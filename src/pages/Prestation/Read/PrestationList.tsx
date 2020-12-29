@@ -67,7 +67,6 @@ const PrestationList: FC<{}> = () => {
     setCurrentItem(item);    
     setClickOn(true);
   };
-
   useEffect(() => {   
     if (!isLoaded) {
       findAllBySiret(siret).catch((e: Error) => {
