@@ -18,7 +18,7 @@ export interface IConsultantService {
    *
    * @param id facture id to delete
    */
-  deleteById(id: number): Promise<String>;
+  deleteById(id: number, siret: string): Promise<String>;
 
   /**
    * Get all schemas if no project or all schemas for project name in otherwise

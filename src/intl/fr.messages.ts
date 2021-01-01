@@ -29,7 +29,7 @@ export default {
       success: "La {cle} a été crée avec succès",
     },
     delete:{
-      success : "La {cle} a été supprimée avec succès",
+      success: "La {cle} a été supprimée avec succès",
     }
     
   }, 

@@ -11,30 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import { Button, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import useSiret from "../../../hooks/siret.hook";
-
-const clientInit = {
-  id: 0,
-  socialReason: "",
-  mail:"",
-  adresseClient: {
-    id: 0,
-    numero: "",
-    voie: "",
-    complementAdresse: "",
-    codePostal: "",
-    commune: "",
-    pays: "",
-  },
-};
-const adresseClient = {
-  id: 0,
-  numero: "",
-  voie: "",
-  complementAdresse: "",
-  codePostal: "",
-  commune: "",
-  pays: "",
-};
+import { parseClientJsonObject } from "../../../shared/Utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
-    margin: 15
+    margin: 15,
   },
 }));
 
@@ -66,15 +43,18 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const siret: string = useSiret();
-  const createOrUpdate = useStoreActions((actions) => actions.clients.create);
+  const create = useStoreActions((actions) => actions.clients.create);
+  const update = useStoreActions((actions) => actions.clients.update);
   /*
   const connectedUser: Partial<User> = useStoreState(
     (state) => state.user.user
   );
 */
+  let client = parseClientJsonObject(history.location.state);
+
   const { enqueueSnackbar } = useSnackbar();
-  const [clientInfo, setClientInfo] = useState(clientInit);
-  const [clientAdresse, setclientAdresse] = useState(adresseClient);
+  const [clientInfo, setClientInfo] = useState(client);
+  const [clientAdresse, setclientAdresse] = useState(client.adresseClient);
 
   const handleInfoClient = (e: React.ChangeEvent<HTMLInputElement>) => {
     setClientInfo({ ...clientInfo, [e.target.id]: e.target.value });
@@ -86,17 +66,35 @@ const ClientPage: FC<{}> = (): ReactElement => {
   clientInfo.adresseClient = clientAdresse;
 
   const addClient = () => {
-    createOrUpdate({ client: clientInfo, siret: siret })
-      .then(() => history.push("/clients"))
-      .then(() =>
-        enqueueSnackbar("Le client a été créée avec succès", {
-          variant: "success",
-        })
-      )
-      .catch((err: Error) => {
-        enqueueSnackbar(err.message, { variant: "error" });
-      });
+    const isNew: boolean = !clientInfo.id || clientInfo.id === 0;
+
+    if (isNew) {
+      create({ client: clientInfo, siret: siret })
+        .then(() => history.push("/clients"))
+        .then(() =>
+          enqueueSnackbar("Le client a été créée avec succès", {
+            variant: "success",
+          })
+        )
+        .catch((err: Error) => {
+          enqueueSnackbar(err.message, { variant: "error" });
+        });
+    } else {
+      update({ client: clientInfo, siret: siret })
+        .then(() => history.push("/clients"))
+        .then(() =>
+          enqueueSnackbar("Le client a été mis à jour avec succès", {
+            variant: "success",
+          })
+        )
+        .catch((err: Error) => {
+          enqueueSnackbar(err.message, { variant: "error" });
+        });
+    }
   };
+  const cancelClientInfo = () =>{
+    history.push('/clients');
+  }
 
   return (
     <PageLayout
@@ -111,7 +109,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
               alignItems="center"
             >
               <Grid item xs={12}>
-                <Typography className={classes.heading} >
+                <Typography className={classes.heading}>
                   {intl.formatMessage({ id: "clients.create.info" })}
                 </Typography>
               </Grid>
@@ -119,6 +117,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="socialReason"
                   label="Raison sociale"
+                  value={clientInfo.socialReason}
                   variant="outlined"
                   color="secondary"
                   helperText="Raison sociale obligatoire."
@@ -129,6 +128,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="mail"
                   label="EMail"
+                  value={clientInfo.mail}
                   variant="outlined"
                   color="secondary"
                   helperText="EMail obligatoire."
@@ -136,7 +136,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography className={classes.heading} >
+                <Typography className={classes.heading}>
                   {intl.formatMessage({ id: "clients.clientAdress" })}
                 </Typography>
               </Grid>
@@ -144,9 +144,10 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="numero"
                   label="Numéro"
+                  value={clientAdresse.numero}
                   variant="outlined"
                   color="secondary"
-                  helperText="Numéro obligatoire."
+                  //helperText="Numéro obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -154,9 +155,10 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="voie"
                   label="voie"
+                  value={clientAdresse.voie}
                   variant="outlined"
                   color="secondary"
-                  helperText="Voie obligatoire."
+                  //helperText="Voie obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -164,9 +166,10 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="complementAdresse"
                   label="Complément adresse"
+                  value={clientAdresse.complementAdresse}
                   variant="outlined"
                   color="secondary"
-                  helperText="Numéro Siret obligatoire."
+                  //helperText="Numéro Siret obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -174,9 +177,10 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="codePostal"
                   label="Code postale"
+                  value={clientAdresse.codePostal}
                   variant="outlined"
                   color="secondary"
-                  helperText="Code postale obligatoire."
+                  //helperText="Code postale obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -184,9 +188,10 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="commune"
                   label="Commune"
+                  value={clientAdresse.commune}
                   variant="outlined"
                   color="secondary"
-                  helperText="Nom commune obligatoire."
+                  //helperText="Nom commune obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -194,15 +199,24 @@ const ClientPage: FC<{}> = (): ReactElement => {
                 <TextField
                   id="pays"
                   label="Pays"
+                  value={clientAdresse.pays}
                   variant="outlined"
                   color="secondary"
-                  helperText="Nom pays obligatoire."
+                  //helperText="Nom pays obligatoire."
                   defaultValue="France"
                   onChange={handleAdresseClient}
                 />
               </Grid>
             </Grid>
           </Paper>
+          <Button
+                variant="contained"
+                color="secondary"                
+                className={classes.button}
+                onClick={cancelClientInfo}
+              >
+                {intl.formatMessage({ id: "buttons.cancelButton" })}
+              </Button>
           <Button
             variant="contained"
             color="secondary"

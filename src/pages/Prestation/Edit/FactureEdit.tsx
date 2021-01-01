@@ -23,7 +23,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const history = useHistory();
   const siret: string = useSiret();
   const intl = useIntl();
-  const create = useStoreActions((actions) => actions.factures.create);
+  const createOrUpdate = useStoreActions((actions) => actions.factures.createOrUpdate);
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
@@ -96,7 +96,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       { cle: "facture" }
     );
 
-    create(param)
+    createOrUpdate(param)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {

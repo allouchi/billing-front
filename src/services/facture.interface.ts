@@ -5,23 +5,13 @@ import Facture from '../domains/Facture';
  *
  */
 export interface IFactureService {
-  /**
+   /**
    * Create new facture for the current project or update it if already exists
    *
    * @param facture facture to create or to update
    * @returns Promise<Facture>
-   */
-  createOrUpdate(facture: Facture): Promise<Facture>;
-
-
-  /**
-   * Create new facture for the current project or update it if already exists
-   *
-   * @param facture facture to create or to update
-   * @returns Promise<Facture>
-   */
-  
-  create(facture: Facture, siret: string, prestationId: number, numeroCommande: string ): Promise<Facture>;
+   */  
+  createOrUpdate(facture: Facture, siret: string, prestationId: number, numeroCommande: string ): Promise<Facture>;
 
   /**
    * Get all schemas if no project or all schemas for project name in otherwise

@@ -11,8 +11,6 @@ import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 
-
-
 interface CompanyItemProps {
   item: Company;
 }
@@ -31,25 +29,26 @@ const StyledTableCell = withStyles((theme: Theme) =>
 
 const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
-  const history = useHistory();  
+  const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const deleteById = useStoreActions((actions) => actions.companies.deleteById);
-     
-  const handleDeleteClick = () =>{
+
+  const handleDeleteClick = () => {
     const messageId = intl.formatMessage(
-      { id: "delete.success"},{cle: "tooltip.company"},      
+      { id: "delete.success" },
+      { cle: "tooltip.company" }
     );
     deleteById(item.id)
-    .then(() => history.push("/companies"))
-    .then(() =>
-      enqueueSnackbar(messageId, {
-        variant: "success",
-      })
-    )
-    .catch((err: Error) => {
-      enqueueSnackbar(err.message, { variant: "error" });
-    });
-  }
+      .then(() => history.push("/companies"))
+      .then(() =>
+        enqueueSnackbar(messageId, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
 
   return (
     <>
@@ -60,7 +59,7 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
       <StyledTableCell> {item.numeroTva} </StyledTableCell>
       <StyledTableCell> {item.ape} </StyledTableCell>
       <StyledTableCell>
-      <Tooltip title={BuildMessageTooltip("company", "edit")}>
+        <Tooltip title={BuildMessageTooltip("company", "edit")}>
           <IconButton aria-label="edit" size="small" style={{ marginRight: 6 }}>
             <EditIcon />
           </IconButton>

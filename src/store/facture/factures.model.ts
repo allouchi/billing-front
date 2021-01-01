@@ -14,9 +14,9 @@ export interface FacturesModel {
 
   // Thunk
   findAllBySiret: Thunk<FacturesModel, string | undefined, Injections>;
-  create: Thunk<FacturesModel, FacturePrestation, Injections>;
-  update: Thunk<FacturesModel, Facture, Injections>;
-  deleteById: Thunk<FacturesModel, number, Injections>;  
+  createOrUpdate: Thunk<FacturesModel, FacturePrestation, Injections>;
+  //update: Thunk<FacturesModel, Facture, Injections>;
+  deleteById: Thunk<FacturesModel, number, Injections>;
 }
 
 export const facturesModel: FacturesModel = {
@@ -32,7 +32,7 @@ export const facturesModel: FacturesModel = {
     state.items = state.items.filter(
       (facture: Facture) => facture.id !== payload
     );
-  }),  
+  }),
   add: action((state, payload: Facture) => {
     state.items = [payload, ...state.items];
   }),
@@ -46,7 +46,7 @@ export const facturesModel: FacturesModel = {
   findAllBySiret: thunk(async (actions, payload: string, { injections }) => {
     try {
       const { factureService } = injections;
-      const factures = await factureService.findAllBySiret(payload);      
+      const factures = await factureService.findAllBySiret(payload);
       actions.loadSuccess(factures);
     } catch (error) {
       throw error;
@@ -54,12 +54,12 @@ export const facturesModel: FacturesModel = {
   }),
 
   // Thunks
-  create: thunk(async (actions, payload: FacturePrestation, { injections }) => {
+  createOrUpdate: thunk(async (actions, payload: FacturePrestation, { injections }) => {
     try {
       const { factureService } = injections;
-      const facture = await factureService.create(
-        payload.facture, 
-        payload.siret,     
+      const facture = await factureService.createOrUpdate(
+        payload.facture,
+        payload.siret,
         payload.prestationId,
         payload.numeroCommande
       );
@@ -68,16 +68,8 @@ export const facturesModel: FacturesModel = {
       throw error;
     }
   }),
-  update: thunk(async (actions, payload: Facture, { injections }) => {
-    try {
-      const { factureService } = injections;
-      const facture = await factureService.createOrUpdate(payload);
-      actions.update(facture);
-    } catch (error) {
-      throw error;
-    }
-  }),
-  deleteById: thunk(async (actions, payload: number, { injections }) => {   
+ 
+  deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { factureService } = injections;
       await factureService.deleteById(payload);
@@ -85,7 +77,7 @@ export const facturesModel: FacturesModel = {
     } catch (error) {
       throw error;
     }
-  }),  
+  }),
 };
 
 interface FacturePrestation {

@@ -23,8 +23,12 @@ const Consultants: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
 
-  const handleCreate = () => {
-    history.push("/consultant");
+  const handleCreate = () => {       
+    history.push({
+      pathname: '/consultant',
+      search: '',
+      state: { detail: null }
+    })
   };
 
   return (

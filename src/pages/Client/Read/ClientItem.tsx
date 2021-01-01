@@ -9,7 +9,7 @@ import { useSnackbar } from "notistack";
 import { useStoreActions } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
-import { IconButton} from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 
 const StyledTableCell = withStyles((theme: Theme) =>
@@ -52,9 +52,14 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
       });
   };
 
-  const editerClientClick = () =>{
-
-  }
+  const editerClientClick = () => {
+    let client = JSON.stringify(item);
+    history.push({
+      pathname: "/client",
+      search: "",
+      state: { detail: client },
+    });
+  };
 
   return (
     <>
@@ -65,16 +70,14 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
         {item.adresseClient.numero} {item.adresseClient.voie}{" "}
         {item.adresseClient.complementAdresse} {item.adresseClient.codePostal}{" "}
         {item.adresseClient.commune} {item.adresseClient.pays}
-      </StyledTableCell>      
+      </StyledTableCell>
       <StyledTableCell>
-      <Tooltip title={BuildMessageTooltip("client", "edit")}>
+        <Tooltip title={BuildMessageTooltip("client", "edit")}>
           <IconButton onClick={() => editerClientClick()}>
             <EditIcon color="primary" />
           </IconButton>
         </Tooltip>
-        <Tooltip
-          title={BuildMessageTooltip("client", "delete")}
-        >
+        <Tooltip title={BuildMessageTooltip("client", "delete")}>
           <DeleteItem
             id={item.id}
             cle="client"

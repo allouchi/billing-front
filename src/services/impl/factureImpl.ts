@@ -11,29 +11,14 @@ import { IFactureService } from '../facture.interface';
 export class FactureServiceImpl implements IFactureService {
   private static readonly FACTURES_PATH: string = 'factures';
 
-  async createOrUpdate(facture: Facture): Promise<Facture> {
-    const isNew: boolean = !facture.id || facture.id === 0;
-    try {
-      let response;
-      if (isNew) {
-        response = await Webservice.getInstance().post(`${FactureServiceImpl.FACTURES_PATH}`, facture);
-      } else {
-        response = await Webservice.getInstance().put(FactureServiceImpl.FACTURES_PATH, facture);
-      }
-      return response.data;
-    } catch (error) {
-      throw Error(`Error during ${isNew ? 'creating' : 'editing'} new facture`);
-    }
-  }
-
-  async create(facture: Facture, siret: string,  prestationId: number, numeroCommande: string): Promise<Facture> {
+  async createOrUpdate(facture: Facture, siret: string,  prestationId: number, numeroCommande: string): Promise<Facture> {
     const isNew: boolean = !facture.id || facture.id === 0;
     try {
       let response;
       if (isNew) {
         response = await Webservice.getInstance().post(`${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}/${numeroCommande}`, facture);
       } else {
-        response = await Webservice.getInstance().put(FactureServiceImpl.FACTURES_PATH, facture);
+        response = await Webservice.getInstance().put(`${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`, facture);
       }
       return response.data;
     } catch (error) {

@@ -7,9 +7,14 @@ import { StyledTableCell } from "./FactureList";
 import { IconButton, Tooltip } from "@material-ui/core";
 import { useIntl } from "react-intl";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
-import { useStoreActions } from "../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
+import useSiret from "../../../hooks/siret.hook";
+import Prestation from "../../../domains/Prestation";
+import FacturePrestation from "../../../store/facture/factures.model";
+import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
+
 
 //import useSiret from "../../../hooks/siret.hook";
 
@@ -28,33 +33,70 @@ interface FactureItemProps {
 }
 const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
-  const history = useHistory();  
+  const history = useHistory();
+  const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
-  //const items: Facture[] = useStoreState((state) => state.factures.items);
+  const createOrUpdate = useStoreActions(
+    (actions) => actions.factures.createOrUpdate
+  );
+  const items: Prestation[] = useStoreState((state) => state.prestations.items);
   //const [state, setState] = useState();
 
-  const handleEditClick = () =>{
-    
-  }
+  const editerFactureClick = () => {
+    let pestationId = 0;
+    let numeroCommande = "";
 
-  const handleDeleteClick = () =>{ 
     const message = intl.formatMessage(
-      { id: "messages.delete.success"}, 
-      { value: "facture" }
+      { id: "messages.delete.success" },
+      { cle: "facture" }
     );
+
+    items &&
+      items.forEach((element) => {        
+        if (element.facture === null) {
+          pestationId = element.id;
+          numeroCommande = element.numeroCommande;
+        }
+      });
+    
+    const param: FacturePrestation = {
+      prestationId: pestationId,
+      siret: siret,
+      facture: item,
+      numeroCommande: numeroCommande,
+    };
+
+    createOrUpdate(param)
+      .then(() => history.push("/factures"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
+
+  const handleDeleteClick = () => {
+    const message = intl.formatMessage(
+      { id: "messages.delete.success" },
+      { cle: "facture" }
+    );
+
     deleteById(item.id)
-    .then(() => history.push("/factures"))
-    .then(() =>
-      enqueueSnackbar(message, {
-        variant: "success",
-      })
-    )
-    .catch((err: Error) => {
-      enqueueSnackbar(err.message, { variant: "error" });
-    });
-  }
-  
+      .then(() => history.push("/factures"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
+
   return (
     <StyledTableRow>
       <StyledTableCell>{item.id}</StyledTableCell>
@@ -71,21 +113,22 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       <StyledTableCell>{item.factureStatus}</StyledTableCell>
       <StyledTableCell>{item.fraisRetard}</StyledTableCell>
       <StyledTableCell>
-        <Tooltip title={intl.formatMessage({ id: "tooltip.edit" })}>
-          <IconButton onClick={() =>handleEditClick()}aria-label="edit" size="small" style={{ marginRight: 6 }}>
+        <Tooltip title={BuildMessageTooltip("facture", "edit")}>
+          <IconButton
+            onClick={editerFactureClick}
+            aria-label="edit"
+            size="small"
+            style={{ marginRight: 6 }}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
-        </StyledTableCell>
-        <StyledTableCell>
-        <Tooltip title={intl.formatMessage({ id: "tooltip.delete" })}>
         <DeleteItem
           id={item.id}
           cle="facture"
           value={item.numeroFacture}
           deleteAction={handleDeleteClick}
         />
-        </Tooltip>
       </StyledTableCell>
     </StyledTableRow>
   );

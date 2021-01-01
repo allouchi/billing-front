@@ -17,7 +17,7 @@ export interface ConsultantsModel {
   findAllBySiret: Thunk<ConsultantsModel, string, Injections>;
   create: Thunk<ConsultantsModel,ConsultantSiret, Injections>;
   update: Thunk<ConsultantsModel, ConsultantSiret, Injections>;
-  deleteById: Thunk<ConsultantsModel, number, Injections>;
+  deleteById: Thunk<ConsultantsModel, ConsultantSiret, Injections>;
 }
 
 export const consultantsModel: ConsultantsModel = {
@@ -69,11 +69,11 @@ export const consultantsModel: ConsultantsModel = {
     }
   }),
   
-  deleteById: thunk(async (actions, payload: number, { injections }) => {
+  deleteById: thunk(async (actions, payload: ConsultantSiret, { injections }) => {
     try {
       const { consultantService } = injections;
-      await consultantService.deleteById(payload);
-      actions.remove(payload);
+      await consultantService.deleteById(payload.consultant.id, payload.siret);
+      actions.remove(payload.consultant.id);
     } catch (error) {
       throw error;
     }

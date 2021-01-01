@@ -27,7 +27,12 @@ const Clients: FC<{}> = (): ReactElement => {
   const intl = useIntl();
 
   const handleCreate = () => {
-    history.push("/client");
+   
+    history.push({
+      pathname: "/client",
+      search: "",
+      state: { detail: null },
+    });
   };
 
   return (

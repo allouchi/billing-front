@@ -9,15 +9,12 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import useSiret from "../../../hooks/siret.hook";
-import { isEmptyString, isNotEmptyString } from "../../../shared/Utils";
+import {
+  isEmptyString,
+  isNotEmptyString,
+  parseConsultJsonObject,
+} from "../../../shared/Utils";
 import PageLayout from "../../../components/PageLayout/PageLayout";
-
-const consultantInit = {
-  id: 0,
-  lastName: "",
-  firstName: "",
-  mail: "",
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ConsultantPage: FC<{}> = (): ReactElement => {
+const ConsultantPage: FC<{}> = (props): ReactElement => {
   const siret: string = useSiret();
   const classes = useStyles();
   const history = useHistory();
   const intl = useIntl();
-  const createOrUpdate = useStoreActions(
-    (actions) => actions.consultants.create
-  );
+  //const location = useLocation();
+  const create = useStoreActions((actions) => actions.consultants.create);
+  const update = useStoreActions((actions) => actions.consultants.update);
 
   const isValidForm = (): boolean => {
     return (
@@ -60,9 +57,10 @@ const ConsultantPage: FC<{}> = (): ReactElement => {
     );
   };
 
+  let consult = parseConsultJsonObject(history.location.state);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
-    consultant: consultantInit,
+    consultant: consult,
     firstNameMessage: "",
     lastNameMessage: "",
     mailMessage: "",
@@ -71,7 +69,6 @@ const ConsultantPage: FC<{}> = (): ReactElement => {
   const handleInfoConsultant = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
-
     setState({
       ...state,
       consultant: { ...state.consultant, [id]: value },
@@ -82,7 +79,6 @@ const ConsultantPage: FC<{}> = (): ReactElement => {
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
-
     setState({
       ...state,
       [`${id}Message`]: isEmptyString(value) ? "Required" : "",
@@ -90,17 +86,34 @@ const ConsultantPage: FC<{}> = (): ReactElement => {
   };
 
   const addConsultant = () => {
-    createOrUpdate({ consultant: state.consultant, siret: siret })
-      .then(() => history.push("/consultants"))
-      .then(() =>
-        enqueueSnackbar("Le consultant a été créée avec succès", {
-          variant: "success",
-        })
-      )
-      .catch((err: Error) => {
-        enqueueSnackbar(err.message, { variant: "error" });
-      });
+    const isNew: boolean = !state.consultant.id || state.consultant.id === 0;
+    if (isNew) {
+      create({ consultant: state.consultant, siret: siret })
+        .then(() => history.push("/consultants"))
+        .then(() =>
+          enqueueSnackbar("Le consultant a été créée avec succès", {
+            variant: "success",
+          })
+        )
+        .catch((err: Error) => {
+          enqueueSnackbar(err.message, { variant: "error" });
+        });
+    } else {
+      update({ consultant: state.consultant, siret: siret })
+        .then(() => history.push("/consultants"))
+        .then(() =>
+          enqueueSnackbar("Le consultant a été mis à jour avec succès", {
+            variant: "success",
+          })
+        )
+        .catch((err: Error) => {
+          enqueueSnackbar(err.message, { variant: "error" });
+        });
+    }
   };
+  const cancelConsultantInfo = () => {
+   history.push('/consultants');
+  }
 
   return (
     <PageLayout
@@ -152,13 +165,21 @@ const ConsultantPage: FC<{}> = (): ReactElement => {
               </form>
               <Button
                 variant="contained"
+                color="secondary"                
+                className={classes.button}
+                onClick={cancelConsultantInfo}
+              >
+                {intl.formatMessage({ id: "buttons.cancelButton" })}
+              </Button>
+              <Button
+                variant="contained"
                 color="secondary"
                 disabled={!isValidForm()}
                 className={classes.button}
                 onClick={addConsultant}
               >
                 {intl.formatMessage({ id: "consultants.buttonSubmit" })}
-              </Button>
+              </Button>             
             </Paper>
           </Grid>
         </Grid>

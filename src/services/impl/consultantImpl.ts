@@ -23,7 +23,7 @@ export class ConsultantServiceImpl implements IConsultantService {
         );
       } else {
         response = await Webservice.getInstance().put(
-          ConsultantServiceImpl.CONSULTANT_PATH,
+          `${ConsultantServiceImpl.CONSULTANT_PATH}/${siret}`,
           consultant
         );
       }
@@ -46,10 +46,10 @@ export class ConsultantServiceImpl implements IConsultantService {
     }
   }
 
-  async deleteById(id: number): Promise<string> {
+  async deleteById(id: number, siret : string): Promise<string> {
     try {
       await Webservice.getInstance().delete(
-        `${window.env.BACKEND_ENDPOINT}/${ConsultantServiceImpl.CONSULTANT_PATH}/${id}`
+        `${ConsultantServiceImpl.CONSULTANT_PATH}/${siret}/${id}`
       );
       return Promise.resolve("200");
     } catch (error) {
