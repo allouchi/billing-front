@@ -49,8 +49,7 @@ const factures = (
         <TableRow>
           <StyledTableCell>Id</StyledTableCell>
           <StyledTableCell align="left">Numéro Facture</StyledTableCell>          
-          <StyledTableCell align="left">Quantité</StyledTableCell>
-          <StyledTableCell align="left">Désignation</StyledTableCell>
+          <StyledTableCell align="left">Quantité</StyledTableCell>         
           <StyledTableCell align="left">Prix Total HT</StyledTableCell>
           <StyledTableCell align="left">Prix Total TTC</StyledTableCell>
           <StyledTableCell align="left">Date de Facturation</StyledTableCell>

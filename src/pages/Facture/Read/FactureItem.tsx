@@ -46,6 +46,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const editerFactureClick = () => {
     let pestationId = 0;
     let numeroCommande = "";
+    let clientPrestation = "";
 
     const message = intl.formatMessage(
       { id: "messages.edit.success" },
@@ -56,15 +57,14 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       items.forEach((element) => {        
         if (element.facture === null) {
           pestationId = element.id;
-          numeroCommande = element.numeroCommande;
+          numeroCommande = element.numeroCommande;          
         }
       });
     
     const param: FacturePrestation = {
       prestationId: pestationId,
       siret: siret,
-      facture: item,
-      numeroCommande: numeroCommande,
+      facture: item,        
     };
 
     createOrUpdate(param)
@@ -101,8 +101,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     <StyledTableRow>
       <StyledTableCell>{item.id}</StyledTableCell>
       <StyledTableCell>{item.numeroFacture}</StyledTableCell>
-      <StyledTableCell>{item.quantite}</StyledTableCell>
-      <StyledTableCell>{item.designation}</StyledTableCell>
+      <StyledTableCell>{item.quantite}</StyledTableCell>     
       <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
       <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
       <StyledTableCell>{item.dateFacturation}</StyledTableCell>

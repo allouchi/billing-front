@@ -34,7 +34,7 @@ const Prestations: FC<{}> = (): ReactElement => {
     history.push("/prestation");
   };
 
-  useEffect(() => {
+  useEffect(() => {    
     findAll()
       .catch((e: Error) => enqueueSnackbar(e.message, { variant: "error" }))
       .finally(() => {});

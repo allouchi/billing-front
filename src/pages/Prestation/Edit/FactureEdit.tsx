@@ -27,8 +27,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
-    prestationId: item.id,
-    numeroCommande: "",
+    prestationId: item.id,      
     facture: {
       id: 0,
       numeroFacture: "",
@@ -44,24 +43,15 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       factureStatus: "KO",
       quantite: 0,
       numeroCommande: "",
-      designation: `La Prestation est réalisée pour le compte de ${item.client.socialReason}`,
+      designation: "La Prestation est réalisée pour le compte de",
+      clientPrestation : `${item.client.socialReason}`
     },
   });
-
-  const handleNumeroCommandeChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value: string = e.target.value;
-    setState({
-      ...state,
-      numeroCommande: value,
-    });
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
-
+   
     setState({
       ...state,
       facture: { ...state.facture, [id]: value },
@@ -76,16 +66,16 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     setOpen(false);
 
     const param: FacturePrestation = {
-      prestationId: state.prestationId,
-      numeroCommande: state.numeroCommande,
+      prestationId: state.prestationId,         
       facture: state.facture,
       siret: siret,
     };
 
     if (
-      param.numeroCommande === "" ||
+      param.facture.numeroCommande === "" ||
       param.facture.quantite === 0 ||
-      param.facture.designation === ""
+      param.facture.designation === "" ||
+      param.facture.clientPrestation === ""
     ) {
       enqueueSnackbar("La saisie de tous les champs est obligatoire", { variant: "error" });
       setOpen(true);
@@ -124,11 +114,11 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             margin="dense"
             id="numeroCommande"
             label="Numéro de commande"
-            value={state.numeroCommande}
+            value={state.facture.numeroCommande}
             type="text"
             required
             fullWidth
-            onChange={handleNumeroCommandeChange}
+            onChange={handleChange}
           />
           <TextField
             margin="dense"
@@ -145,6 +135,16 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             id="designation"
             label="Désignation"
             value={state.facture.designation}
+            type="text"
+            required
+            fullWidth
+            onChange={handleChange}
+          />
+           <TextField
+            margin="dense"
+            id="clientPrestation"
+            label="Client prestation"
+            value={state.facture.clientPrestation}
             type="text"
             required
             fullWidth

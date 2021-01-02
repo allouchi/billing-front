@@ -14,8 +14,7 @@ export interface PrestationsModel {
   findAllBySiret: Thunk<PrestationsModel, string, Injections>;
 
   // Thunk
-  create: Thunk<PrestationsModel, PrestationSiret, Injections>;
-  update: Thunk<PrestationsModel, PrestationSiret, Injections>;
+  createOrUpdate: Thunk<PrestationsModel, PrestationSiret, Injections>;  
   deleteById: Thunk<PrestationsModel, number, Injections>;
 }
 
@@ -52,32 +51,27 @@ export const prestationsModel: PrestationsModel = {
       throw error;
     }
   }),
+ 
   // Thunks
-  // Thunks
-  create: thunk(async (actions, payload: PrestationSiret, { injections }) => {
+  createOrUpdate: thunk(async (actions, payload: PrestationSiret, { injections }) => {
+    const isNew: boolean = !payload.prestation.id || payload.prestation.id === 0;
     try {
       const { prestationService } = injections;
       const prestation = await prestationService.createOrUpdate(
         payload.prestation,
         payload.siret
       );
-      actions.add(prestation);
+      
+      if(isNew){
+        actions.add(prestation);
+      }else{
+        actions.updateState(prestation);
+      }
+     
     } catch (error) {
       throw error;
     }
-  }),
-  update: thunk(async (actions, payload: PrestationSiret, { injections }) => {
-    try {
-      const { prestationService } = injections;
-      const prestation = await prestationService.createOrUpdate(
-        payload.prestation,
-        payload.siret
-      );
-      actions.updateState(prestation);
-    } catch (error) {
-      throw error;
-    }
-  }),
+  }), 
   deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { prestationService } = injections;

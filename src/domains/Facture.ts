@@ -6,8 +6,7 @@ export default interface Facture {
   dateFacturation: string;
   dateEcheance: string;
   dateEncaissement: string; 
-  delaiPaiement: number;
-  numeroCommande: string;
+  delaiPaiement: number; 
   tva: number;
   prixTotalHT: number;
   prixTotalTTC: number;
@@ -15,5 +14,7 @@ export default interface Facture {
   fraisRetard: number;  
   factureStatus: string;
   quantite: number,
+  numeroCommande: string;
   designation: string,  
+  clientPrestation: string,
 }

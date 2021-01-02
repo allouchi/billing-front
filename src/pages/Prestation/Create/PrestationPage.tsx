@@ -16,6 +16,7 @@ import useSiret from "../../../hooks/siret.hook";
 import Alert from "@material-ui/lab/Alert";
 import { clientIdentity, consultantIdentity } from "../../../shared/Utils";
 import PageLayout from "../../../components/PageLayout/PageLayout";
+import { useStoreDispatch } from 'easy-peasy';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,10 +46,11 @@ const PrestationPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const siret: string = useSiret();
+  const dispatch = useStoreDispatch();
   const { enqueueSnackbar } = useSnackbar();
-
+  
   const createOrUpdate = useStoreActions(
-    (actions) => actions.prestations.create
+    (actions) => actions.prestations.createOrUpdate
   );
   const consultants: Consultant[] = useStoreState(
     (state) => state.consultants.items
@@ -149,6 +151,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
         consultants
       </Alert>
     ) : (
+
       <Autocomplete
         id="consultant"
         options={consultants}
@@ -159,6 +162,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
         renderInput={(params) => (
           <TextField {...params} label="Consultant" variant="outlined" />
         )}
+        disablePortal
       />
     );
   };
@@ -174,12 +178,13 @@ const PrestationPage: FC<{}> = (): ReactElement => {
         id="client"
         options={clients}
         value={state.client}
-        className={classes.textField}
+        className={classes.textField}             
         getOptionLabel={(option: Client) => clientIdentity(option)}
-        onChange={(e, value) => onSelectClient(value)}
+        onChange={(e, value) => onSelectClient(value)}       
         renderInput={(params) => (
           <TextField {...params} label="Client" variant="outlined" />
         )}
+        disablePortal
       />
     );
   };

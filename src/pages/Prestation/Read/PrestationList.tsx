@@ -67,8 +67,8 @@ const PrestationList: FC<{}> = () => {
     setCurrentItem(item);    
     setClickOn(true);
   };
-  useEffect(() => {   
-    if (!isLoaded) {
+  useEffect(() => {     
+    if (!isLoaded) {     
       findAllBySiret(siret).catch((e: Error) => {
         enqueueSnackbar(e.message, { variant: "error" });
         setOnError(true);

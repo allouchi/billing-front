@@ -14,15 +14,14 @@ export class FactureServiceImpl implements IFactureService {
   async createOrUpdate(
     facture: Facture,
     siret: string,
-    prestationId: number,
-    numeroCommande: string
+    prestationId: number    
   ): Promise<Facture> {
     const isNew: boolean = !facture.id || facture.id === 0;
     try {
       let response;
       if (isNew) {
         response = await Webservice.getInstance().post(
-          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}/${numeroCommande}`,
+          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
           facture
         );
       } else {

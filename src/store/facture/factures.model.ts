@@ -14,8 +14,7 @@ export interface FacturesModel {
 
   // Thunk
   findAllBySiret: Thunk<FacturesModel, string | undefined, Injections>;
-  createOrUpdate: Thunk<FacturesModel, FacturePrestation, Injections>;
-  //update: Thunk<FacturesModel, Facture, Injections>;
+  createOrUpdate: Thunk<FacturesModel, FacturePrestation, Injections>;  
   deleteById: Thunk<FacturesModel, number, Injections>;
 }
 
@@ -62,8 +61,7 @@ export const facturesModel: FacturesModel = {
         const facture = await factureService.createOrUpdate(
           payload.facture,
           payload.siret,
-          payload.prestationId,
-          payload.numeroCommande
+          payload.prestationId         
         );
         if (isNew) {
           actions.add(facture);
@@ -88,8 +86,7 @@ export const facturesModel: FacturesModel = {
 };
 
 interface FacturePrestation {
-  prestationId: number;
-  numeroCommande: string;
+  prestationId: number;  
   facture: Facture;
   siret: string;
 }

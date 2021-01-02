@@ -105,6 +105,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     factureStatus: "",
     quantite: 0,
     designation: "",
+    clientPrestation: ""
   };
 
   if (jsonObject !== null && jsonObject.detail !== null) {
@@ -126,6 +127,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       factureStatus: item.factureStatus,
       quantite: item.quantite,
       designation: item.designation,
+      clientPrestation: item.clientPrestation,
     };
   }
   return facture;
