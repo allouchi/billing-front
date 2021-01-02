@@ -63,8 +63,8 @@ const consultants = (
       <TableHead>
         <TableRow>
           <StyledTableCell>Id</StyledTableCell>
-          <StyledTableCell align="left">Nom</StyledTableCell>
           <StyledTableCell align="left">Prénom</StyledTableCell>
+          <StyledTableCell align="left">Nom</StyledTableCell>         
           <StyledTableCell align="left">Adresse mail</StyledTableCell>
           <StyledTableCell align="left">{}</StyledTableCell>
         </TableRow>

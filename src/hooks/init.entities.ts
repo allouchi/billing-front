@@ -4,10 +4,9 @@ export interface ClientInit{
     adresseClient: {
       id: 0,
       numero: "",
-      voie: "",
-      complementAdresse: "",
+      rue: "", 
       codePostal: "",
-      commune: "",
+      localite: "",
       pays: "",
     }
 }
@@ -62,10 +61,9 @@ export interface CompanyInit{
     adresseCompnay: {
         id: 0,
         numero: "",
-        voie: "",
-        complementAdresse: "",
+        rue: "",       
         codePostal: "",
-        commune: "",
+        localite: "",
         pays: "",
       },
     users: {},

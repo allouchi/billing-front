@@ -43,8 +43,9 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   //const location = useLocation();
-  const create = useStoreActions((actions) => actions.consultants.create);
-  const update = useStoreActions((actions) => actions.consultants.update);
+  const createOrUpdate = useStoreActions(
+    (actions) => actions.consultants.createOrUpdate
+  );
 
   const isValidForm = (): boolean => {
     return (
@@ -86,34 +87,32 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   };
 
   const addConsultant = () => {
+    let messageId = "";
     const isNew: boolean = !state.consultant.id || state.consultant.id === 0;
-    if (isNew) {
-      create({ consultant: state.consultant, siret: siret })
-        .then(() => history.push("/consultants"))
-        .then(() =>
-          enqueueSnackbar("Le consultant a été créée avec succès", {
-            variant: "success",
-          })
-        )
-        .catch((err: Error) => {
-          enqueueSnackbar(err.message, { variant: "error" });
-        });
-    } else {
-      update({ consultant: state.consultant, siret: siret })
-        .then(() => history.push("/consultants"))
-        .then(() =>
-          enqueueSnackbar("Le consultant a été mis à jour avec succès", {
-            variant: "success",
-          })
-        )
-        .catch((err: Error) => {
-          enqueueSnackbar(err.message, { variant: "error" });
-        });
+    if(isNew){
+      messageId = 'messages.create.success';
+    }else{
+      messageId = 'messages.edit.success';
     }
+    const message = intl.formatMessage(
+      { id: messageId },
+      { cle: "Le consultant" }
+    );
+    
+    createOrUpdate({ consultant: state.consultant, siret: siret })
+      .then(() => history.push("/consultants"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      ).catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
   };
+
   const cancelConsultantInfo = () => {
-   history.push('/consultants');
-  }
+    history.push("/consultants");
+  };
 
   return (
     <PageLayout
@@ -165,7 +164,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
               </form>
               <Button
                 variant="contained"
-                color="secondary"                
+                color="secondary"
                 className={classes.button}
                 onClick={cancelConsultantInfo}
               >
@@ -179,7 +178,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                 onClick={addConsultant}
               >
                 {intl.formatMessage({ id: "consultants.buttonSubmit" })}
-              </Button>             
+              </Button>
             </Paper>
           </Grid>
         </Grid>

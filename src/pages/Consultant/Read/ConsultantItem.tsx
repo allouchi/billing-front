@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import { useSnackbar } from "notistack";
 import { useStoreActions } from "../../../store/hooks";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import { IconButton } from "@material-ui/core";

@@ -48,7 +48,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     let numeroCommande = "";
 
     const message = intl.formatMessage(
-      { id: "messages.delete.success" },
+      { id: "messages.edit.success" },
       { cle: "facture" }
     );
 

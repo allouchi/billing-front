@@ -14,8 +14,7 @@ export interface ClientsModel {
 
   // Thunk
   findAllBySiret: Thunk<ClientsModel, string | undefined, Injections>;
-  create: Thunk<ClientsModel, ClientSiret, Injections>;
-  update: Thunk<ClientsModel, ClientSiret, Injections>;
+  createOrUpdate: Thunk<ClientsModel, ClientSiret, Injections>;  
   deleteById: Thunk<ClientsModel, number, Injections>;
 }
 
@@ -48,26 +47,23 @@ export const clientsModel: ClientsModel = {
       throw error;
     }
   }),
-
   // Thunks
-  create: thunk(async (actions, payload: ClientSiret, { injections }) => {
+  createOrUpdate: thunk(async (actions, payload: ClientSiret, { injections }) => {
+    const isNew: boolean = !payload.client.id || payload.client.id === 0;
     try {     
       const { clientService } = injections;
       const client = await clientService.createOrUpdate(payload.client, payload.siret);
-      actions.add(client);
+     
+      if(isNew){
+        actions.add(client);
+      }else{
+        actions.updateState(client);
+      }     
     } catch (error) {
       throw error;
     }
   }),
-  update: thunk(async (actions, payload: ClientSiret, { injections }) => {
-    try {
-      const { clientService } = injections;     
-      const client = await clientService.createOrUpdate(payload.client, payload.siret);
-      actions.updateState(client);
-    } catch (error) {
-      throw error;
-    }
-  }),
+  
   deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { clientService } = injections;

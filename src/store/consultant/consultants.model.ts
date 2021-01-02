@@ -15,8 +15,7 @@ export interface ConsultantsModel {
 
   // Thunk  
   findAllBySiret: Thunk<ConsultantsModel, string, Injections>;
-  create: Thunk<ConsultantsModel,ConsultantSiret, Injections>;
-  update: Thunk<ConsultantsModel, ConsultantSiret, Injections>;
+  createOrUpdate: Thunk<ConsultantsModel,ConsultantSiret, Injections>;  
   deleteById: Thunk<ConsultantsModel, ConsultantSiret, Injections>;
 }
 
@@ -35,7 +34,7 @@ export const consultantsModel: ConsultantsModel = {
   add: action((state, payload: Consultant) => {    
     state.items = [payload, ...state.items];  
   }),
-  updateState: action((state, payload: Consultant) => {
+  updateState: action((state, payload: Consultant) => {    
     state.items.map((item: Consultant) => (item.id === payload.id ? payload : item));
   }),  
   // Thunks
@@ -50,25 +49,21 @@ export const consultantsModel: ConsultantsModel = {
   }),
 
   // Thunks
-  create: thunk(async (actions, payload: ConsultantSiret, { injections }) => {
+  createOrUpdate: thunk(async (actions, payload: ConsultantSiret, { injections }) => {
+    const isNew: boolean = !payload.consultant.id || payload.consultant.id === 0;
     try {
       const { consultantService } = injections;
       const consultant = await consultantService.createOrUpdate(payload.consultant, payload.siret);
-      actions.add(consultant);
+      if(isNew){
+        actions.add(consultant);
+      }else{        
+        actions.updateState(consultant);
+      }      
     } catch (error) {
       throw error;
     }
   }),
-  update: thunk(async (actions, payload: ConsultantSiret, { injections }) => {
-    try {
-      const { consultantService } = injections;
-      const consultant = await consultantService.createOrUpdate(payload.consultant, payload.siret);
-      actions.updateState(consultant);
-    } catch (error) {
-      throw error;
-    }
-  }),
-  
+   
   deleteById: thunk(async (actions, payload: ConsultantSiret, { injections }) => {
     try {
       const { consultantService } = injections;

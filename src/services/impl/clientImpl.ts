@@ -15,8 +15,7 @@ export class ClientServiceImpl implements IClientService {
     const isNew: boolean = !client.id || client.id === 0;
     try {
       let response;
-      if (isNew) {
-        
+      if (isNew) {        
         response = await Webservice.getInstance().post(`${ClientServiceImpl.CLIENT_PATH}/${siret}`, client);
       } else {
         response = await Webservice.getInstance().put(`${ClientServiceImpl.CLIENT_PATH}/${siret}`, client);

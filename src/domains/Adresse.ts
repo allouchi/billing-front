@@ -1,9 +1,8 @@
 export default interface Adresse {
   id: number;
   numero: string;
-  voie: string;
-  complementAdresse : string;
+  rue: string;
   codePostal: string;
-  commune: string;
+  localite: string;
   pays: string;
 }

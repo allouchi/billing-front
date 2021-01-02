@@ -77,10 +77,9 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       adresseClient: {
         id: 0,
         numero: "",
-        voie: "",
-        complementAdresse: "",
+        rue: "",   
         codePostal: "",
-        commune: "",
+        localite: "",
         pays: "",
       },
     },

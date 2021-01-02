@@ -8,6 +8,13 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Button, Paper, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
+/*
+import MaskedInput from 'react-text-mask';
+import NumberFormat from 'react-number-format';
+import { createStyles, Theme } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl'; */
 
 const companyInit = {
   id: 0,
@@ -20,10 +27,9 @@ const companyInit = {
   companyAdresse: {
     id: 0,
     numero: "",
-    voie: "",
-    complementAdresse: "",
+    rue: "",
     codePostal: "",
-    commune: "",
+    localite: "",
     pays: "",
   },
   users: [],
@@ -35,10 +41,9 @@ const companyInit = {
 const companyAdresse = {
   id: 0,
   numero: "",
-  voie: "",
-  complementAdresse: "",
+  rue: "",
   codePostal: "",
-  commune: "",
+  localite: "",
   pays: "",
 };
 
@@ -92,7 +97,6 @@ const CompanyPage: FC<{}> = (): ReactElement => {
       { id: "messages.create.success" },
       { cle: "société" }
     );
-
     createOrUpdate(companyInfo)
       .then(() => history.push("/companies"))
       .then(() =>
@@ -125,6 +129,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Raison sociale"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.socialReason}
                   helperText="Raison sociale obligatoire."
                   onChange={handleInfoCompany}
                 />
@@ -136,6 +141,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Status"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.status}
                   helperText="Statut obligatoire."
                   onChange={handleInfoCompany}
                 />
@@ -147,8 +153,12 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Numéro Siret"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.siret}
                   helperText="Numéro Siret obligatoire."
                   onChange={handleInfoCompany}
+                  InputProps={{
+                    //inputComponent: NumberFormatCustom as any,
+                  }}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -158,6 +168,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Code APE"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.ape}
                   helperText="Code APE obligatoire."
                   onChange={handleInfoCompany}
                 />
@@ -169,6 +180,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Code RCS"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.rcsName}
                   helperText="Code RCS obligatoire."
                   onChange={handleInfoCompany}
                 />
@@ -180,6 +192,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Numéro TVA"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.numeroTva}
                   helperText="Numéro TVA obligatoire."
                   onChange={handleInfoCompany}
                 />
@@ -201,31 +214,22 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Numéro"
                   variant="outlined"
                   color="secondary"
+                  value={companyAdress.numero}
                   helperText="Numéro obligatoire."
                   onChange={handleAdressCompany}
                 />
               </Grid>
               <Grid item xs={2}>
                 <TextField
-                  id="voie"
-                  label="voie"
+                  id="rue"
+                  label="rue"
                   variant="outlined"
                   color="secondary"
-                  helperText="Voie obligatoire."
+                  value={companyAdress.rue}
+                  helperText="Rue obligatoire."
                   onChange={handleAdressCompany}
                 />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField
-                  id="complementAdresse"
-                  className={classes.textField}
-                  label="Complément adresse"
-                  variant="outlined"
-                  color="secondary"
-                  helperText="Numéro Siret obligatoire."
-                  onChange={handleAdressCompany}
-                />
-              </Grid>
+              </Grid>              
               <Grid item xs={2}>
                 <TextField
                   id="codePostal"
@@ -233,18 +237,20 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Code postale"
                   variant="outlined"
                   color="secondary"
+                  value={companyAdress.codePostal}
                   helperText="Code postale obligatoire."
                   onChange={handleAdressCompany}
                 />
               </Grid>
               <Grid item xs={2}>
                 <TextField
-                  id="commune"
+                  id="localite"
                   className={classes.textField}
                   label="Commune"
                   variant="outlined"
                   color="secondary"
-                  helperText="Nom commune obligatoire."
+                  value={companyAdress.localite}
+                  helperText="Nom localite obligatoire."
                   onChange={handleAdressCompany}
                 />
               </Grid>
@@ -254,9 +260,10 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   className={classes.textField}
                   label="Pays"
                   variant="outlined"
-                  color="secondary"
-                  value="France"
+                  color="secondary"  
+                  value={companyAdress.pays}              
                   helperText="Nom pays obligatoire."
+                  defaultValue="France"
                   onChange={handleAdressCompany}
                 />
               </Grid>

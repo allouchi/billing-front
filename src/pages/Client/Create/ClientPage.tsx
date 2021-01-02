@@ -43,8 +43,9 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const siret: string = useSiret();
-  const create = useStoreActions((actions) => actions.clients.create);
-  const update = useStoreActions((actions) => actions.clients.update);
+  const createOrUpdate = useStoreActions(
+    (actions) => actions.clients.createOrUpdate
+  );
   /*
   const connectedUser: Partial<User> = useStoreState(
     (state) => state.user.user
@@ -66,35 +67,29 @@ const ClientPage: FC<{}> = (): ReactElement => {
   clientInfo.adresseClient = clientAdresse;
 
   const addClient = () => {
+    let messageId = "";
     const isNew: boolean = !clientInfo.id || clientInfo.id === 0;
-
     if (isNew) {
-      create({ client: clientInfo, siret: siret })
-        .then(() => history.push("/clients"))
-        .then(() =>
-          enqueueSnackbar("Le client a été créée avec succès", {
-            variant: "success",
-          })
-        )
-        .catch((err: Error) => {
-          enqueueSnackbar(err.message, { variant: "error" });
-        });
+      messageId = "messages.create.success";
     } else {
-      update({ client: clientInfo, siret: siret })
-        .then(() => history.push("/clients"))
-        .then(() =>
-          enqueueSnackbar("Le client a été mis à jour avec succès", {
-            variant: "success",
-          })
-        )
-        .catch((err: Error) => {
-          enqueueSnackbar(err.message, { variant: "error" });
-        });
+      messageId = "messages.edit.success";
     }
+    const message = intl.formatMessage({ id: messageId }, { cle: "Le client" });
+
+    createOrUpdate({ client: clientInfo, siret: siret })
+      .then(() => history.push("/clients"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
   };
-  const cancelClientInfo = () =>{
-    history.push('/clients');
-  }
+  const cancelClientInfo = () => {
+    history.push("/clients");
+  };
 
   return (
     <PageLayout
@@ -153,26 +148,15 @@ const ClientPage: FC<{}> = (): ReactElement => {
               </Grid>
               <Grid item xs={2}>
                 <TextField
-                  id="voie"
-                  label="voie"
-                  value={clientAdresse.voie}
+                  id="rue"
+                  label="rue"
+                  value={clientAdresse.rue}
                   variant="outlined"
                   color="secondary"
                   //helperText="Voie obligatoire."
                   onChange={handleAdresseClient}
                 />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField
-                  id="complementAdresse"
-                  label="Complément adresse"
-                  value={clientAdresse.complementAdresse}
-                  variant="outlined"
-                  color="secondary"
-                  //helperText="Numéro Siret obligatoire."
-                  onChange={handleAdresseClient}
-                />
-              </Grid>
+              </Grid>              
               <Grid item xs={2}>
                 <TextField
                   id="codePostal"
@@ -186,12 +170,12 @@ const ClientPage: FC<{}> = (): ReactElement => {
               </Grid>
               <Grid item xs={2}>
                 <TextField
-                  id="commune"
+                  id="localite"
                   label="Commune"
-                  value={clientAdresse.commune}
+                  value={clientAdresse.localite}
                   variant="outlined"
                   color="secondary"
-                  //helperText="Nom commune obligatoire."
+                  //helperText="Nom localite obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -210,13 +194,13 @@ const ClientPage: FC<{}> = (): ReactElement => {
             </Grid>
           </Paper>
           <Button
-                variant="contained"
-                color="secondary"                
-                className={classes.button}
-                onClick={cancelClientInfo}
-              >
-                {intl.formatMessage({ id: "buttons.cancelButton" })}
-              </Button>
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            onClick={cancelClientInfo}
+          >
+            {intl.formatMessage({ id: "buttons.cancelButton" })}
+          </Button>
           <Button
             variant="contained"
             color="secondary"

@@ -43,7 +43,7 @@ export class PrestationServiceImpl implements IPrestationService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting consultants");
+      throw Error("Error during getting prestations");
     }
   }
 

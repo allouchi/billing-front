@@ -52,7 +52,7 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
       });
   };
 
-  const editerClientClick = () => {
+  const editerClientClick = () => {   
     let client = JSON.stringify(item);
     history.push({
       pathname: "/client",
@@ -60,31 +60,33 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
       state: { detail: client },
     });
   };
-
   return (
     <>
       <StyledTableCell> {item.id}</StyledTableCell>
       <StyledTableCell> {item.socialReason}</StyledTableCell>
       <StyledTableCell> {item.mail}</StyledTableCell>
       <StyledTableCell>
-        {item.adresseClient.numero} {item.adresseClient.voie}{" "}
-        {item.adresseClient.complementAdresse} {item.adresseClient.codePostal}{" "}
-        {item.adresseClient.commune} {item.adresseClient.pays}
+        {item.adresseClient.numero} {item.adresseClient.rue}{" "}
+        {item.adresseClient.codePostal}{" "}
+        {item.adresseClient.localite} {" "} {item.adresseClient.pays}
       </StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("client", "edit")}>
-          <IconButton onClick={() => editerClientClick()}>
-            <EditIcon color="primary" />
+          <IconButton
+            onClick={editerClientClick}
+            aria-label="edit"
+            size="small"
+            style={{ marginRight: 6 }}
+          >
+            <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title={BuildMessageTooltip("client", "delete")}>
-          <DeleteItem
-            id={item.id}
-            cle="client"
-            value={item.socialReason}
-            deleteAction={handleDeleteClick}
-          />
-        </Tooltip>
+        <DeleteItem
+          id={item.id}
+          cle="client"
+          value={item.socialReason}
+          deleteAction={handleDeleteClick}
+        />
       </StyledTableCell>
     </>
   );

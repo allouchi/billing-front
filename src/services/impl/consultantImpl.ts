@@ -12,7 +12,6 @@ export class ConsultantServiceImpl implements IConsultantService {
   private static readonly CONSULTANT_PATH: string = "consultants";
 
   async createOrUpdate(consultant: Consultant, siret: string): Promise<Consultant> {
-
     const isNew: boolean = !consultant.id || consultant.id === 0;
     try {
       let response;

@@ -28,6 +28,17 @@ export default {
     "edit-source-code": " Edit {codeContent} and save to reload.",
     "learn-react": "Learn React",
   },
+  messages:{
+    create: {
+      success: "La {cle} a été crée avec succès",
+    },
+    edit: {
+      success: "La {cle} a été éditée avec succès",
+    },
+    delete:{
+      success: "La {cle} a été supprimée avec succès",
+    }   
+  }, 
   factures: {
     title: "Bills List",
   },

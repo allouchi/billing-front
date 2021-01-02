@@ -41,7 +41,7 @@ const FactureItem: FC<PrestationItemProps> = ({item, ...props}): ReactElement =>
   const handleDeleteClick = () =>{
     const message = intl.formatMessage(
       { id: "messages.delete.success"}, 
-      { value: "préstation" }
+      { value: "prestation" }
     );
     
     deleteById(item.id)

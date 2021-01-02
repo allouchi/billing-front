@@ -26,12 +26,14 @@ export default {
   notFoundGoBack: "Retour",
   messages:{
     create: {
-      success: "La {cle} a été crée avec succès",
+      success: "{cle} a été crée avec succès",
+    },
+    edit: {
+      success: "{cle} a été éditée avec succès",
     },
     delete:{
-      success: "La {cle} a été supprimée avec succès",
-    }
-    
+      success: "{cle} a été supprimée avec succès",
+    }   
   }, 
   // Home page
   home: {
