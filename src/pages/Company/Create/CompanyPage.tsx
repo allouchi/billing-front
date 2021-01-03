@@ -95,7 +95,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
   const addCompany = () => {
     const message = intl.formatMessage(
       { id: "messages.create.success" },
-      { cle: "société" }
+      { cle: "La société" }
     );
     createOrUpdate(companyInfo)
       .then(() => history.push("/companies"))

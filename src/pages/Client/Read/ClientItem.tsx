@@ -37,7 +37,7 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
-      { cle: "client" }
+      { cle: "Le client" }
     );
 
     deleteById(item.id)

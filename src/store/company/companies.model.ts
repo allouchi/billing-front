@@ -25,8 +25,7 @@ export const companiesModel: CompaniesModel = {
   isLoaded: false,
   items: [],
 
-  // Actions
-  
+  // Actions  
   loadSuccess: action((state, payload: Company[]) => {
     state.items= payload;
     state.isLoaded = true;

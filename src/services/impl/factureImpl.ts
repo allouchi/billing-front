@@ -15,7 +15,7 @@ export class FactureServiceImpl implements IFactureService {
     facture: Facture,
     siret: string,
     prestationId: number    
-  ): Promise<Facture> {
+  ): Promise<Map<string, object>> {
     const isNew: boolean = !facture.id || facture.id === 0;
     try {
       let response;

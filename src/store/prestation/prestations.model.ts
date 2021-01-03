@@ -35,7 +35,7 @@ export const prestationsModel: PrestationsModel = {
   add: action((state, payload: Prestation) => {
     state.items = [payload, ...state.items];
   }),
-  updateState: action((state, payload: Prestation) => {
+  updateState: action((state, payload: Prestation) => {    
     state.items.map((item: Prestation) =>
       item.id === payload.id ? payload : item
     );

@@ -11,7 +11,7 @@ export interface IFactureService {
    * @param facture facture to create or to update
    * @returns Promise<Facture>
    */  
-  createOrUpdate(facture: Facture, siret: string, prestationId: number): Promise<Facture>;
+  createOrUpdate(facture: Facture, siret: string, prestationId: number): Promise<Map<string, object>>;
 
   /**
    * Get all schemas if no project or all schemas for project name in otherwise

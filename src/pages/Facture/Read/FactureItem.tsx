@@ -15,7 +15,6 @@ import Prestation from "../../../domains/Prestation";
 import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 
-
 //import useSiret from "../../../hooks/siret.hook";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
@@ -45,29 +44,23 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
   const editerFactureClick = () => {
     let pestationId = 0;
-    let numeroCommande = "";
-    let clientPrestation = "";
-
     const message = intl.formatMessage(
       { id: "messages.edit.success" },
       { cle: "facture" }
     );
 
     items &&
-      items.forEach((element) => {        
-        if (element.facture === null) {
-          pestationId = element.id;
-          numeroCommande = element.numeroCommande;          
-        }
+      items.forEach((element) => {
+        pestationId = element.id;        
       });
-    
-    const param: FacturePrestation = {
+   
+    const facturePrestation: FacturePrestation = {
       prestationId: pestationId,
       siret: siret,
-      facture: item,        
+      facture: item,
     };
 
-    createOrUpdate(param)
+    createOrUpdate(facturePrestation)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
@@ -82,7 +75,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
-      { cle: "facture" }
+      { cle: "La facture" }
     );
 
     deleteById(item.id)
@@ -97,11 +90,13 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       });
   };
 
+  const styleStatus = item.factureStatus === "KO" ? 'color:green' : 'color: red';
+  
   return (
     <StyledTableRow>
       <StyledTableCell>{item.id}</StyledTableCell>
       <StyledTableCell>{item.numeroFacture}</StyledTableCell>
-      <StyledTableCell>{item.quantite}</StyledTableCell>     
+      <StyledTableCell>{item.quantite}</StyledTableCell>
       <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
       <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
       <StyledTableCell>{item.dateFacturation}</StyledTableCell>
@@ -109,7 +104,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       <StyledTableCell>{item.delaiPaiement}</StyledTableCell>
       <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
       <StyledTableCell>{item.nbJourRetard}</StyledTableCell>
-      <StyledTableCell>{item.factureStatus}</StyledTableCell>
+      <StyledTableCell className={styleStatus}>{item.factureStatus}</StyledTableCell>
       <StyledTableCell>{item.fraisRetard}</StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("facture", "edit")}>

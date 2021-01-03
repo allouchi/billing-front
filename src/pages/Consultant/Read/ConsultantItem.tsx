@@ -42,7 +42,7 @@ const ConsultantItem: FC<ConsultantItemProps> = ({ item }): ReactElement => {
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
-      { cle: "consultant" }
+      { cle: "Le consultant" }
     );
 
     const param : ConsultantSiret = {

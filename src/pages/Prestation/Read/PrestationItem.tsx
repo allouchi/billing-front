@@ -13,7 +13,6 @@ import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 
-
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -41,7 +40,7 @@ const FactureItem: FC<PrestationItemProps> = ({item, ...props}): ReactElement =>
   const handleDeleteClick = () =>{
     const message = intl.formatMessage(
       { id: "messages.delete.success"}, 
-      { value: "prestation" }
+      { cle: "La prestation" }
     );
     
     deleteById(item.id)

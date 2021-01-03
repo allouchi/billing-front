@@ -16,7 +16,7 @@ import useSiret from "../../../hooks/siret.hook";
 import Alert from "@material-ui/lab/Alert";
 import { clientIdentity, consultantIdentity } from "../../../shared/Utils";
 import PageLayout from "../../../components/PageLayout/PageLayout";
-import { useStoreDispatch } from 'easy-peasy';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +46,6 @@ const PrestationPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const siret: string = useSiret();
-  const dispatch = useStoreDispatch();
   const { enqueueSnackbar } = useSnackbar();
   
   const createOrUpdate = useStoreActions(
@@ -111,7 +110,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
 
     const message = intl.formatMessage(
       { id: "messages.create.success" },
-      { cle: "prestation" }
+      { cle: "La prestation" }
     );
     createOrUpdate(param)
       .then(() => history.push("/prestations"))

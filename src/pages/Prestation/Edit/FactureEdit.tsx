@@ -64,7 +64,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
 
   const handleValider = () => {
     setOpen(false);
-
     const param: FacturePrestation = {
       prestationId: state.prestationId,         
       facture: state.facture,
@@ -83,7 +82,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     }
     const message = intl.formatMessage(
       { id: "messages.create.success" },
-      { cle: "facture" }
+      { cle: "La facture" }
     );
 
     createOrUpdate(param)
