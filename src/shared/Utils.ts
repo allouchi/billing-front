@@ -2,6 +2,7 @@ import Client from "../domains/Client";
 import Consultant from "../domains/Consultant";
 import Facture from "../domains/Facture";
 
+
 export const clientIdentity = (client: Client): string => {
   return upperFirstCase(client.socialReason);
 };
@@ -82,9 +83,7 @@ export const parseClientJsonObject = (jsonObject: any): Client => {
         pays: item.adresseClient.pays,
       },
     };
-  }
-
-  console.log("client : ", client);
+  }  
   return client;
 };
 
@@ -105,7 +104,9 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     factureStatus: "",
     quantite: 0,
     designation: "",
-    clientPrestation: ""
+    clientPrestation: "",
+    filePath: '',
+    fileContent: undefined,
   };
 
   if (jsonObject !== null && jsonObject.detail !== null) {
@@ -128,6 +129,8 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       quantite: item.quantite,
       designation: item.designation,
       clientPrestation: item.clientPrestation,
+      filePath: item.filePath,
+      fileContent: item.fileContent,
     };
   }
   return facture;

@@ -24,6 +24,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const siret: string = useSiret();
   const intl = useIntl();
   const createOrUpdate = useStoreActions((actions) => actions.factures.createOrUpdate);
+  
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
@@ -44,14 +45,15 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       quantite: 0,
       numeroCommande: "",
       designation: "La Prestation est réalisée pour le compte de",
-      clientPrestation : `${item.client.socialReason}`
+      clientPrestation : `${item.client.socialReason}`,
+      filePath: '',
+      fileContent: item.facture.fileContent,
     },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;
-   
+    const value: string = e.target.value;   
     setState({
       ...state,
       facture: { ...state.facture, [id]: value },
@@ -64,17 +66,18 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
 
   const handleValider = () => {
     setOpen(false);
-    const param: FacturePrestation = {
+    const facturePrestation: FacturePrestation = {
       prestationId: state.prestationId,         
-      facture: state.facture,
+      facture:state.facture,      
       siret: siret,
+      factureId: state.facture.id,
     };
 
     if (
-      param.facture.numeroCommande === "" ||
-      param.facture.quantite === 0 ||
-      param.facture.designation === "" ||
-      param.facture.clientPrestation === ""
+      facturePrestation.facture.numeroCommande === "" ||
+      facturePrestation.facture.quantite === 0 ||
+      facturePrestation.facture.designation === "" ||
+      facturePrestation.facture.clientPrestation === ""
     ) {
       enqueueSnackbar("La saisie de tous les champs est obligatoire", { variant: "error" });
       setOpen(true);
@@ -85,7 +88,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       { cle: "La facture" }
     );
 
-    createOrUpdate(param)
+    createOrUpdate(facturePrestation)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
@@ -94,7 +97,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });
+      });     
   };
 
   return (

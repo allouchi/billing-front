@@ -15,19 +15,17 @@ export class FactureServiceImpl implements IFactureService {
     facture: Facture,
     siret: string,
     prestationId: number    
-  ): Promise<Map<string, object>> {
+  ): Promise<Facture> {
     const isNew: boolean = !facture.id || facture.id === 0;
     try {
       let response;
       if (isNew) {
         response = await Webservice.getInstance().post(
-          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
-          facture
+          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`, facture
         );
       } else {
         response = await Webservice.getInstance().put(
-          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
-          facture
+          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`, facture
         );
       }
       return response.data;
@@ -47,14 +45,17 @@ export class FactureServiceImpl implements IFactureService {
     }
   }
 
-  async deleteById(id: number): Promise<string> {
+  async deleteById(    
+    siret: string,
+    prestationId: number,
+    factureId: number): Promise<string> {
     try {
       await Webservice.getInstance().delete(
-        `${FactureServiceImpl.FACTURES_PATH}/${id}`
+        `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}/${factureId}`
       );
       return Promise.resolve("200");
     } catch (error) {
-      return Promise.reject(`Error during deleting facture with id ${id}`);
+      return Promise.reject(`Error during deleting facture with id ${factureId}`);
     }
   }
 }

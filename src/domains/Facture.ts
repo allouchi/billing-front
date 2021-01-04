@@ -17,4 +17,6 @@ export default interface Facture {
   numeroCommande: string;
   designation: string,  
   clientPrestation: string,
+  filePath: string,
+  fileContent?: BinaryType | undefined;
 }

@@ -39,6 +39,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const createOrUpdate = useStoreActions(
     (actions) => actions.factures.createOrUpdate
   );
+  const factures: Facture[] = useStoreState((state) => state.factures.items);
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   //const [state, setState] = useState();
 
@@ -46,18 +47,30 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     let pestationId = 0;
     const message = intl.formatMessage(
       { id: "messages.edit.success" },
-      { cle: "facture" }
+      { cle: "La facture" }
     );
+
+    factures &&
+      factures.forEach((element) => {
+        const data = element.fileContent;
+        if(data !== undefined){
+          const file = new Blob([data], { type: "application/pdf" });
+          const fileURL = URL.createObjectURL(file);        
+          window.open(fileURL);
+        }
+        
+      });
 
     items &&
       items.forEach((element) => {
-        pestationId = element.id;        
+        pestationId = element.id;
       });
-   
+
     const facturePrestation: FacturePrestation = {
       prestationId: pestationId,
       siret: siret,
       facture: item,
+      factureId: item.id,
     };
 
     createOrUpdate(facturePrestation)
@@ -73,12 +86,26 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   };
 
   const handleDeleteClick = () => {
+    let pestationId: number = 0;
+
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
       { cle: "La facture" }
     );
 
-    deleteById(item.id)
+    items &&
+      items.forEach((element) => {
+        pestationId = element.id;
+      });
+
+    const facturePrestation: FacturePrestation = {
+      prestationId: pestationId,
+      siret: siret,
+      factureId: item.id,
+      facture: item,
+    };
+
+    deleteById(facturePrestation)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
@@ -90,8 +117,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       });
   };
 
-  const styleStatus = item.factureStatus === "KO" ? 'color:green' : 'color: red';
-  
+  const styleStatus =
+    item.factureStatus === "KO" ? "color:green" : "color: red";
+
   return (
     <StyledTableRow>
       <StyledTableCell>{item.id}</StyledTableCell>
@@ -104,7 +132,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       <StyledTableCell>{item.delaiPaiement}</StyledTableCell>
       <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
       <StyledTableCell>{item.nbJourRetard}</StyledTableCell>
-      <StyledTableCell className={styleStatus}>{item.factureStatus}</StyledTableCell>
+      <StyledTableCell className={styleStatus}>
+        {item.factureStatus}
+      </StyledTableCell>
       <StyledTableCell>{item.fraisRetard}</StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("facture", "edit")}>

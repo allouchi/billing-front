@@ -11,7 +11,7 @@ export interface IFactureService {
    * @param facture facture to create or to update
    * @returns Promise<Facture>
    */  
-  createOrUpdate(facture: Facture, siret: string, prestationId: number): Promise<Map<string, object>>;
+  createOrUpdate(facture: Facture, siret: string, prestationId: number): Promise<Facture>;
 
   /**
    * Get all schemas if no project or all schemas for project name in otherwise
@@ -26,6 +26,6 @@ export interface IFactureService {
    *
    * @param id facture id to delete
    */
-  deleteById(id: number): Promise<String>;
+  deleteById(siret: string, factureId: number, prestationId: number): Promise<String>;
  
 }

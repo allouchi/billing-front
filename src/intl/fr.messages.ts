@@ -26,7 +26,7 @@ export default {
   notFoundGoBack: "Retour",
   messages:{
     create: {
-      success: "{cle} a été crée avec succès",
+      success: "{cle} a été créee avec succès",
     },
     edit: {
       success: "{cle} a été éditée avec succès",
