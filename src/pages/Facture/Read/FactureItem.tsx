@@ -39,7 +39,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const createOrUpdate = useStoreActions(
     (actions) => actions.factures.createOrUpdate
   );
-  const factures: Facture[] = useStoreState((state) => state.factures.items);
+  
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   //const [state, setState] = useState();
 
@@ -48,18 +48,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     const message = intl.formatMessage(
       { id: "messages.edit.success" },
       { cle: "La facture" }
-    );
-
-    factures &&
-      factures.forEach((element) => {
-        const data = element.fileContent;
-        if(data !== undefined){
-          const file = new Blob([data], { type: "application/pdf" });
-          const fileURL = URL.createObjectURL(file);        
-          window.open(fileURL);
-        }
-        
-      });
+    );    
 
     items &&
       items.forEach((element) => {
@@ -82,7 +71,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });
+      });     
   };
 
   const handleDeleteClick = () => {
@@ -124,6 +113,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     <StyledTableRow>
       <StyledTableCell>{item.id}</StyledTableCell>
       <StyledTableCell>{item.numeroFacture}</StyledTableCell>
+      <StyledTableCell>{item.numeroCommande}</StyledTableCell>
       <StyledTableCell>{item.quantite}</StyledTableCell>
       <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
       <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>

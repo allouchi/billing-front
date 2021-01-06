@@ -106,7 +106,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     designation: "",
     clientPrestation: "",
     filePath: '',
-    fileContent: undefined,
+    //fileContent: new Blob(),
   };
 
   if (jsonObject !== null && jsonObject.detail !== null) {
@@ -130,7 +130,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       designation: item.designation,
       clientPrestation: item.clientPrestation,
       filePath: item.filePath,
-      fileContent: item.fileContent,
+      //fileContent: item.fileContent,
     };
   }
   return facture;

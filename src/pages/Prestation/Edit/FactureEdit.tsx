@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useState } from "react";
 import Prestation from "../../../domains/Prestation";
-import { useStoreActions } from "../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import { useIntl } from "react-intl";
 import useSiret from "../../../hooks/siret.hook";
@@ -8,6 +8,7 @@ import FacturePrestation from "../../../store/facture/factures.model";
 import { useSnackbar } from "notistack";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -24,9 +25,15 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const siret: string = useSiret();
   const intl = useIntl();
   const createOrUpdate = useStoreActions((actions) => actions.factures.createOrUpdate);
-  
+  const [onError, setOnError] = useState(false);
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
+  const findAllBySiret = useStoreActions(
+    (actions) => actions.prestations.findAllBySiret
+  );
+  const isLoaded: boolean = useStoreState(
+    (state) => state.prestations.isLoaded
+  );  
   const [state, setState] = useState({
     prestationId: item.id,      
     facture: {
@@ -47,7 +54,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       designation: "La Prestation est réalisée pour le compte de",
       clientPrestation : `${item.client.socialReason}`,
       filePath: '',
-      fileContent: item.facture.fileContent,
+      //fileContent: new Blob(),
     },
   });
 
@@ -65,6 +72,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   };
 
   const handleValider = () => {
+   
     setOpen(false);
     const facturePrestation: FacturePrestation = {
       prestationId: state.prestationId,         
@@ -97,8 +105,18 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });     
+      }); 
+/*
+      findAllBySiret(siret).catch((e: Error) => {         
+      enqueueSnackbar(e.message, { variant: "error" });
+      setOnError(true);
+    });
+
+    if (!isLoaded && !onError) {
+      return <CircularProgress color="inherit" />;
+    }  */  
   };
+
 
   return (
     <div>

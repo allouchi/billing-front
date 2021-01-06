@@ -5,7 +5,7 @@ import Prestation from "../../../domains/Prestation";
 import { StyledTableCell } from "./PrestationList";
 import ConsultantAvatar from "./../../../components/Avatar/ConsultantAvatar";
 import { useIntl } from "react-intl";
-import { IconButton, Tooltip } from "@material-ui/core";
+import {IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import { useStoreActions } from "../../../store/hooks";
@@ -27,33 +27,39 @@ interface PrestationItemProps {
   item: Prestation;
   editerFacture(item: Prestation): void;
 }
-const FactureItem: FC<PrestationItemProps> = ({item, ...props}): ReactElement => { 
+const FactureItem: FC<PrestationItemProps> = ({
+  item,
+  ...props
+}): ReactElement => {
   const intl = useIntl();
-  const history = useHistory();  
+  const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const deleteById = useStoreActions((actions) => actions.prestations.deleteById);
- 
-  const handleEditClick = () => {    
-    props.editerFacture(item);
+
+  const deleteById = useStoreActions(
+    (actions) => actions.prestations.deleteById
+  ); 
+
+  const handleEditClick = () => {
+    props.editerFacture(item);   
   };
 
-  const handleDeleteClick = () =>{
+  const handleDeleteClick = () => {
     const message = intl.formatMessage(
-      { id: "messages.delete.success"}, 
+      { id: "messages.delete.success" },
       { cle: "La prestation" }
     );
-    
+
     deleteById(item.id)
-    .then(() => history.push("/prestations"))
-    .then(() =>     
-      enqueueSnackbar(message, {
-        variant: "success",
-      })
-    )
-    .catch((err: Error) => {
-      enqueueSnackbar(err.message, { variant: "error" });
-    });
-  }
+      .then(() => history.push("/prestations"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
 
   return (
     <StyledTableRow>
@@ -67,7 +73,12 @@ const FactureItem: FC<PrestationItemProps> = ({item, ...props}): ReactElement =>
       <StyledTableCell>{item.client.socialReason}</StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("prestation", "edit")}>
-          <IconButton onClick={() =>handleEditClick()} aria-label="edit" size="small" style={{ marginRight: 6 }}>
+          <IconButton
+            onClick={() => handleEditClick()}
+            aria-label="edit"
+            size="small"
+            style={{ marginRight: 6 }}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
