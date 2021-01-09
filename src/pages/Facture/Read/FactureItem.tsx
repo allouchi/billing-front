@@ -14,7 +14,6 @@ import useSiret from "../../../hooks/siret.hook";
 import Prestation from "../../../domains/Prestation";
 import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
-import { ForumTwoTone } from "@material-ui/icons";
 
 //import useSiret from "../../../hooks/siret.hook";
 
@@ -44,39 +43,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   //const [state, setState] = useState();
 
-  const editerFactureClick = () => {
-    let pestationId = 0;
-    const message = intl.formatMessage(
-      { id: "messages.edit.success" },
-      { cle: "La facture" }
-    );
-    /*
-    items &&
-      items.forEach((element) => {
-        if (element.facture.id === item.id) {
-          pestationId = element.id;
-        }
-      });
-*/
-    const facturePrestation: FacturePrestation = {
-      prestationId: pestationId,
-      siret: siret,
-      facture: item,
-      factureId: item.id,
-    };
-
-    createOrUpdate(facturePrestation)
-      .then(() => history.push("/factures"))
-      .then(() =>
-        enqueueSnackbar(message, {
-          variant: "success",
-        })
-      )
-      .catch((err: Error) => {
-        enqueueSnackbar(err.message, { variant: "error" });
-      });
-  };
-
   const findPrestationId = (): number => {
     let pestationId: number = 0;
     let prestation = items.map((prestat) => {
@@ -95,6 +61,30 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     }
     return pestationId;
   };
+  const editerFactureClick = () => {    
+    const message = intl.formatMessage(
+      { id: "messages.edit.success" },
+      { cle: "La facture" }
+    );
+   
+    const facturePrestation: FacturePrestation = {
+      prestationId: findPrestationId(),
+      siret: siret,
+      facture: item,
+      factureId: item.id,
+    };
+
+    createOrUpdate(facturePrestation)
+      .then(() => history.push("/factures"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  }; 
 
   const handleDeleteClick = () => {
     const message = intl.formatMessage(

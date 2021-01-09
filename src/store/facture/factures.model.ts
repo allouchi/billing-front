@@ -75,6 +75,7 @@ export const facturesModel: FacturesModel = {
           payload.prestationId
         );
         let facture: Facture;
+        
         const objectArray = Object.entries(response);
         objectArray.forEach(([key, value]) => {
           if (key === "facture") {
