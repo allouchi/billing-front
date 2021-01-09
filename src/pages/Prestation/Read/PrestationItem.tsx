@@ -87,7 +87,7 @@ const FactureItem: FC<PrestationItemProps> = ({
           cle="prestation"
           value={item.numeroCommande}
           deleteAction={handleDeleteClick}
-        />
+        />      
       </StyledTableCell>
     </StyledTableRow>
   );

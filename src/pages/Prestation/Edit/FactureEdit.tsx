@@ -98,15 +98,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       }); 
-/*
-      findAllBySiret(siret).catch((e: Error) => {         
-      enqueueSnackbar(e.message, { variant: "error" });
-      setOnError(true);
-    });
-
-    if (!isLoaded && !onError) {
-      return <CircularProgress color="inherit" />;
-    }  */  
   };
 
 

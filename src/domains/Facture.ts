@@ -17,6 +17,6 @@ export default interface Facture {
   numeroCommande: string;
   designation: string,  
   clientPrestation: string,
-  filePath?: string,
+  filePath: string,
   //fileContent?: Blob
 }

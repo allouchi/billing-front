@@ -1,29 +1,31 @@
 import { action, Action, Thunk, thunk } from "easy-peasy";
 import Facture from "../../domains/Facture";
+import Pdf from "../../domains/Pdf";
 import { Injections } from "../injections";
 
 export interface FacturesModel {
   isLoaded: boolean;
   items: Facture[];
-  //pdf: Blob;
+  pdf: Pdf | any;
 
   // Actions
   loadSuccess: Action<FacturesModel, Facture[]>;
   remove: Action<FacturesModel, FacturePrestation>;
   add: Action<FacturesModel, Facture>;
-  //addPdf: Action<FacturesModel, Blob>;
   updateState: Action<FacturesModel, Facture>;
+  download: Action<FacturesModel, PdfPath>;
 
   // Thunk
   findAllBySiret: Thunk<FacturesModel, string | undefined, Injections>;
   createOrUpdate: Thunk<FacturesModel, FacturePrestation, Injections>;
   deleteById: Thunk<FacturesModel, FacturePrestation, Injections>;
+  downloadPdf: Thunk<FacturesModel, PdfPath, Injections>;
 }
 
 export const facturesModel: FacturesModel = {
   isLoaded: false,
   items: [],
-  //pdf : Blob,
+  pdf: {},
 
   // Actions
   loadSuccess: action((state, payload: Facture[]) => {
@@ -39,13 +41,11 @@ export const facturesModel: FacturesModel = {
     state.items = [payload, ...state.items];
   }),
 
-  /*
-  addPdf: action((state, payload: Blob) => {
-    //state.pdf = [payload, ...state.pdf];
+  download: action((state, payload: PdfPath) => {
+    state.pdf = [payload, ...state.pdf];    
   }),
-  */
+
   updateState: action((state, payload: Facture) => {
-    //state.items = [payload, ...state.items];
     state.items.map((item: Facture) =>
       item.filePath === payload.filePath ? item : payload
     );
@@ -64,39 +64,20 @@ export const facturesModel: FacturesModel = {
   // Thunks
   createOrUpdate: thunk(
     async (actions, payload: FacturePrestation, { injections }) => {
-      const isNew: boolean = !payload.facture.id || payload.facture.id === 0;   
-
+      const isNew: boolean = !payload.facture.id || payload.facture.id === 0;
       try {
         const { factureService } = injections;
-        let response: Map<String, object>;
-        response = await factureService.createOrUpdate(
+        const facture = await factureService.createOrUpdate(
           payload.facture,
           payload.siret,
           payload.prestationId
         );
-        let facture: Facture;
-        
-        const objectArray = Object.entries(response);
-        objectArray.forEach(([key, value]) => {
-          if (key === "facture") {
-            facture = value;
-            if (isNew) {
-              actions.add(facture);
-            } else {
-              actions.updateState(facture);
-            }
-          }
-          if (key === "pdf") {
-            if(value !== undefined){
-              const file = new Blob([value], { type: "application/pdf" });
-              const fileURL = URL.createObjectURL(file); 
-              console.log(value);       
-              //window.open(fileURL); 
-            }           
-          }
-        });
 
-        
+        if (isNew) {
+          actions.add(facture);
+        } else {
+          actions.updateState(facture);
+        }
       } catch (error) {
         throw error;
       }
@@ -118,7 +99,24 @@ export const facturesModel: FacturesModel = {
       }
     }
   ),
+
+  // Thunks
+  downloadPdf: thunk(async (actions, payload: PdfPath, { injections }) => {
+    try {
+      const { factureService } = injections;  
+      const pdf = await factureService.download(payload.siret, payload.path);
+      actions.download(payload);
+    } catch (error) {
+      throw error;
+    }
+  }),
 };
+
+export interface PdfPath { 
+  siret: string;
+  path: string;
+  pdf: Pdf;
+}
 
 interface FacturePrestation {
   prestationId: number;

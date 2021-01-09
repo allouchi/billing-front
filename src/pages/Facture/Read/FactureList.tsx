@@ -60,8 +60,8 @@ const factures = (
           <StyledTableCell align="left">Jours de Retard</StyledTableCell>
           <StyledTableCell align="left">Statut de la Facture</StyledTableCell>          
           <StyledTableCell align="left">Frais de Retard</StyledTableCell>
-          <StyledTableCell></StyledTableCell> 
-          <StyledTableCell></StyledTableCell>
+          <StyledTableCell>{}</StyledTableCell>
+          
         </TableRow>
       </TableHead>
       <TableBody>

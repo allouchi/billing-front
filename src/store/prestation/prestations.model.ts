@@ -14,7 +14,7 @@ export interface PrestationsModel {
   findAllBySiret: Thunk<PrestationsModel, string, Injections>;
 
   // Thunk
-  createOrUpdate: Thunk<PrestationsModel, PrestationSiret, Injections>;  
+  createOrUpdate: Thunk<PrestationsModel, PrestationSiret, Injections>;
   deleteById: Thunk<PrestationsModel, number, Injections>;
 }
 
@@ -35,7 +35,7 @@ export const prestationsModel: PrestationsModel = {
   add: action((state, payload: Prestation) => {
     state.items = [payload, ...state.items];
   }),
-  updateState: action((state, payload: Prestation) => {    
+  updateState: action((state, payload: Prestation) => {
     state.items.map((item: Prestation) =>
       item.id === payload.id ? payload : item
     );
@@ -51,27 +51,29 @@ export const prestationsModel: PrestationsModel = {
       throw error;
     }
   }),
- 
+
   // Thunks
-  createOrUpdate: thunk(async (actions, payload: PrestationSiret, { injections }) => {
-    const isNew: boolean = !payload.prestation.id || payload.prestation.id === 0;
-    try {
-      const { prestationService } = injections;
-      const prestation = await prestationService.createOrUpdate(
-        payload.prestation,
-        payload.siret
-      );
-      
-      if(isNew){
-        actions.add(prestation);
-      }else{
-        actions.updateState(prestation);
+  createOrUpdate: thunk(
+    async (actions, payload: PrestationSiret, { injections }) => {
+      const isNew: boolean =
+        !payload.prestation.id || payload.prestation.id === 0;
+      try {
+        const { prestationService } = injections;
+        const prestation = await prestationService.createOrUpdate(
+          payload.prestation,
+          payload.siret
+        );
+
+        if (isNew) {
+          actions.add(prestation);
+        } else {
+          actions.updateState(prestation);
+        }
+      } catch (error) {
+        throw error;
       }
-     
-    } catch (error) {
-      throw error;
     }
-  }), 
+  ),
   deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { prestationService } = injections;
@@ -83,7 +85,7 @@ export const prestationsModel: PrestationsModel = {
   }),
 };
 
-interface PrestationSiret {  
+interface PrestationSiret {
   prestation: Partial<Prestation>;
   siret: string;
 }

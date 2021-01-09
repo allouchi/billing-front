@@ -1,8 +1,7 @@
 import { useIntl } from "react-intl";
 
 const BuildMessageTooltip = (item: string, action: string): string => {
-    const intl = useIntl();
-  
+    const intl = useIntl();    
     const itemId = intl.formatMessage(
         { id:  `tooltip.${item}`},      
       );  

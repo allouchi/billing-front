@@ -90,6 +90,7 @@ export default {
     editButton : "Editer facture",   
   },
   tooltip: {
+    download: 'Télécharger {cle}',
     edit: 'Editer {cle}',
     delete: 'Supprimer {cle}',
     prestation: 'prestation',

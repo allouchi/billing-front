@@ -12,8 +12,11 @@ import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import useSiret from "../../../hooks/siret.hook";
 import Prestation from "../../../domains/Prestation";
-import FacturePrestation from "../../../store/facture/factures.model";
+import FacturePrestation, {
+  PdfPath,
+} from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 //import useSiret from "../../../hooks/siret.hook";
 
@@ -34,13 +37,11 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
   const history = useHistory();
   const siret: string = useSiret();
-  const { enqueueSnackbar } = useSnackbar();
-  const deleteById = useStoreActions((actions) => actions.factures.deleteById);
-  const createOrUpdate = useStoreActions(
-    (actions) => actions.factures.createOrUpdate
-  );
-
+  const { enqueueSnackbar } = useSnackbar(); 
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
+  const deleteById = useStoreActions((actions) => actions.factures.deleteById);
+  const createOrUpdate = useStoreActions((actions) => actions.factures.createOrUpdate);
+  const downloadPdf = useStoreActions((actions) => actions.factures.download);
   //const [state, setState] = useState();
 
   const findPrestationId = (): number => {
@@ -51,22 +52,24 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
     for (let i = 0; i < prestation.length; i++) {
       if (typeof prestation[i] !== "undefined") {
-        let facture = prestation[i].facture;        
-        for (let j = 0; j < facture.length; j++) {
-          if (facture[j].id === item.id) {
-            pestationId = prestation[i].id;            
+        let facture = prestation[i].facture;
+        if (typeof facture[i] !== "undefined") {
+          for (let j = 0; j < facture.length; j++) {
+            if (facture[j].id === item.id) {
+              pestationId = prestation[i].id;
+            }
           }
         }
       }
     }
     return pestationId;
   };
-  const editerFactureClick = () => {    
+  const editerFactureClick = () => {
     const message = intl.formatMessage(
       { id: "messages.edit.success" },
       { cle: "La facture" }
     );
-   
+
     const facturePrestation: FacturePrestation = {
       prestationId: findPrestationId(),
       siret: siret,
@@ -84,14 +87,13 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
-  }; 
-
+  };
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
       { cle: "La facture" }
     );
-    
+
     const facturePrestation: FacturePrestation = {
       prestationId: findPrestationId(),
       siret: siret,
@@ -109,6 +111,30 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
+  };
+
+  const downloadPdfClick = () => {
+    const message = intl.formatMessage(
+      { id: "messages.delete.success" },
+      { cle: "La facture" }
+    );
+
+    const pdfPath: PdfPath = {
+      siret: siret,
+      path: item.filePath,
+      pdf: {},
+    };
+/*
+    downloadPdf(pdfPath)
+      .then(() => history.push("/factures"))
+      .then(() =>
+        enqueueSnackbar(message, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });*/
   };
 
   const styleStatus =
@@ -148,6 +174,16 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           value={item.numeroFacture}
           deleteAction={handleDeleteClick}
         />
+        <Tooltip title={BuildMessageTooltip("facture", "download")}>
+          <IconButton
+            onClick={downloadPdfClick}
+            aria-label="edit"
+            size="small"
+            style={{ marginRight: 6 }}
+          >
+            <PictureAsPdfIcon />
+          </IconButton>
+        </Tooltip>
       </StyledTableCell>
     </StyledTableRow>
   );
