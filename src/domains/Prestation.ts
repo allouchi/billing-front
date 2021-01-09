@@ -8,7 +8,7 @@ export default interface Prestation {
   delaiPaiement: number;  
   consultant: Consultant;
   client: Client;
-  facture: Facture;
+  facture: Facture[];
   numeroCommande: string;   
   startDate?: Date;
   endDate?: Date;

@@ -14,6 +14,7 @@ import useSiret from "../../../hooks/siret.hook";
 import Prestation from "../../../domains/Prestation";
 import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
+import { ForumTwoTone } from "@material-ui/icons";
 
 //import useSiret from "../../../hooks/siret.hook";
 
@@ -39,7 +40,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const createOrUpdate = useStoreActions(
     (actions) => actions.factures.createOrUpdate
   );
-  
+
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   //const [state, setState] = useState();
 
@@ -48,13 +49,15 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     const message = intl.formatMessage(
       { id: "messages.edit.success" },
       { cle: "La facture" }
-    );    
-
+    );
+    /*
     items &&
       items.forEach((element) => {
-        pestationId = element.id;
+        if (element.facture.id === item.id) {
+          pestationId = element.id;
+        }
       });
-
+*/
     const facturePrestation: FacturePrestation = {
       prestationId: pestationId,
       siret: siret,
@@ -71,27 +74,39 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });     
+      });
+  };
+
+  const findPrestationId = (): number => {
+    let pestationId: number = 0;
+    let prestation = items.map((prestat) => {
+      return prestat;
+    });
+
+    for (let i = 0; i < prestation.length; i++) {
+      if (typeof prestation[i] !== "undefined") {
+        let facture = prestation[i].facture;        
+        for (let j = 0; j < facture.length; j++) {
+          if (facture[j].id === item.id) {
+            pestationId = prestation[i].id;            
+          }
+        }
+      }
+    }
+    return pestationId;
   };
 
   const handleDeleteClick = () => {
-    let pestationId: number = 0;
-
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
       { cle: "La facture" }
     );
-
-    items &&
-      items.forEach((element) => {
-        pestationId = element.id;
-      });
-
+    
     const facturePrestation: FacturePrestation = {
-      prestationId: pestationId,
+      prestationId: findPrestationId(),
       siret: siret,
-      factureId: item.id,
       facture: item,
+      factureId: item.id,
     };
 
     deleteById(facturePrestation)
