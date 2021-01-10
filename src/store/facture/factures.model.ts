@@ -1,32 +1,27 @@
 import { action, Action, Thunk, thunk } from "easy-peasy";
 import Facture from "../../domains/Facture";
-import Pdf from "../../domains/Pdf";
 import { Injections } from "../injections";
 
 export interface FacturesModel {
   isLoaded: boolean;
   items: Facture[];
-  pdf: Pdf | any;
-
+  
   // Actions
   loadSuccess: Action<FacturesModel, Facture[]>;
   remove: Action<FacturesModel, FacturePrestation>;
   add: Action<FacturesModel, Facture>;
   updateState: Action<FacturesModel, Facture>;
-  download: Action<FacturesModel, PdfPath>;
-
+  
   // Thunk
   findAllBySiret: Thunk<FacturesModel, string | undefined, Injections>;
   createOrUpdate: Thunk<FacturesModel, FacturePrestation, Injections>;
-  deleteById: Thunk<FacturesModel, FacturePrestation, Injections>;
-  downloadPdf: Thunk<FacturesModel, PdfPath, Injections>;
+  deleteById: Thunk<FacturesModel, FacturePrestation, Injections>; 
 }
 
 export const facturesModel: FacturesModel = {
   isLoaded: false,
   items: [],
-  pdf: {},
-
+  
   // Actions
   loadSuccess: action((state, payload: Facture[]) => {
     state.items = payload;
@@ -39,10 +34,6 @@ export const facturesModel: FacturesModel = {
   }),
   add: action((state, payload: Facture) => {
     state.items = [payload, ...state.items];
-  }),
-
-  download: action((state, payload: PdfPath) => {
-    state.pdf = [payload, ...state.pdf];    
   }),
 
   updateState: action((state, payload: Facture) => {
@@ -62,28 +53,6 @@ export const facturesModel: FacturesModel = {
     }
   }),
   // Thunks
-  createOrUpdate: thunk(
-    async (actions, payload: FacturePrestation, { injections }) => {
-      const isNew: boolean = !payload.facture.id || payload.facture.id === 0;
-      try {
-        const { factureService } = injections;
-        const facture = await factureService.createOrUpdate(
-          payload.facture,
-          payload.siret,
-          payload.prestationId
-        );
-
-        if (isNew) {
-          actions.add(facture);
-        } else {
-          actions.updateState(facture);
-        }
-      } catch (error) {
-        throw error;
-      }
-    }
-  ),
-
   deleteById: thunk(
     async (actions, payload: FacturePrestation, { injections }) => {
       try {
@@ -101,24 +70,30 @@ export const facturesModel: FacturesModel = {
   ),
 
   // Thunks
-  downloadPdf: thunk(async (actions, payload: PdfPath, { injections }) => {
-    try {
-      const { factureService } = injections;  
-      const pdf = await factureService.download(payload.siret, payload.path);
-      actions.download(payload);
-    } catch (error) {
-      throw error;
+  createOrUpdate: thunk(
+    async (actions, payload: FacturePrestation, { injections }) => {
+      const isNew: boolean = !payload.facture.id || payload.facture.id === 0;
+      try {
+        const { factureService } = injections;
+        const facture = await factureService.createOrUpdate(
+          payload.facture,
+          payload.siret,
+          payload.prestationId
+        );
+        if (isNew) {
+          actions.add(facture);
+        } else {
+          actions.updateState(facture);
+        }
+      } catch (error) {
+        throw error;
+      }
     }
-  }),
+  ),
+ 
 };
 
-export interface PdfPath { 
-  siret: string;
-  path: string;
-  pdf: Pdf;
-}
-
-interface FacturePrestation {
+export interface FacturePrestation {
   prestationId: number;
   facture: Facture;
   siret: string;

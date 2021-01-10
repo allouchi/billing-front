@@ -12,13 +12,10 @@ import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import useSiret from "../../../hooks/siret.hook";
 import Prestation from "../../../domains/Prestation";
-import FacturePrestation, {
-  PdfPath,
-} from "../../../store/facture/factures.model";
+import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-
-//import useSiret from "../../../hooks/siret.hook";
+import PdfPath from "../../../store/pdf/pdfs.model";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -37,11 +34,13 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
   const history = useHistory();
   const siret: string = useSiret();
-  const { enqueueSnackbar } = useSnackbar(); 
+  const { enqueueSnackbar } = useSnackbar();
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
-  const createOrUpdate = useStoreActions((actions) => actions.factures.createOrUpdate);
-  const downloadPdf = useStoreActions((actions) => actions.factures.download);
+  const createOrUpdate = useStoreActions(
+    (actions) => actions.factures.createOrUpdate
+  );
+  const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
   //const [state, setState] = useState();
 
   const findPrestationId = (): number => {
@@ -115,16 +114,16 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
   const downloadPdfClick = () => {
     const message = intl.formatMessage(
-      { id: "messages.delete.success" },
+      { id: "messages.download.success" },
       { cle: "La facture" }
     );
 
     const pdfPath: PdfPath = {
+      prestationId: findPrestationId(),
       siret: siret,
-      path: item.filePath,
-      pdf: {},
+      factureId: item.id,
     };
-/*
+
     downloadPdf(pdfPath)
       .then(() => history.push("/factures"))
       .then(() =>
@@ -134,7 +133,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });*/
+      });
   };
 
   const styleStatus =

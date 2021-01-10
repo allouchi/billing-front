@@ -5,6 +5,7 @@ import { clientsModel, ClientsModel } from './client/clients.model';
 import { consultantsModel, ConsultantsModel } from './consultant/consultants.model';
 import { prestationsModel, PrestationsModel } from './prestation/prestations.model';
 import { userModel, UserModel } from './user/user.model';
+import { pdfsModel, PdfsModel } from './pdf/pdfs.model';
 
 export interface AppStoreModel {
   intl: IntlModel;
@@ -14,6 +15,7 @@ export interface AppStoreModel {
   prestations: PrestationsModel;
   factures: FacturesModel;
   user: UserModel;
+  pdf: PdfsModel;
 }
 
 const model: AppStoreModel = {
@@ -23,7 +25,8 @@ const model: AppStoreModel = {
   clients: clientsModel,
   consultants: consultantsModel,
   prestations: prestationsModel,
-  user: userModel
+  user: userModel,
+  pdf: pdfsModel,
 };
 
 export default model;

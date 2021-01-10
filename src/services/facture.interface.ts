@@ -1,5 +1,4 @@
 import Facture from '../domains/Facture';
-import Pdf from '../domains/Pdf';
 
 /**
  * Facture fetcher port
@@ -28,12 +27,5 @@ export interface IFactureService {
    * @param id facture id to delete
    */
   deleteById(siret: string, factureId: number, prestationId: number): Promise<String>;
- 
-  /**
-   * Download a pdf file
-   *
-   * @param id siret, path file
-   */
-  download(siret: string, path: string): Promise<Pdf>;
  
 }

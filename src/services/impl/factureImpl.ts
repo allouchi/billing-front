@@ -1,5 +1,4 @@
 import Facture from "../../domains/Facture";
-import Pdf from "../../domains/Pdf";
 import Webservice from "../../utils/webservice";
 import { IFactureService } from "../facture.interface";
 
@@ -63,15 +62,6 @@ export class FactureServiceImpl implements IFactureService {
         `Error during deleting facture with id ${factureId}`
       );
     }
-  } 
-  async download(siret: string, path: string): Promise<Pdf> {
-    try {
-      const response = await Webservice.getInstance().get(
-        `${FactureServiceImpl.FACTURES_PATH}/${siret}/${path}`
-      );
-      return response.data;
-    } catch (error) {
-      throw Error("Error during getting pdf");
-    }
   }
+ 
 }

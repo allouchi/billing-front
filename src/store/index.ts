@@ -8,7 +8,7 @@ const clientService = Configuration.clientService;
 const prestationService = Configuration.prestationService;
 const consultantService = Configuration.consultantService;
 const userService = Configuration.userService;
-
+const pdfService = Configuration.pdfService;
 const store = createStore(model, {
   injections: {
     factureService,
@@ -16,7 +16,8 @@ const store = createStore(model, {
     clientService,
     prestationService,
     consultantService,
-    userService
+    userService,
+    pdfService,
   },
 });
 

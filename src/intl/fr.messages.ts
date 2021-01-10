@@ -33,7 +33,12 @@ export default {
     },
     delete:{
       success: "{cle} a été supprimée avec succès",
-    }   
+    },
+    download:{
+      success: "{cle} a été téléchargée avec succès",
+      echec: "{cle} n'a pas été téléchargée"
+    },
+    
   }, 
   // Home page
   home: {

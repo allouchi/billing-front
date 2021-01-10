@@ -12,8 +12,12 @@ import { ConsultantServiceImpl } from './services/impl/consultantImpl';
 
 import { IPrestationService } from './services/prestation.interface';
 import { PrestationServiceImpl } from './services/impl/prestationImpl';
+
 import { IUserService } from './services/user.interface';
 import { UserServiceImpl } from './services/impl/userImpl';
+
+import { IPdfService } from './services/pdf.interface';
+import { PdfServiceImpl } from './services/impl/pdfImpl';
 
 class ManualDependenciesConfiguration {
   private readonly _factureService: IFactureService;
@@ -22,6 +26,7 @@ class ManualDependenciesConfiguration {
   private readonly _consultantService: IConsultantService;
   private readonly _prestationService: IPrestationService;
   private readonly _userService: IUserService;
+  private readonly _pdfService: IPdfService;
   
   constructor() {
       this._factureService = new FactureServiceImpl();
@@ -30,6 +35,7 @@ class ManualDependenciesConfiguration {
       this._consultantService = new ConsultantServiceImpl();
       this._prestationService = new PrestationServiceImpl();
       this._userService = new UserServiceImpl();
+      this._pdfService = new PdfServiceImpl();
   }
   get factureService(): IFactureService {
     return this._factureService;
@@ -48,6 +54,9 @@ class ManualDependenciesConfiguration {
   }
   get userService(): IUserService {
     return this._userService;
+  }
+  get pdfService(): IPdfService {
+    return this._pdfService;
   }
 }
 export const Configuration = new ManualDependenciesConfiguration();
