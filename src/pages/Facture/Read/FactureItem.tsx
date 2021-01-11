@@ -16,6 +16,8 @@ import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import PdfPath from "../../../store/pdf/pdfs.model";
+import Pdf from "../../../domains/Pdf";
+
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +38,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
+  //const pdf: Pdf[] = useStoreState((state) => state.pdf.items.fileContent);
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const createOrUpdate = useStoreActions(
     (actions) => actions.factures.createOrUpdate
@@ -44,7 +47,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   //const [state, setState] = useState();
 
   const findPrestationId = (): number => {
-    let pestationId: number = 0;
+    let pestationId: number = 1;
     let prestation = items.map((prestat) => {
       return prestat;
     });
@@ -63,9 +66,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     }
     return pestationId;
   };
-  const editerFactureClick = () => {
+  const updateFactureClick = () => {
     const message = intl.formatMessage(
-      { id: "messages.edit.success" },
+      { id: "messages.update.success" },
       { cle: "La facture" }
     );
 
@@ -75,7 +78,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       facture: item,
       factureId: item.id,
     };
-
+    /*
     createOrUpdate(facturePrestation)
       .then(() => history.push("/factures"))
       .then(() =>
@@ -86,7 +89,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
+      */
   };
+
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
@@ -133,15 +138,15 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });
+      });    
   };
 
   const styleStatus =
     item.factureStatus === "KO" ? "color:green" : "color: red";
 
   return (
+      
     <StyledTableRow>
-      <StyledTableCell>{item.id}</StyledTableCell>
       <StyledTableCell>{item.numeroFacture}</StyledTableCell>
       <StyledTableCell>{item.numeroCommande}</StyledTableCell>
       <StyledTableCell>{item.quantite}</StyledTableCell>
@@ -157,9 +162,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       </StyledTableCell>
       <StyledTableCell>{item.fraisRetard}</StyledTableCell>
       <StyledTableCell>
-        <Tooltip title={BuildMessageTooltip("facture", "edit")}>
+        <Tooltip title={BuildMessageTooltip("facture", "update")}>
           <IconButton
-            onClick={editerFactureClick}
+            onClick={updateFactureClick}
             aria-label="edit"
             size="small"
             style={{ marginRight: 6 }}
@@ -184,7 +189,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           </IconButton>
         </Tooltip>
       </StyledTableCell>
-    </StyledTableRow>
+    </StyledTableRow>       
   );
 };
 

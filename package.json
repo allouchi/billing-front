@@ -38,6 +38,7 @@
     "@material-ui/data-grid": "^4.0.0-alpha.12",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
+    "@react-pdf/renderer": "^1.6.12",
     "axios": "0.19.2",
     "easy-peasy": "^3.3.0",
     "history": "4.10.1",

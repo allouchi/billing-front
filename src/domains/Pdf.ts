@@ -1,3 +1,3 @@
 export default interface Pdf{  
-  fileContent: any;
+  fileContent?: any | undefined;
 }

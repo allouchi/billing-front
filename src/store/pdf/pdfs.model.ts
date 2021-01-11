@@ -15,7 +15,7 @@ export interface PdfsModel {
 
 export const pdfsModel: PdfsModel = {
   isLoaded: false,
-  items: { fileContent: "" },
+  items: { fileContent: [] },
 
   // Actions
   loadSuccess: action((state, payload: Pdf) => {
@@ -23,26 +23,26 @@ export const pdfsModel: PdfsModel = {
     state.isLoaded = true;
   }),
   add: action((state, payload: Pdf) => {
-    //state.items = [payload, ...state.items];
+    //state.items = [payload, ...state.items.fileContent];
   }),
 
   // Thunks
   downloadPdf: thunk(async (actions, payload: PdfPath, { injections }) => {
     try {
       const { pdfService } = injections;
-      const pdf = await pdfService.download(
+      const binaryPdf = await pdfService.download(
         payload.siret,
         payload.prestationId,
         payload.factureId
-      );
-      let binary = "";
-      const bytes = new Uint8Array(pdf.fileContent);
-      const len = bytes.byteLength;
-      for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      window.open(binary);
-      //actions.add(pdf);
+      );   
+
+      
+      console.log("byte :", binaryPdf);
+      const file = new Blob([binaryPdf.fileContent], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, "_blank");
+      
+      actions.add(binaryPdf);
     } catch (error) {
       throw error;
     }

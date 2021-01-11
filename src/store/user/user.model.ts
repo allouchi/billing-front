@@ -18,7 +18,7 @@ export interface UserModel {
 
 export const userModel: UserModel = {
   isConnected: false,
-  user: {company: {siret: '85292702900011'}},
+  user: {company: {siret: '831 502 141 00011'}},
 
   // Actions  
   doConnect: action((state, payload: User) => {

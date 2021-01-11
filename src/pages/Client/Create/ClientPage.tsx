@@ -64,7 +64,8 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const handleAdresseClient = (e: React.ChangeEvent<HTMLInputElement>) => {
     setclientAdresse({ ...clientAdresse, [e.target.id]: e.target.value });
   };
-  clientInfo.adresseClient = clientAdresse;
+  clientInfo.adresseClient = clientAdresse; 
+
 
   const addClient = () => {
     let messageId = "";
@@ -75,7 +76,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
       messageId = "messages.edit.success";
     }
     const message = intl.formatMessage({ id: messageId }, { cle: "Le client" });
-
+    
     createOrUpdate({ client: clientInfo, siret: siret })
       .then(() => history.push("/clients"))
       .then(() =>

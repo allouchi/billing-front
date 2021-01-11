@@ -94,7 +94,7 @@ const ClientList: FC<{}> = () => {
 
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-  let siret: string = connectedUser && connectedUser.company && connectedUser.company.siret ? connectedUser.company.siret : "85292702900011";
+  let siret: string = connectedUser && connectedUser.company && connectedUser.company.siret ? connectedUser.company.siret : "831 502 141 00011";
 
   useEffect(() => {
     if (!isLoaded) {

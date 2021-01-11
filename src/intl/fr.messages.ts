@@ -31,6 +31,10 @@ export default {
     edit: {
       success: "{cle} a été éditée avec succès",
     },
+    update: {
+      success: "{cle} a été éditée avec succès",
+      echec: "{cle} n'a pas été mise à jour",
+    },
     delete:{
       success: "{cle} a été supprimée avec succès",
     },
@@ -97,6 +101,7 @@ export default {
   tooltip: {
     download: 'Télécharger {cle}',
     edit: 'Editer {cle}',
+    update: 'Modifier {cle}',
     delete: 'Supprimer {cle}',
     prestation: 'prestation',
     facture: 'facture',

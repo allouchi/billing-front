@@ -45,8 +45,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       numeroCommande: "",
       designation: "La Prestation est réalisée pour le compte de",
       clientPrestation : `${item.client.socialReason}`,
-      filePath: '',
-      //fileContent: new Blob(),
+      filePath: '',     
     },
   });
 

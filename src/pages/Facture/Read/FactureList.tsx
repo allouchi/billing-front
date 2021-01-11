@@ -46,8 +46,7 @@ const factures = (
   return (
     <Table className={classes.table} aria-label="customized table">
       <TableHead>
-        <TableRow>
-          <StyledTableCell>Id</StyledTableCell>
+        <TableRow>         
           <StyledTableCell align="left">Numéro Facture</StyledTableCell> 
           <StyledTableCell align="left">Numéro Commande</StyledTableCell>         
           <StyledTableCell align="left">Quantité</StyledTableCell>         

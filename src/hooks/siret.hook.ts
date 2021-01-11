@@ -6,7 +6,7 @@ const useSiret = (): string => {
   let siret: string =
     user && user.company && user.company.siret
       ? user.company.siret
-      : "85292702900011";
+      : "831 502 141 00011";
   return siret;
 };
 
