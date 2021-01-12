@@ -4,20 +4,18 @@ import { useSnackbar } from "notistack";
 import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Facture from "../../../domains/Facture";
 import { StyledTableCell } from "./FactureList";
-import { IconButton, Tooltip } from "@material-ui/core";
 import { useIntl } from "react-intl";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
+import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import useSiret from "../../../hooks/siret.hook";
 import Prestation from "../../../domains/Prestation";
 import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import PdfPath from "../../../store/pdf/pdfs.model";
-import Pdf from "../../../domains/Pdf";
-
+import PdfPath from "../../../store/pdf/pdf.model";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -38,12 +36,12 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
-  //const pdf: Pdf[] = useStoreState((state) => state.pdf.items.fileContent);
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const createOrUpdate = useStoreActions(
     (actions) => actions.factures.createOrUpdate
   );
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
+
   //const [state, setState] = useState();
 
   const findPrestationId = (): number => {
@@ -130,13 +128,13 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     };
 
     downloadPdf(pdfPath)
-      .then(() => history.push("/factures"))
+      .then(() => history.push("/pdf"))
       .then(() =>
         enqueueSnackbar(message, {
           variant: "success",
         })
       )
-      .catch((err: Error) => {
+      .catch((err: Error) => {        
         enqueueSnackbar(err.message, { variant: "error" });
       });    
   };
@@ -145,7 +143,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     item.factureStatus === "KO" ? "color:green" : "color: red";
 
   return (
-      
     <StyledTableRow>
       <StyledTableCell>{item.numeroFacture}</StyledTableCell>
       <StyledTableCell>{item.numeroCommande}</StyledTableCell>
@@ -189,7 +186,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           </IconButton>
         </Tooltip>
       </StyledTableCell>
-    </StyledTableRow>       
+    </StyledTableRow>
   );
 };
 

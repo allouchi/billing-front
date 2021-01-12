@@ -62,8 +62,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     setOpen(false);
   };
 
-  const handleValider = () => {
-   
+  const handleValider = () => {   
     setOpen(false);
     const facturePrestation: FacturePrestation = {
       prestationId: state.prestationId,         
@@ -98,7 +97,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
         enqueueSnackbar(err.message, { variant: "error" });
       }); 
   };
-
 
   return (
     <div>

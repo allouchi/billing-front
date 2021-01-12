@@ -5,6 +5,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import AppLayout from './components/AppLayout';
 import AppHeader from './components/Header/AppHeader';
 import AppFooter from './components/Footer/AppFooter';
+import PdfViewer from './pages/Pdf/PdfViewer';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Factures = React.lazy(() => import('./pages/Facture/Read'));
@@ -39,6 +40,7 @@ const App: React.FunctionComponent<{}> = () => {
                   <Route exact  path="/prestation" component={Prestation} />
                   <Route exact  path="/consultants" component={Consultants} />
                   <Route exact  path="/consultant" component={Consultant} />
+                  <Route exact  path="/pdf" component={PdfViewer} />
                   <Route component={NotFound} />
                 </Switch>
               </Suspense>

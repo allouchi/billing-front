@@ -118,11 +118,9 @@ const AppHeader: FC<{}> = () => {
             <Button color="inherit" onClick={() => history.push("/clients")}>
               {intl.formatMessage({ id: "menu.clients" })}
             </Button>
-
             <Button color="inherit" onClick={() => history.push("/consultants")}>
               {intl.formatMessage({ id: "menu.consultants" })}
-            </Button>
-            
+            </Button>            
             <IconButton
               edge="end"
               aria-label="account of current user"

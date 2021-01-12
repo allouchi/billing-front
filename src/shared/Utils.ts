@@ -130,7 +130,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       designation: item.designation,
       clientPrestation: item.clientPrestation,
       filePath: item.filePath,
-      //fileContent: item.fileContent,
+      
     };
   }
   return facture;

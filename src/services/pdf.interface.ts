@@ -1,5 +1,5 @@
 
-import Pdf from '../domains/Pdf';
+import DataPDF from '../domains/DataPDF';
 
 
 export interface IPdfService {
@@ -8,6 +8,6 @@ export interface IPdfService {
    *
    * @param id siret, id facture
    */
-  download(siret: string, prestationId: number, factureId: number): Promise<Pdf>;
+  download(siret: string, prestationId: number, factureId: number): Promise<DataPDF[]>;
  
 }
