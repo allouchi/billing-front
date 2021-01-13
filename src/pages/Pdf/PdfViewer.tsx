@@ -26,12 +26,12 @@ const PdfViewer: FC<{}> = (): ReactElement => {
   });
 
   var pdfAsDataUri = "data:application/pdf;base64,"+data;
-  window.open(pdfAsDataUri);
+  //window.open(pdfAsDataUri);
   
 
   return (
     <div className="pdf">
-        <embed src="http://localhost:8080/editions/831 502 141 00011/1/1" type="application/pdf" />
+        
      </div>
   )
 

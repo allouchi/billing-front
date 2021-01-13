@@ -53,12 +53,9 @@ const factures = (
           <StyledTableCell align="left">Prix Total HT</StyledTableCell>
           <StyledTableCell align="left">Prix Total TTC</StyledTableCell>
           <StyledTableCell align="left">Date de Facturation</StyledTableCell>
-          <StyledTableCell align="left">Date d'Echéance</StyledTableCell>
-          <StyledTableCell align="left">Délai(j)</StyledTableCell>
+          <StyledTableCell align="left">Date d'Echéance</StyledTableCell>          
           <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>          
-          <StyledTableCell align="left">Jours de Retard</StyledTableCell>
           <StyledTableCell align="left">Statut de la Facture</StyledTableCell>          
-          <StyledTableCell align="left">Frais de Retard</StyledTableCell>
           <StyledTableCell>{}</StyledTableCell>
           
         </TableRow>

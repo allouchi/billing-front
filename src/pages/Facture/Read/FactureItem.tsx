@@ -45,23 +45,25 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   //const [state, setState] = useState();
 
   const findPrestationId = (): number => {
-    let pestationId: number = 1;
+    let pestationId: number = 0;
     let prestation = items.map((prestat) => {
       return prestat;
-    });
+    }); 
 
-    for (let i = 0; i < prestation.length; i++) {
-      if (typeof prestation[i] !== "undefined") {
-        let facture = prestation[i].facture;
-        if (typeof facture[i] !== "undefined") {
-          for (let j = 0; j < facture.length; j++) {
-            if (facture[j].id === item.id) {
-              pestationId = prestation[i].id;
+    if(prestation && prestation.length>0){
+      for (let i = 0; i < prestation.length; i++) {
+        if (typeof prestation[i] !== "undefined") {        
+          let facture = prestation[i].facture;        
+          if (typeof facture[i] !== "undefined") {
+            for (let j = 0; j < facture.length; j++) {
+              if (facture[j].id === item.id) {
+                pestationId = prestation[i].id;              
+              }
             }
           }
         }
-      }
-    }
+      }  
+    }      
     return pestationId;
   };
   const updateFactureClick = () => {
@@ -126,9 +128,8 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       siret: siret,
       factureId: item.id,
     };
-
     downloadPdf(pdfPath)
-      .then(() => history.push("/pdf"))
+      .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
           variant: "success",
@@ -140,7 +141,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   };
 
   const styleStatus =
-    item.factureStatus === "KO" ? "color:green" : "color: red";
+    item.factureStatus === "OK" ? 'style = color:green' : 'style = color: red';
 
   return (
     <StyledTableRow>
@@ -150,14 +151,11 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
       <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
       <StyledTableCell>{item.dateFacturation}</StyledTableCell>
-      <StyledTableCell>{item.dateEcheance}</StyledTableCell>
-      <StyledTableCell>{item.delaiPaiement}</StyledTableCell>
-      <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
-      <StyledTableCell>{item.nbJourRetard}</StyledTableCell>
-      <StyledTableCell className={styleStatus}>
-        {item.factureStatus}
-      </StyledTableCell>
-      <StyledTableCell>{item.fraisRetard}</StyledTableCell>
+      <StyledTableCell>{item.dateEcheance}</StyledTableCell>      
+      <StyledTableCell>{item.dateEncaissement}</StyledTableCell>      
+      <StyledTableCell>      
+        <p className={styleStatus}> {item.factureStatus}</p>        
+      </StyledTableCell>      
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("facture", "update")}>
           <IconButton

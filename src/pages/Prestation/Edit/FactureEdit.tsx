@@ -43,7 +43,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       factureStatus: "KO",
       quantite: 0,
       numeroCommande: "",
-      designation: "La Prestation est réalisée pour le compte de",
+      designation: "Prestation",
       clientPrestation : `${item.client.socialReason}`,
       filePath: '',     
     },

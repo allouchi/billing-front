@@ -37,6 +37,7 @@ export const parseConsultJsonObject = (jsonObject: any): Consultant => {
     lastName: "",
     firstName: "",
     mail: "",
+    fonction: "",
   };
 
   if (jsonObject !== null && jsonObject.detail !== null) {
@@ -47,6 +48,7 @@ export const parseConsultJsonObject = (jsonObject: any): Consultant => {
       lastName: item.lastName,
       firstName: item.firstName,
       mail: item.mail,
+      fonction: item.fonction,
     };
   }
   return consult;

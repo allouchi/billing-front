@@ -74,8 +74,9 @@ const ConsultantItem: FC<ConsultantItemProps> = ({ item }): ReactElement => {
   return (
     <>
       <StyledTableCell> {item.id}</StyledTableCell>
-      <StyledTableCell> {item.firstName}</StyledTableCell>
+      <StyledTableCell> {item.firstName}</StyledTableCell>      
       <StyledTableCell> {item.lastName}</StyledTableCell>
+      <StyledTableCell> {item.fonction}</StyledTableCell>
       <StyledTableCell> {item.mail}</StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("consultant", "edit")}>

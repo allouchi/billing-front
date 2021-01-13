@@ -52,6 +52,8 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
       isNotEmptyString(state.consultant.firstName) &&
       isEmptyString(state.firstNameMessage) &&
       isNotEmptyString(state.consultant.lastName) &&
+      isEmptyString(state.fonctionMessage) &&
+      isNotEmptyString(state.consultant.fonction) &&
       isEmptyString(state.lastNameMessage) &&
       isNotEmptyString(state.consultant.mail) &&
       isEmptyString(state.mailMessage)
@@ -64,6 +66,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
     consultant: consult,
     firstNameMessage: "",
     lastNameMessage: "",
+    fonctionMessage: "",
     mailMessage: "",
   });
 
@@ -144,6 +147,19 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                     value={state.consultant.lastName}
                     helperText={state.lastNameMessage}
                     error={state.lastNameMessage !== ""}
+                    onChange={handleInfoConsultant}
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div>
+                  <TextField
+                    id="fonction"
+                    label="Fonction"
+                    variant="outlined"
+                    color="secondary"
+                    value={state.consultant.fonction}
+                    helperText={state.fonctionMessage}
+                    error={state.fonctionMessage !== ""}
                     onChange={handleInfoConsultant}
                     onBlur={handleBlur}
                   />
