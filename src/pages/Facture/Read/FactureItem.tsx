@@ -37,59 +37,38 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const { enqueueSnackbar } = useSnackbar();
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
-  const createOrUpdate = useStoreActions(
-    (actions) => actions.factures.createOrUpdate
-  );
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
 
-  //const [state, setState] = useState();
-
+  
   const findPrestationId = (): number => {
     let pestationId: number = 0;
     let prestation = items.map((prestat) => {
       return prestat;
-    }); 
+    });
 
-    if(prestation && prestation.length>0){
+    if (prestation && prestation.length > 0) {
       for (let i = 0; i < prestation.length; i++) {
-        if (typeof prestation[i] !== "undefined") {        
-          let facture = prestation[i].facture;        
+        if (typeof prestation[i] !== "undefined") {
+          let facture = prestation[i].facture;
           if (typeof facture[i] !== "undefined") {
             for (let j = 0; j < facture.length; j++) {
               if (facture[j].id === item.id) {
-                pestationId = prestation[i].id;              
+                pestationId = prestation[i].id;
               }
             }
           }
         }
-      }  
-    }      
+      }
+    }
     return pestationId;
   };
-  const updateFactureClick = () => {
-    const message = intl.formatMessage(
-      { id: "messages.update.success" },
-      { cle: "La facture" }
-    );
-
-    const facturePrestation: FacturePrestation = {
-      prestationId: findPrestationId(),
-      siret: siret,
-      facture: item,
-      factureId: item.id,
-    };
-    /*
-    createOrUpdate(facturePrestation)
-      .then(() => history.push("/factures"))
-      .then(() =>
-        enqueueSnackbar(message, {
-          variant: "success",
-        })
-      )
-      .catch((err: Error) => {
-        enqueueSnackbar(err.message, { variant: "error" });
-      });
-      */
+  const updateFactureClick = () => {   
+    let facture = JSON.stringify(item);
+    history.push({
+      pathname: "/facture",
+      search: "",
+      state: { detail: facture },
+    });
   };
 
   const handleDeleteClick = () => {
@@ -135,13 +114,13 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           variant: "success",
         })
       )
-      .catch((err: Error) => {        
+      .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      });    
+      });
   };
 
   const styleStatus =
-    item.factureStatus === "OK" ? 'style = color:green' : 'style = color: red';
+    item.factureStatus === "OK" ? "style = color:green" : "style = color: red";
 
   return (
     <StyledTableRow>
@@ -151,11 +130,11 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
       <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
       <StyledTableCell>{item.dateFacturation}</StyledTableCell>
-      <StyledTableCell>{item.dateEcheance}</StyledTableCell>      
-      <StyledTableCell>{item.dateEncaissement}</StyledTableCell>      
-      <StyledTableCell>      
-        <p className={styleStatus}> {item.factureStatus}</p>        
-      </StyledTableCell>      
+      <StyledTableCell>{item.dateEcheance}</StyledTableCell>
+      <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
+      <StyledTableCell>
+        <p className={styleStatus}> {item.factureStatus}</p>
+      </StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("facture", "update")}>
           <IconButton

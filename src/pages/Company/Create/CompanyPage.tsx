@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Button, Paper, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
+import { parseCompanyJsonObject } from "../../../shared/Utils";
 /*
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
@@ -16,36 +17,6 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl'; */
 
-const companyInit = {
-  id: 0,
-  socialReason: "",
-  status: "",
-  siret: "",
-  rcsName: "",
-  numeroTva: "",
-  ape: "",
-  companyAdresse: {
-    id: 0,
-    numero: "",
-    rue: "",
-    codePostal: "",
-    localite: "",
-    pays: "",
-  },
-  users: [],
-  clients: [],
-  consultants: [],
-  prestations: [],
-};
-
-const companyAdresse = {
-  id: 0,
-  numero: "",
-  rue: "",
-  codePostal: "",
-  localite: "",
-  pays: "",
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,8 +52,10 @@ const CompanyPage: FC<{}> = (): ReactElement => {
   const intl = useIntl();
   const createOrUpdate = useStoreActions((actions) => actions.companies.create);
   const { enqueueSnackbar } = useSnackbar();
-  const [companyInfo, setCompanyInfo] = useState(companyInit);
-  const [companyAdress, setCompanyAdress] = useState(companyAdresse);
+  let company = parseCompanyJsonObject(history.location.state);
+  const [companyInfo, setCompanyInfo] = useState(company);
+  const [companyAdress, setCompanyAdress] = useState(company.companyAdresse);
+ 
 
   const handleInfoCompany = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCompanyInfo({ ...companyInfo, [e.target.id]: e.target.value });
@@ -109,9 +82,14 @@ const CompanyPage: FC<{}> = (): ReactElement => {
       });
   };
 
+  const cancelCompanyInfo = () => {
+    history.push("/companies");
+  };
+
   return (
     <PageLayout
-      title={intl.formatMessage({ id: "companies.create.title" })}
+    title={intl.formatMessage({ id: "companies.update.title" },  
+    {cle: companyInfo.socialReason})}
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>
@@ -268,6 +246,14 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                 />
               </Grid>
               <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                onClick={cancelCompanyInfo}
+              >
+                {intl.formatMessage({ id: "buttons.cancelButton" })}
+              </Button>
                 <Button
                   variant="contained"
                   color="secondary"

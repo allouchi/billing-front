@@ -71,6 +71,7 @@ const factures = (
 
 const FactureList: FC<{}> = () => {
   const classes = useStyles();
+  let siret: string = useSiret();
   //const intl = useIntl();
   const findAllBySiret = useStoreActions(
     (actions) => actions.factures.findAllBySiret
@@ -79,8 +80,6 @@ const FactureList: FC<{}> = () => {
   const items: Facture[] = useStoreState((state) => state.factures.items);
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-
-  let siret: string = useSiret();
 
   useEffect(() => {
     if (!isLoaded) {

@@ -1,7 +1,7 @@
 import Client from "../domains/Client";
 import Consultant from "../domains/Consultant";
 import Facture from "../domains/Facture";
-
+import Company from "../domains/Company";
 
 export const clientIdentity = (client: Client): string => {
   return upperFirstCase(client.socialReason);
@@ -29,6 +29,59 @@ const upperFirstCase = (value: string): string => {
 
 export const initial = (value: string): string => {
   return value.charAt(0).toUpperCase();
+};
+
+export const parseCompanyJsonObject = (jsonObject: any): Company => {
+  let company : Company = {
+    id: 0,
+    socialReason: "",
+    status: "",
+    siret: "",
+    rcsName: "",
+    numeroTva: "",
+    ape: "",
+    companyAdresse: {
+      id: 0,
+      numero: "",
+      rue: "",
+      codePostal: "",
+      localite: "",
+      pays: "",
+    },
+    users: [],
+    clients: [],
+    consultants: [],
+    prestations: [],
+  };
+
+  if (jsonObject !== null && jsonObject.detail !== null) {
+    let detail = jsonObject.detail;
+    let item = JSON.parse(detail);
+
+    company = {
+      id: item.id,
+      socialReason: item.socialReason,
+      status: item.status,
+      siret: item.siret,
+      rcsName: item.rcsName,
+      numeroTva: item.numeroTva,
+      ape: item.ape,
+      companyAdresse: {
+        id: item.companyAdresse.id,
+        numero: item.companyAdresse.numero,
+        rue: item.companyAdresse.rue,
+        codePostal: item.companyAdresse.codePostal,
+        localite: item.companyAdresse.localite,
+        pays: item.companyAdresse.pays,
+       
+      },   
+      users: [], 
+      clients: [],
+      consultants: [],
+      prestations: [],
+    };
+  }
+  return company;
 };
 
 export const parseConsultJsonObject = (jsonObject: any): Consultant => {
@@ -85,7 +138,7 @@ export const parseClientJsonObject = (jsonObject: any): Client => {
         pays: item.adresseClient.pays,
       },
     };
-  }  
+  }
   return client;
 };
 
@@ -107,8 +160,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     quantite: 0,
     designation: "",
     clientPrestation: "",
-    filePath: '',
-    //fileContent: new Blob(),
+    filePath: "",
   };
 
   if (jsonObject !== null && jsonObject.detail !== null) {
@@ -132,7 +184,6 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       designation: item.designation,
       clientPrestation: item.clientPrestation,
       filePath: item.filePath,
-      
     };
   }
   return facture;

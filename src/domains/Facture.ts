@@ -18,5 +18,5 @@ export default interface Facture {
   designation: string,  
   clientPrestation: string,
   filePath: string,
-  //fileContent?: Blob
+  
 }

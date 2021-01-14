@@ -32,7 +32,7 @@ export default {
       success: "{cle} a été éditée avec succès",
     },
     update: {
-      success: "{cle} a été éditée avec succès",
+      success: "{cle} a été mise à jour avec succès",
       echec: "{cle} n'a pas été mise à jour",
     },
     delete:{
@@ -52,6 +52,9 @@ export default {
   },
   factures: {
     title: "Liste des factures",
+    update: {
+      title: 'Mise à jour de la facture N° : {cle}',      
+    }
   },
   companies: {
     title: "Liste des sociétés",
@@ -60,6 +63,9 @@ export default {
     companyAdress : "Adresse société",
     create: {
       title: 'Création d\'un nouvelle société'
+    },
+    update: {
+      title: 'Mise à jour de la société : {cle}',      
     }
   },
   billErrors: {
@@ -73,6 +79,9 @@ export default {
     create: {
       title: 'Création d\'un nouveau client',
       info: 'Infos client'
+    },
+    update: {
+      title: 'Mise à jour du client : {cle}',      
     }
   },
   consultants: {
@@ -81,6 +90,9 @@ export default {
     buttonSubmit : "Valider",
     create: {
       title: 'Création d\'un nouveau consultant'
+    },
+    update: {
+      title: 'Mise à jour du consulant : {cle}',      
     }
   },
   prestations: {
@@ -89,6 +101,9 @@ export default {
     buttonSubmit : "Valider",
     create: {
       title: 'Création d\'une nouvelle prestation'
+    },
+    update: {
+      title: 'Mise à jour la prestation : {cle}',      
     }
   },
   buttons: {    

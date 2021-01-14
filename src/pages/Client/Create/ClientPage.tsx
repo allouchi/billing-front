@@ -94,7 +94,8 @@ const ClientPage: FC<{}> = (): ReactElement => {
 
   return (
     <PageLayout
-      title={intl.formatMessage({ id: "clients.create.title" })}
+    title={intl.formatMessage({ id: "clients.update.title" },  
+    {cle: clientInfo.socialReason})}
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>

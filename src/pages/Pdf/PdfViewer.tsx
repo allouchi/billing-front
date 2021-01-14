@@ -1,8 +1,9 @@
 import React, { FC, ReactElement, useState } from "react";
 import DataPDF from "../../domains/DataPDF";
-import PDFViewer from "pdf-viewer-reactjs";
 import { useStoreActions, useStoreState } from "../../store/hooks";
-import CircularProgress from "@material-ui/core/CircularProgress";
+//import PDFViewer from "pdf-viewer-reactjs";
+//import { useStoreActions, useStoreState } from "../../store/hooks";
+//import CircularProgress from "@material-ui/core/CircularProgress";
 
 const PdfViewer: FC<{}> = (): ReactElement => {
   const pdf: DataPDF[] = useStoreState((state) => state.pdf.items);

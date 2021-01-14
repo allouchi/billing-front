@@ -119,7 +119,9 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
 
   return (
     <PageLayout
-      title={intl.formatMessage({ id: "consultants.create.title" })}
+    title={intl.formatMessage({ id: "consultants.update.title" },  
+    {cle: `${state.consultant.firstName} ${state.consultant.lastName}`})}
+     
       content={
         <Grid container className={classes.root}>
           <Grid item xs={12}>

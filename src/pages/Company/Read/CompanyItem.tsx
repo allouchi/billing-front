@@ -50,6 +50,15 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
       });
   };
 
+  const editerCompanyClick = () => {
+    let company = JSON.stringify(item);
+    history.push({
+      pathname: "/company",
+      search: "",
+      state: { detail: company },
+    });
+  };
+
   return (
     <>
       <StyledTableCell> {item.id}</StyledTableCell>
@@ -60,7 +69,7 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
       <StyledTableCell> {item.ape} </StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("company", "edit")}>
-          <IconButton aria-label="edit" size="small" style={{ marginRight: 6 }}>
+          <IconButton onClick={editerCompanyClick} aria-label="edit" size="small" style={{ marginRight: 6 }}>
             <EditIcon />
           </IconButton>
         </Tooltip>

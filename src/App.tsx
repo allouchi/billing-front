@@ -9,6 +9,7 @@ import PdfViewer from './pages/Pdf/PdfViewer';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Factures = React.lazy(() => import('./pages/Facture/Read'));
+const Facture = React.lazy(() => import('./pages/Facture/Update'));
 const Clients = React.lazy(() => import('./pages/Client/Read/Clients'));
 const Client = React.lazy(() => import('./pages/Client/Create'));
 const Consultants = React.lazy(() => import('./pages/Consultant/Read/Consultants'));
@@ -40,6 +41,7 @@ const App: React.FunctionComponent<{}> = () => {
                   <Route exact  path="/prestation" component={Prestation} />
                   <Route exact  path="/consultants" component={Consultants} />
                   <Route exact  path="/consultant" component={Consultant} />
+                  <Route exact  path="/facture" component={Facture} />
                   <Route exact  path="/pdf" component={PdfViewer} />
                   <Route component={NotFound} />
                 </Switch>
