@@ -36,9 +36,10 @@ export const facturesModel: FacturesModel = {
     state.items = [payload, ...state.items];
   }),
 
-  updateState: action((state, payload: Facture) => {
-    state.items.map((item: Facture) =>
-      item.filePath === payload.filePath ? item : payload
+  updateState: action((state, payload: Facture) => {    
+    state.items.map((item: Facture) =>      
+    item.dateEncaissement !== '' && 
+    item.dateEncaissement === payload.dateEncaissement ? item : payload
     );
   }),
 
@@ -80,6 +81,7 @@ export const facturesModel: FacturesModel = {
           payload.siret,
           payload.prestationId
         );
+        
         if (isNew) {
           actions.add(facture);
         } else {

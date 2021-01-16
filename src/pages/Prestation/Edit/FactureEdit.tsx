@@ -35,7 +35,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       dateEcheance: "",
       dateEncaissement: "",
       delaiPaiement: 0,
-      tva: 0,
+      montantTVA: 0,
       prixTotalHT: 0,
       prixTotalTTC: 0,
       nbJourRetard: 0,

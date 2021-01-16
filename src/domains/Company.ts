@@ -15,7 +15,9 @@ export default interface Company {
   siret: string;
   rcsName: string;
   numeroTva: string;
-  ape: string;
+  codeApe: string;
+  numeroIban: string;
+  numeroBic: string;
   companyAdresse: Adresse;
   users: Partial<User[]>;
   clients?: Client[];

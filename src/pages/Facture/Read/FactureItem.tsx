@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import TableRow from "@material-ui/core/TableRow";
 import { useSnackbar } from "notistack";
-import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { withStyles, Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Facture from "../../../domains/Facture";
 import { StyledTableCell } from "./FactureList";
 import { useIntl } from "react-intl";
@@ -16,6 +16,15 @@ import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import PdfPath from "../../../store/pdf/pdf.model";
+import { findPrestationId } from "../../../shared/Utils";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import Box from "@material-ui/core/Box";
+import Collapse from "@material-ui/core/Collapse";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableHead from "@material-ui/core/TableHead";
+import Typography from "@material-ui/core/Typography";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -23,9 +32,22 @@ export const StyledTableRow = withStyles((theme: Theme) =>
       "&:nth-of-type(odd)": {
         backgroundColor: theme.palette.action.hover,
       },
+      head: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+      },
+      body: {
+        fontSize: 14,
+      },
     },
   })
 )(TableRow);
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 1000,
+  },
+});
 
 interface FactureItemProps {
   item: Facture;
@@ -36,33 +58,12 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
+  const classes = useStyles();
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
+  const [open, setOpen] = React.useState(false);
 
-  
-  const findPrestationId = (): number => {
-    let pestationId: number = 0;
-    let prestation = items.map((prestat) => {
-      return prestat;
-    });
-
-    if (prestation && prestation.length > 0) {
-      for (let i = 0; i < prestation.length; i++) {
-        if (typeof prestation[i] !== "undefined") {
-          let facture = prestation[i].facture;
-          if (typeof facture[i] !== "undefined") {
-            for (let j = 0; j < facture.length; j++) {
-              if (facture[j].id === item.id) {
-                pestationId = prestation[i].id;
-              }
-            }
-          }
-        }
-      }
-    }
-    return pestationId;
-  };
-  const updateFactureClick = () => {   
+  const updateFactureClick = () => {
     let facture = JSON.stringify(item);
     history.push({
       pathname: "/facture",
@@ -78,7 +79,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     );
 
     const facturePrestation: FacturePrestation = {
-      prestationId: findPrestationId(),
+      prestationId: findPrestationId(items, item),
       siret: siret,
       facture: item,
       factureId: item.id,
@@ -103,7 +104,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     );
 
     const pdfPath: PdfPath = {
-      prestationId: findPrestationId(),
+      prestationId: findPrestationId(items, item),
       siret: siret,
       factureId: item.id,
     };
@@ -113,57 +114,121 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
         enqueueSnackbar(message, {
           variant: "success",
         })
-      )
-      .catch((err: Error) => {
+      ).catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
+  };
+
+  const onClickTable = () => {
+    setOpen(!open);
   };
 
   const styleStatus =
     item.factureStatus === "OK" ? "style = color:green" : "style = color: red";
 
   return (
-    <StyledTableRow>
-      <StyledTableCell>{item.numeroFacture}</StyledTableCell>
-      <StyledTableCell>{item.numeroCommande}</StyledTableCell>
-      <StyledTableCell>{item.quantite}</StyledTableCell>
-      <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
-      <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
-      <StyledTableCell>{item.dateFacturation}</StyledTableCell>
-      <StyledTableCell>{item.dateEcheance}</StyledTableCell>
-      <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
-      <StyledTableCell>
-        <p className={styleStatus}> {item.factureStatus}</p>
-      </StyledTableCell>
-      <StyledTableCell>
-        <Tooltip title={BuildMessageTooltip("facture", "update")}>
-          <IconButton
-            onClick={updateFactureClick}
-            aria-label="edit"
-            size="small"
-            style={{ marginRight: 6 }}
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <DeleteItem
-          id={item.id}
-          cle="facture"
-          value={item.numeroFacture}
-          deleteAction={handleDeleteClick}
-        />
-        <Tooltip title={BuildMessageTooltip("facture", "download")}>
-          <IconButton
-            onClick={downloadPdfClick}
-            aria-label="edit"
-            size="small"
-            style={{ marginRight: 6 }}
-          >
-            <PictureAsPdfIcon />
-          </IconButton>
-        </Tooltip>
-      </StyledTableCell>
-    </StyledTableRow>
+    <>
+      <StyledTableRow>
+        <IconButton aria-label="expand row" size="small" onClick={onClickTable}>
+          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+        <StyledTableCell>{item.numeroFacture}</StyledTableCell>
+        <StyledTableCell>{item.quantite}</StyledTableCell>
+        <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
+        <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
+        <StyledTableCell>{item.dateFacturation}</StyledTableCell>
+        <StyledTableCell>{item.dateEcheance}</StyledTableCell>
+        <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
+        <StyledTableCell>
+          <Tooltip title={BuildMessageTooltip("facture", "update")}>
+            <IconButton
+              onClick={updateFactureClick}
+              aria-label="edit"
+              size="small"
+              style={{ marginRight: 6 }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <DeleteItem
+            id={item.id}
+            cle="facture"
+            value={item.numeroFacture}
+            deleteAction={handleDeleteClick}
+          />
+          <Tooltip title={BuildMessageTooltip("facture", "download")}>
+            <IconButton
+              onClick={downloadPdfClick}
+              aria-label="edit"
+              size="small"
+              style={{ marginRight: 6 }}
+            >
+              <PictureAsPdfIcon />
+            </IconButton>
+          </Tooltip>
+        </StyledTableCell>
+      </StyledTableRow>     
+      <StyledTableRow>
+        <StyledTableCell
+          style={{ paddingBottom: 0, paddingTop: 0 }}
+          colSpan={6}
+        >
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                Détail
+              </Typography>
+              <Table size="small" aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">
+                      Numéro commande
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      Statut facture
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      Frais retard
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      Jours retard
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      Délai paiement
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                     Montant TVA
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key={item.id}>
+                    <StyledTableCell align="center">
+                      {item.numeroCommande}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.factureStatus}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.fraisRetard}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.nbJourRetard}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.delaiPaiement}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.montantTVA}
+                    </StyledTableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </StyledTableCell>
+      </StyledTableRow>      
+    </>
   );
 };
 

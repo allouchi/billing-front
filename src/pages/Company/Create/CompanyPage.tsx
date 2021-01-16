@@ -9,6 +9,8 @@ import TextField from "@material-ui/core/TextField";
 import { Button, Paper, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import { parseCompanyJsonObject } from "../../../shared/Utils";
+import NumberFormat from "react-number-format";
+
 /*
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
@@ -16,7 +18,6 @@ import { createStyles, Theme } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl'; */
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,9 +43,38 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
-    marginBottom: 3
+    marginBottom: 3,
   },
 }));
+
+interface NumberFormatCustomProps {
+  inputRef: (instance: NumberFormat | null) => void;
+  onChange: (event: { target: { name: string; value: string } }) => void;
+  name: string;
+}
+
+const NumberFormatCustom = (props: NumberFormatCustomProps) => {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        alert(values.value);
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="FR"
+    />
+  );
+};
 
 const CompanyPage: FC<{}> = (): ReactElement => {
   const classes = useStyles();
@@ -52,10 +82,9 @@ const CompanyPage: FC<{}> = (): ReactElement => {
   const intl = useIntl();
   const createOrUpdate = useStoreActions((actions) => actions.companies.create);
   const { enqueueSnackbar } = useSnackbar();
-  let company = parseCompanyJsonObject(history.location.state);
+  const company = parseCompanyJsonObject(history.location.state);
   const [companyInfo, setCompanyInfo] = useState(company);
   const [companyAdress, setCompanyAdress] = useState(company.companyAdresse);
- 
 
   const handleInfoCompany = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCompanyInfo({ ...companyInfo, [e.target.id]: e.target.value });
@@ -88,8 +117,10 @@ const CompanyPage: FC<{}> = (): ReactElement => {
 
   return (
     <PageLayout
-    title={intl.formatMessage({ id: "companies.update.title" },  
-    {cle: companyInfo.socialReason})}
+      title={intl.formatMessage(
+        { id: "companies.create.title" },
+        { cle: companyInfo.socialReason }
+      )}
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>
@@ -137,16 +168,16 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   InputProps={{
                     //inputComponent: NumberFormatCustom as any,
                   }}
-                />
+                ></TextField>
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  id="ape"
+                  id="codeApe"
                   className={classes.textField}
                   label="Code APE"
                   variant="outlined"
                   color="secondary"
-                  value={companyInfo.ape}
+                  value={companyInfo.codeApe}
                   helperText="Code APE obligatoire."
                   onChange={handleInfoCompany}
                 />
@@ -172,6 +203,32 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   color="secondary"
                   value={companyInfo.numeroTva}
                   helperText="Numéro TVA obligatoire."
+                  onChange={handleInfoCompany}
+                />
+              </Grid>
+
+              <Grid item xs={4}>
+                <TextField
+                  id="numeroIban"
+                  className={classes.textField}
+                  label="Numéro Iban"
+                  variant="outlined"
+                  color="secondary"
+                  value={companyInfo.numeroIban}
+                  helperText="Numéro IBAN obligatoire."
+                  onChange={handleInfoCompany}
+                />
+              </Grid>
+
+              <Grid item xs={4}>
+                <TextField
+                  id="numeroBic"
+                  className={classes.textField}
+                  label="Numéro BIC"
+                  variant="outlined"
+                  color="secondary"
+                  value={companyInfo.numeroBic}
+                  helperText="Numéro BIC obligatoire."
                   onChange={handleInfoCompany}
                 />
               </Grid>
@@ -207,7 +264,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   helperText="Rue obligatoire."
                   onChange={handleAdressCompany}
                 />
-              </Grid>              
+              </Grid>
               <Grid item xs={2}>
                 <TextField
                   id="codePostal"
@@ -238,22 +295,22 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   className={classes.textField}
                   label="Pays"
                   variant="outlined"
-                  color="secondary"  
-                  value={companyAdress.pays}              
+                  color="secondary"
+                  value={companyAdress.pays}
                   helperText="Nom pays obligatoire."
                   defaultValue="France"
                   onChange={handleAdressCompany}
                 />
               </Grid>
               <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                onClick={cancelCompanyInfo}
-              >
-                {intl.formatMessage({ id: "buttons.cancelButton" })}
-              </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={cancelCompanyInfo}
+                >
+                  {intl.formatMessage({ id: "buttons.cancelButton" })}
+                </Button>
                 <Button
                   variant="contained"
                   color="secondary"

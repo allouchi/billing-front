@@ -66,7 +66,7 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
       <StyledTableCell> {item.siret} </StyledTableCell>
       <StyledTableCell> {item.rcsName} </StyledTableCell>
       <StyledTableCell> {item.numeroTva} </StyledTableCell>
-      <StyledTableCell> {item.ape} </StyledTableCell>
+      <StyledTableCell> {item.codeApe} </StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("company", "edit")}>
           <IconButton onClick={editerCompanyClick} aria-label="edit" size="small" style={{ marginRight: 6 }}>

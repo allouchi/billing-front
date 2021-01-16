@@ -1,10 +1,11 @@
 import React, { FC, ReactElement, useState } from "react";
 import Facture from "../../../domains/Facture";
 import { useHistory } from "react-router-dom";
-import { useStoreActions } from "../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../store/hooks";
 import FacturePrestation from "../../../store/facture/factures.model";
 import { useSnackbar } from "notistack";
 import {
+  findPrestationId,
   isEmptyString,
   isNotEmptyString,
   parseFactureJsonObject,
@@ -13,6 +14,7 @@ import PageLayout from "../../../components/PageLayout/PageLayout";
 import { useIntl } from "react-intl";
 import { Grid, makeStyles, Paper, TextField, Button } from "@material-ui/core";
 import useSiret from "../../../hooks/siret.hook";
+import Prestation from "../../../domains/Prestation";
 
 const emptyFacture: Facture = {
   id: 0,
@@ -21,7 +23,7 @@ const emptyFacture: Facture = {
   dateEcheance: "",
   dateEncaissement: "",
   delaiPaiement: 0,
-  tva: 0,
+  montantTVA: 0,
   prixTotalHT: 0,
   prixTotalTTC: 0,
   nbJourRetard: 0,
@@ -75,19 +77,17 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   const createOrUpdate = useStoreActions(
     (actions) => actions.factures.createOrUpdate
   );
+  const items: Prestation[] = useStoreState((state) => state.prestations.items);
 
   let factureToEdit = parseFactureJsonObject(history.location.state);
 
   const [state, setState] = useState({
-    facture: factureToEdit ? factureToEdit : emptyFacture,
-    factureStatusMessage: "",
+    facture: factureToEdit ? factureToEdit : emptyFacture,   
     dateEncaissementMessage: "",    
   });
 
   const isValidForm = (): boolean => {
-    return (
-      isNotEmptyString(state.facture.factureStatus) &&
-      isEmptyString(state.factureStatusMessage) &&
+    return (      
       isNotEmptyString(state.facture.dateEncaissement) &&
       isEmptyString(state.dateEncaissementMessage)     
     );
@@ -95,7 +95,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
 
   const handleInfoFacture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;
+    const value: string = e.target.value;    
     setState({
       ...state,
       facture: { ...state.facture, [id]: value },
@@ -105,15 +105,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;
-
-    if(id === 'dateEncaissement' && value !== ''){
-      setState({
-        ...state,
-        facture: { ...state.facture, factureStatus: 'OK' }        
-      });
-      //alert(state.facture.factureStatus);
-    }
+    const value: string = e.target.value;   
     setState({
       ...state,
       [`${id}Message`]: isEmptyString(value) ? "factureStatusRequired" : "",
@@ -131,8 +123,8 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
     );
 
     const facturePrestation: FacturePrestation = {
-      prestationId: 1,         
-      facture:state.facture,      
+      prestationId: findPrestationId(items, state.facture),         
+      facture: state.facture,      
       siret: siret,
       factureId: state.facture.id,
     };
@@ -165,20 +157,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
         <Grid container className={classes.root}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <form className={classes.root} noValidate autoComplete="on">
-                <div>
-                  <TextField
-                    id="factureStatus"
-                    label="Statut facture"
-                    variant="outlined"
-                    color="secondary"
-                    value={state.facture.factureStatus}
-                    helperText={state.factureStatusMessage}
-                    error={state.factureStatusMessage !== ""}
-                    onChange={handleInfoFacture}
-                    onBlur={handleBlur}
-                  />
-                </div>
+              <form className={classes.root} noValidate autoComplete="on">                
                 <div>
                   <TextField
                     id="dateEncaissement"

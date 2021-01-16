@@ -39,23 +39,20 @@ const useStyles = makeStyles({
   },
 });
 
-const factures = (
-  items: Facture[],
-  classes: Record<"table", string>
+const factures = ( items: Facture[], classes: Record<"table", string>
 ): ReactElement => {
   return (
     <Table className={classes.table} aria-label="customized table">
       <TableHead>
-        <TableRow>         
-          <StyledTableCell align="left">Numéro Facture</StyledTableCell> 
-          <StyledTableCell align="left">Numéro Commande</StyledTableCell>         
+        <TableRow>    
+          <StyledTableCell>{}</StyledTableCell>     
+          <StyledTableCell align="left">Numéro Facture</StyledTableCell>                  
           <StyledTableCell align="left">Quantité</StyledTableCell>         
           <StyledTableCell align="left">Prix Total HT</StyledTableCell>
           <StyledTableCell align="left">Prix Total TTC</StyledTableCell>
           <StyledTableCell align="left">Date de Facturation</StyledTableCell>
           <StyledTableCell align="left">Date d'Echéance</StyledTableCell>          
-          <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>          
-          <StyledTableCell align="left">Statut de la Facture</StyledTableCell>          
+          <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>                   
           <StyledTableCell>{}</StyledTableCell>
           
         </TableRow>

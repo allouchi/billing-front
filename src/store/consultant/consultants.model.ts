@@ -35,7 +35,8 @@ export const consultantsModel: ConsultantsModel = {
     state.items = [payload, ...state.items];  
   }),
   updateState: action((state, payload: Consultant) => {    
-    state.items.map((item: Consultant) => (item.id === payload.id ? payload : item));
+    state.items.map((item: Consultant) => 
+    (item.id === payload.id ? payload : item));
   }),  
   // Thunks
   findAllBySiret: thunk(async (actions, payload: string, { injections }) => {

@@ -2,6 +2,8 @@ import Client from "../domains/Client";
 import Consultant from "../domains/Consultant";
 import Facture from "../domains/Facture";
 import Company from "../domains/Company";
+import Prestation from "../domains/Prestation";
+
 
 export const clientIdentity = (client: Client): string => {
   return upperFirstCase(client.socialReason);
@@ -32,14 +34,16 @@ export const initial = (value: string): string => {
 };
 
 export const parseCompanyJsonObject = (jsonObject: any): Company => {
-  let company : Company = {
+  let company: Company = {
     id: 0,
     socialReason: "",
     status: "",
     siret: "",
     rcsName: "",
     numeroTva: "",
-    ape: "",
+    codeApe: "",
+    numeroIban: "",
+    numeroBic: "",
     companyAdresse: {
       id: 0,
       numero: "",
@@ -54,7 +58,12 @@ export const parseCompanyJsonObject = (jsonObject: any): Company => {
     prestations: [],
   };
 
-  if (jsonObject !== null && jsonObject.detail !== null) {
+  if (
+    jsonObject !== null &&
+    jsonObject !== undefined &&
+    jsonObject.detail !== null &&
+    jsonObject.detail !== undefined
+  ) {
     let detail = jsonObject.detail;
     let item = JSON.parse(detail);
 
@@ -65,7 +74,9 @@ export const parseCompanyJsonObject = (jsonObject: any): Company => {
       siret: item.siret,
       rcsName: item.rcsName,
       numeroTva: item.numeroTva,
-      ape: item.ape,
+      codeApe: item.codeApe,     
+      numeroIban: item.codeIban,
+      numeroBic: item.codeBic,
       companyAdresse: {
         id: item.companyAdresse.id,
         numero: item.companyAdresse.numero,
@@ -73,9 +84,8 @@ export const parseCompanyJsonObject = (jsonObject: any): Company => {
         codePostal: item.companyAdresse.codePostal,
         localite: item.companyAdresse.localite,
         pays: item.companyAdresse.pays,
-       
-      },   
-      users: [], 
+      },
+      users: [],
       clients: [],
       consultants: [],
       prestations: [],
@@ -93,7 +103,12 @@ export const parseConsultJsonObject = (jsonObject: any): Consultant => {
     fonction: "",
   };
 
-  if (jsonObject !== null && jsonObject.detail !== null) {
+  if (
+    jsonObject !== null &&
+    jsonObject !== undefined &&
+    jsonObject.detail !== null &&
+    jsonObject.detail !== undefined
+  ) {
     let detail = jsonObject.detail;
     let item = JSON.parse(detail);
     consult = {
@@ -122,7 +137,12 @@ export const parseClientJsonObject = (jsonObject: any): Client => {
     },
   };
 
-  if (jsonObject !== null && jsonObject.detail !== null) {
+  if (
+    jsonObject !== null &&
+    jsonObject !== undefined &&
+    jsonObject.detail !== null &&
+    jsonObject.detail !== undefined
+  ) {
     let detail = jsonObject.detail;
     let item = JSON.parse(detail);
     client = {
@@ -151,7 +171,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     dateEncaissement: "",
     delaiPaiement: 0,
     numeroCommande: "",
-    tva: 0,
+    montantTVA: 0,
     prixTotalHT: 0,
     prixTotalTTC: 0,
     nbJourRetard: 0,
@@ -163,7 +183,12 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     filePath: "",
   };
 
-  if (jsonObject !== null && jsonObject.detail !== null) {
+  if (
+    jsonObject !== null &&
+    jsonObject !== undefined &&
+    jsonObject.detail !== null &&
+    jsonObject.detail !== undefined
+  ) {
     let detail = jsonObject.detail;
     let item = JSON.parse(detail);
     facture = {
@@ -174,7 +199,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       dateEncaissement: item.dateEncaissement,
       delaiPaiement: item.delaiPaiement,
       numeroCommande: item.numeroCommande,
-      tva: item.tva,
+      montantTVA: item.montantTVA,
       prixTotalHT: item.prixTotalHT,
       prixTotalTTC: item.prixTotalTTC,
       nbJourRetard: item.nbJourRetard,
@@ -188,3 +213,30 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
   }
   return facture;
 };
+
+export const findPrestationId = (
+  items: Prestation[],
+  item: Facture
+): number => {
+  let pestationId: number = 0;
+  let prestation = items.map((prestat) => {
+    return prestat;
+  });
+
+  if (prestation && prestation.length > 0) {
+    for (let i = 0; i < prestation.length; i++) {
+      if (typeof prestation[i] !== "undefined") {
+        let facture = prestation[i].facture;
+        if (typeof facture[i] !== "undefined") {
+          for (let j = 0; j < facture.length; j++) {
+            if (facture[j].id === item.id) {
+              pestationId = prestation[i].id;
+            }
+          }
+        }
+      }
+    }
+  }
+  return pestationId;
+};
+

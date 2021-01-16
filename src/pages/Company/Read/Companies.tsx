@@ -71,7 +71,6 @@ const Companies: FC<{}> = (): ReactElement => {
               variant="subtitle1"
               component="div"
             ></Typography>
-
             <Button
               variant="contained"
               color="primary"
