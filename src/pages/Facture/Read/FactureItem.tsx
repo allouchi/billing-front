@@ -54,11 +54,11 @@ interface FactureItemProps {
 }
 const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
+  const classes = useStyles();
   const history = useHistory();
   const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
-  const classes = useStyles();
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
   const [open, setOpen] = React.useState(false);
@@ -76,16 +76,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
       { cle: "La facture" }
-    );
+    );  
 
-    const facturePrestation: FacturePrestation = {
-      prestationId: findPrestationId(items, item),
-      siret: siret,
-      facture: item,
-      factureId: item.id,
-    };
-
-    deleteById(facturePrestation)
+    deleteById(item.id)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
@@ -121,8 +114,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
   const onClickTable = () => {
     setOpen(!open);
-  };
-
+  };  
   const styleStatus =
     item.factureStatus === "OK" ? "style = color:green" : "style = color: red";
 
@@ -135,8 +127,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
         <StyledTableCell>{item.numeroFacture}</StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>
         <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
-        <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
-        <StyledTableCell>{item.dateFacturation}</StyledTableCell>
+        <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>        
         <StyledTableCell>{item.dateEcheance}</StyledTableCell>
         <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
         <StyledTableCell>
@@ -176,13 +167,16 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                Détail
+                Détail facture
               </Typography>
-              <Table size="small" aria-label="customized table">
+              <Table className={classes.table} size="small" aria-label="customized table">
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="center">
                       Numéro commande
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      Date de facturation
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       Statut facture
@@ -205,6 +199,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                   <TableRow key={item.id}>
                     <StyledTableCell align="center">
                       {item.numeroCommande}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.dateFacturation}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {item.factureStatus}

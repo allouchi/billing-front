@@ -55,7 +55,7 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
     history.push({
       pathname: "/company",
       search: "",
-      state: { detail: company },
+      state: { mode:"update", detail: company },
     });
   };
 

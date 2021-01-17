@@ -9,10 +9,12 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import useSiret from "../../../hooks/siret.hook";
+
 import {
   isEmptyString,
   isNotEmptyString,
   parseConsultJsonObject,
+  parseModeJsonObject,
 } from "../../../shared/Utils";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 
@@ -92,23 +94,24 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   const addConsultant = () => {
     let messageId = "";
     const isNew: boolean = !state.consultant.id || state.consultant.id === 0;
-    if(isNew){
-      messageId = 'messages.create.success';
-    }else{
-      messageId = 'messages.edit.success';
+    if (isNew) {
+      messageId = "messages.create.success";
+    } else {
+      messageId = "messages.edit.success";
     }
     const message = intl.formatMessage(
       { id: messageId },
       { cle: "Le consultant" }
     );
-    
+
     createOrUpdate({ consultant: state.consultant, siret: siret })
       .then(() => history.push("/consultants"))
       .then(() =>
         enqueueSnackbar(message, {
           variant: "success",
         })
-      ).catch((err: Error) => {
+      )
+      .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
   };
@@ -116,12 +119,15 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   const cancelConsultantInfo = () => {
     history.push("/consultants");
   };
+    
+  let mode = parseModeJsonObject(history.location.state);
 
   return (
     <PageLayout
-    title={intl.formatMessage({ id: "consultants.update.title" },  
-    {cle: `${state.consultant.firstName} ${state.consultant.lastName}`})}
-     
+      title={intl.formatMessage(
+        { id: `consultants.${mode}.title` },
+        { cle: `${state.consultant.firstName} ${state.consultant.lastName}` }
+      )}
       content={
         <Grid container className={classes.root}>
           <Grid item xs={12}>
@@ -152,33 +158,37 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                     onChange={handleInfoConsultant}
                     onBlur={handleBlur}
                   />
-                </div>
-                <div>
-                  <TextField
-                    id="fonction"
-                    label="Fonction"
-                    variant="outlined"
-                    color="secondary"
-                    value={state.consultant.fonction}
-                    helperText={state.fonctionMessage}
-                    error={state.fonctionMessage !== ""}
-                    onChange={handleInfoConsultant}
-                    onBlur={handleBlur}
-                  />
-                </div>
+                </div>                              
                 <div>
                   <TextField
                     id="mail"
                     label="Email"
                     variant="outlined"
                     color="secondary"
+                    type="mail"
                     value={state.consultant.mail}
                     helperText={state.mailMessage}
                     error={state.mailMessage !== ""}
                     onChange={handleInfoConsultant}
                     onBlur={handleBlur}
                   />
+                </div>               
+                <div>
+                <TextField
+                    id="fonction"
+                    label="Fonction"
+                    multiline
+                    rows={2}   
+                    color="secondary"                   
+                    variant="outlined"
+                    value={state.consultant.fonction}
+                    helperText={state.fonctionMessage}
+                    error={state.fonctionMessage !== ""}
+                    onChange={handleInfoConsultant}
+                    onBlur={handleBlur}
+                />
                 </div>
+               
               </form>
               <Button
                 variant="contained"

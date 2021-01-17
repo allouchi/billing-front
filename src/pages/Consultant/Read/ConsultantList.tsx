@@ -71,7 +71,7 @@ const consultants = (
         </TableRow>
       </TableHead>
       <TableBody>
-        {items.map((consultant: Consultant, index: number) => (
+        {items && items.map((consultant: Consultant, index: number) => (
           <StyledTableRow key={index}>
             <ConsultantItem key={index} item={consultant} />
           </StyledTableRow>

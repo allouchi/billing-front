@@ -8,8 +8,7 @@ export class PdfServiceImpl implements IPdfService {
  async download(siret: string, prestationId: number, factureId: number): Promise<DataPDF[]> {   
     try {      
       const response = await Webservice.getInstance().get(
-        `${PdfServiceImpl.EDITIONS_PATH}/${siret}/${prestationId}/${factureId}`,
-         {responseType: 'arraybuffer'}
+        `${PdfServiceImpl.EDITIONS_PATH}/${siret}/${prestationId}/${factureId}`        
       );
       return response.data;
     } catch (error) {

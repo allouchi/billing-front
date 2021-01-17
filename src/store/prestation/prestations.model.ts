@@ -36,7 +36,7 @@ export const prestationsModel: PrestationsModel = {
     state.items = [payload, ...state.items];
   }),
   updateState: action((state, payload: Prestation) => {
-    state.items.map((item: Prestation) =>
+    state.items = state.items.map((item: Prestation) =>
       item.id === payload.id ? payload : item
     );
   }),

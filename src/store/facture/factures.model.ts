@@ -8,14 +8,15 @@ export interface FacturesModel {
   
   // Actions
   loadSuccess: Action<FacturesModel, Facture[]>;
-  remove: Action<FacturesModel, FacturePrestation>;
+  remove: Action<FacturesModel, number>;
   add: Action<FacturesModel, Facture>;
   updateState: Action<FacturesModel, Facture>;
   
   // Thunk
   findAllBySiret: Thunk<FacturesModel, string | undefined, Injections>;
-  createOrUpdate: Thunk<FacturesModel, FacturePrestation, Injections>;
-  deleteById: Thunk<FacturesModel, FacturePrestation, Injections>; 
+  create: Thunk<FacturesModel, FacturePrestation, Injections>;
+  update: Thunk<FacturesModel, Facture, Injections>;
+  deleteById: Thunk<FacturesModel, number, Injections>; 
 }
 
 export const facturesModel: FacturesModel = {
@@ -27,22 +28,19 @@ export const facturesModel: FacturesModel = {
     state.items = payload;
     state.isLoaded = true;
   }),
-  remove: action((state, payload: FacturePrestation) => {
+  remove: action((state, payload: number) => {
     state.items = state.items.filter(
-      (facture: Facture) => facture.id !== payload.facture.id
+      (facture: Facture) => facture.id !== payload
     );
   }),
   add: action((state, payload: Facture) => {
     state.items = [payload, ...state.items];
   }),
-
-  updateState: action((state, payload: Facture) => {    
-    state.items.map((item: Facture) =>      
-    item.dateEncaissement !== '' && 
-    item.dateEncaissement === payload.dateEncaissement ? item : payload
-    );
+  updateState: action((state, payload: Facture) => {
+    state.items = state.items.map((item: Facture) =>    
+       item.id === payload.id ? payload : item    
+    );    
   }),
-
   // Thunks
   findAllBySiret: thunk(async (actions, payload: string, { injections }) => {
     try {
@@ -55,13 +53,11 @@ export const facturesModel: FacturesModel = {
   }),
   // Thunks
   deleteById: thunk(
-    async (actions, payload: FacturePrestation, { injections }) => {
+    async (actions, payload: number, { injections }) => {
       try {
         const { factureService } = injections;
-        await factureService.deleteById(
-          payload.siret,
-          payload.prestationId,
-          payload.facture.id
+        await factureService.deleteById(          
+          payload
         );
         actions.remove(payload);
       } catch (error) {
@@ -69,36 +65,44 @@ export const facturesModel: FacturesModel = {
       }
     }
   ),
-
   // Thunks
-  createOrUpdate: thunk(
+  create: thunk(
     async (actions, payload: FacturePrestation, { injections }) => {
-      const isNew: boolean = !payload.facture.id || payload.facture.id === 0;
+     
       try {
         const { factureService } = injections;
-        const facture = await factureService.createOrUpdate(
+        const factures = await factureService.create(
           payload.facture,
           payload.siret,
           payload.prestationId
-        );
+        );        
+        actions.add(factures);
         
-        if (isNew) {
-          actions.add(facture);
-        } else {
-          actions.updateState(facture);
-        }
       } catch (error) {
         throw error;
       }
     }
   ),
- 
+  
+   // Thunks
+   update: thunk(
+    async (actions, payload: Facture, { injections }) => {     
+      try {
+        const { factureService } = injections;
+        const factures = await factureService.update(
+          payload         
+        );        
+        actions.updateState(factures);  
+      } catch (error) {
+        throw error;
+      }
+    }
+  ),
 };
 
 export interface FacturePrestation {
   prestationId: number;
   facture: Facture;
-  siret: string;
-  factureId: number;
+  siret: string; 
 }
 export default FacturePrestation;

@@ -238,5 +238,22 @@ export const findPrestationId = (
     }
   }
   return pestationId;
-};
+}
+
+export const parseModeJsonObject = (jsonObject: any): string => {
+  let retour = "create";
+  if (
+    jsonObject !== null &&
+    jsonObject !== undefined &&
+    jsonObject.mode !== null &&
+    jsonObject.mode !== undefined
+  ) {
+    let mode = jsonObject.mode;  
+    
+    if(mode === 'update'){
+      retour = "update";
+    }
+  }
+  return retour;
+}
 

@@ -23,7 +23,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const history = useHistory();
   const siret: string = useSiret();
   const intl = useIntl();
-  const createOrUpdate = useStoreActions((actions) => actions.factures.createOrUpdate);  
+  const create = useStoreActions((actions) => actions.factures.create);  
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
    const [state, setState] = useState({
@@ -67,8 +67,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     const facturePrestation: FacturePrestation = {
       prestationId: state.prestationId,         
       facture:state.facture,      
-      siret: siret,
-      factureId: state.facture.id,
+      siret: siret,      
     };
 
     if (
@@ -86,7 +85,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       { cle: "La facture" }
     );
 
-    createOrUpdate(facturePrestation)
+    create(facturePrestation)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {

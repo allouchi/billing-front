@@ -42,8 +42,9 @@ export default {
       success: "{cle} a été téléchargée avec succès",
       echec: "{cle} n'a pas été téléchargée"
     },
-    
+     required: "La saisie de tous les champs est obligatoire"    
   }, 
+
   // Home page
   home: {
     "edit-source-code":

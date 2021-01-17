@@ -22,7 +22,7 @@ import useSiret from "../../../hooks/siret.hook";
 //import {useIntl} from 'react-intl';
 
 export const StyledTableCell = withStyles((theme: Theme) =>
-  createStyles({
+  createStyles({    
     head: {
       backgroundColor: theme.palette.common.black,
       color: theme.palette.common.white,
@@ -49,8 +49,7 @@ const factures = ( items: Facture[], classes: Record<"table", string>
           <StyledTableCell align="left">Numéro Facture</StyledTableCell>                  
           <StyledTableCell align="left">Quantité</StyledTableCell>         
           <StyledTableCell align="left">Prix Total HT</StyledTableCell>
-          <StyledTableCell align="left">Prix Total TTC</StyledTableCell>
-          <StyledTableCell align="left">Date de Facturation</StyledTableCell>
+          <StyledTableCell align="left">Prix Total TTC</StyledTableCell>          
           <StyledTableCell align="left">Date d'Echéance</StyledTableCell>          
           <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>                   
           <StyledTableCell>{}</StyledTableCell>
@@ -58,7 +57,7 @@ const factures = ( items: Facture[], classes: Record<"table", string>
         </TableRow>
       </TableHead>
       <TableBody>
-        {items.map((facture: Facture, index: number) => (
+        {items && items.map((facture: Facture, index: number) => (
           <FactureItem key={index} item={facture} />
         ))}
       </TableBody>
@@ -69,16 +68,16 @@ const factures = ( items: Facture[], classes: Record<"table", string>
 const FactureList: FC<{}> = () => {
   const classes = useStyles();
   let siret: string = useSiret();
-  //const intl = useIntl();
   const findAllBySiret = useStoreActions(
     (actions) => actions.factures.findAllBySiret
   );
-  const isLoaded: boolean = useStoreState((state) => state.factures.isLoaded);
+  const isLoaded: boolean = useStoreState((state) => state.factures.isLoaded);  
   const items: Facture[] = useStoreState((state) => state.factures.items);
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-
-  useEffect(() => {
+  
+  
+  useEffect(() => {   
     if (!isLoaded) {
       findAllBySiret(siret).catch((e: Error) => {
         enqueueSnackbar(e.message, { variant: "error" });
@@ -89,7 +88,8 @@ const FactureList: FC<{}> = () => {
 
   if (!isLoaded && !onError) {
     return <CircularProgress color="inherit" />;
-  }
+  };
+
   return (
     <div className={classes.table}>
       <TableContainer component={Paper}>

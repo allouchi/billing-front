@@ -67,7 +67,7 @@ const ConsultantItem: FC<ConsultantItemProps> = ({ item }): ReactElement => {
     history.push({
       pathname: "/consultant",
       search: "",
-      state: { detail: consult },
+      state: { mode : "update", detail: consult },
     });
   };
 

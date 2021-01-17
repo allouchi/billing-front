@@ -11,31 +11,37 @@ import { IFactureService } from "../facture.interface";
 export class FactureServiceImpl implements IFactureService {
   private static readonly FACTURES_PATH: string = "factures";
 
-  async createOrUpdate(
+  async update(
+    facture: Facture    
+  ): Promise<Facture> {
+    const isNew: boolean = !facture.id || facture.id === 0;
+    try {
+      let response = await Webservice.getInstance().put(
+        `${FactureServiceImpl.FACTURES_PATH}`,
+        facture
+      );
+      return response.data;
+    } catch (error) {
+      throw Error(`Error during editing facture`);
+    }
+  }  
+  async create(
     facture: Facture,
     siret: string,
     prestationId: number
   ): Promise<Facture> {
     const isNew: boolean = !facture.id || facture.id === 0;
     try {
-      let response;
-      if (isNew) {
-        response = await Webservice.getInstance().post(
+           
+        let response = await Webservice.getInstance().post(
           `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
           facture
-        );
-      } else {
-        response = await Webservice.getInstance().put(
-          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
-          facture
-        );
-      }
+        );     
       return response.data;
     } catch (error) {
-      throw Error(`Error during ${isNew ? "creating" : "editing"} new facture`);
+      throw Error("Error during creating new facture");
     }
   }
-
   async findAllBySiret(siret: string): Promise<Facture[]> {
     try {
       const response = await Webservice.getInstance().get(
@@ -46,15 +52,12 @@ export class FactureServiceImpl implements IFactureService {
       throw Error("Error during getting bills");
     }
   }
-
-  async deleteById(
-    siret: string,
-    prestationId: number,
+  async deleteById(    
     factureId: number
   ): Promise<string> {
     try {
       await Webservice.getInstance().delete(
-        `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}/${factureId}`
+        `${FactureServiceImpl.FACTURES_PATH}/${factureId}`
       );
       return Promise.resolve("200");
     } catch (error) {

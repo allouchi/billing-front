@@ -11,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import { Button, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import useSiret from "../../../hooks/siret.hook";
-import { parseClientJsonObject } from "../../../shared/Utils";
+import { parseClientJsonObject, parseModeJsonObject } from "../../../shared/Utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,10 +92,13 @@ const ClientPage: FC<{}> = (): ReactElement => {
     history.push("/clients");
   };
 
+  let mode = parseModeJsonObject(history.location.state);
+  
   return (
     <PageLayout
-    title={intl.formatMessage({ id: "clients.update.title" },  
-    {cle: clientInfo.socialReason})}
+    title={intl.formatMessage(
+      { id: `clients.${mode}.title` }, 
+      {cle: clientInfo.socialReason})}
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>

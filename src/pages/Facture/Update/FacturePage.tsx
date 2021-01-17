@@ -72,13 +72,12 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   const intl = useIntl();
   const classes = useStyles();
   let siret: string = useSiret();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar(); 
   
-  const createOrUpdate = useStoreActions(
-    (actions) => actions.factures.createOrUpdate
+  const update = useStoreActions(
+    (actions) => actions.factures.update
   );
-  const items: Prestation[] = useStoreState((state) => state.prestations.items);
-
+  
   let factureToEdit = parseFactureJsonObject(history.location.state);
 
   const [state, setState] = useState({
@@ -117,31 +116,23 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   };
 
   const updateFacture = () => {
-    const message = intl.formatMessage(
+    const messageUpdate = intl.formatMessage(
       { id: "messages.update.success" },
       { cle: "La facture" }
     );
 
-    const facturePrestation: FacturePrestation = {
-      prestationId: findPrestationId(items, state.facture),         
-      facture: state.facture,      
-      siret: siret,
-      factureId: state.facture.id,
-    };
+    const messageRequired = intl.formatMessage({ id: "messages.required" });
 
-    if (
-      facturePrestation.facture.factureStatus === '' ||
-      facturePrestation.facture.dateEncaissement === ''      
-    ) {
-      enqueueSnackbar("La saisie de tous les champs est obligatoire", 
+    if (state.facture.dateEncaissement === '' ) {
+      enqueueSnackbar(messageRequired, 
       { variant: "error" });      
       return;
     }
 
-    createOrUpdate(facturePrestation)
+    update(state.facture)
     .then(() => history.push("/factures"))
     .then(() =>
-      enqueueSnackbar(message, {
+      enqueueSnackbar(messageUpdate, {
         variant: "success",
       })
     )
@@ -175,8 +166,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
                       shrink: true,
                     }}
                   />
-                </div>
-               
+                </div>               
               </form>
               <Button
                 variant="contained"

@@ -34,7 +34,7 @@ export const clientsModel: ClientsModel = {
     state.items = [payload, ...state.items];
   }),
   updateState: action((state, payload: Client) => {
-    state.items.map((item: Client) => (item.id === payload.id ? payload : item));
+    state.items = state.items.map((item: Client) => (item.id === payload.id ? payload : item));
   }),
 
   // Thunks

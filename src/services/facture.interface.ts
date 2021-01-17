@@ -11,7 +11,15 @@ export interface IFactureService {
    * @param facture facture to create or to update
    * @returns Promise<Facture>
    */  
-  createOrUpdate(facture: Facture, siret: string, prestationId: number): Promise<Facture>;
+  create(facture: Facture, siret: string, prestationId: number): Promise<Facture>;
+
+   /**
+   * Update facture for the current project or update it if already exists
+   *
+   * @param facture facture to create or to update
+   * @returns Promise<Facture>
+   */  
+  update(facture: Facture): Promise<Facture>;
 
   /**
    * Get all schemas if no project or all schemas for project name in otherwise
@@ -26,6 +34,5 @@ export interface IFactureService {
    *
    * @param id facture id to delete
    */
-  deleteById(siret: string, factureId: number, prestationId: number): Promise<String>;
- 
+  deleteById(factureId: number): Promise<String>; 
 }

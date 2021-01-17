@@ -57,7 +57,7 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
     history.push({
       pathname: "/client",
       search: "",
-      state: { detail: client },
+      state: { mode:"update", detail: client },
     });
   };
   return (

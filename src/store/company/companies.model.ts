@@ -15,9 +15,8 @@ export interface CompaniesModel {
 
   // Thunk
   findAll: Thunk<CompaniesModel, void, Injections>;
-  findAllBySiret: Thunk<CompaniesModel, string, Injections>;
-  create: Thunk<CompaniesModel, Company, Injections>;
-  update: Thunk<CompaniesModel, Company, Injections>;
+  findAllBySiret: Thunk<CompaniesModel, string, Injections>; 
+  createOrUpdate: Thunk<CompaniesModel, Company, Injections>;
   deleteById: Thunk<CompaniesModel, number, Injections>;
 }
 
@@ -37,7 +36,7 @@ export const companiesModel: CompaniesModel = {
     state.items = [payload, ...state.items];    
   }),
   updateState: action((state, payload: Company) => {
-    state.items.map((item: Company) => (item.id === payload.id ? payload : item));
+    state.items = state.items.map((item: Company) => (item.id === payload.id ? payload : item));
   }), 
 
    // Thunks
@@ -62,24 +61,21 @@ export const companiesModel: CompaniesModel = {
   }),
 
   // Thunks
-  create: thunk(async (actions, payload: Company, { injections }) => {
+  createOrUpdate: thunk(async (actions, payload: Company, { injections }) => {
+    const isNew: boolean = !payload.id || payload.id === 0;
     try {
       const { companyService } = injections;
       const company = await companyService.createOrUpdate(payload);
-      actions.add(company);
+      if (isNew) {
+        actions.add(company);
+      } else {
+        actions.updateState(company);        
+      }
     } catch (error) {
       throw error;
     }
   }),
-  update: thunk(async (actions, payload: Company, { injections }) => {
-    try {
-      const { companyService } = injections;
-      const company = await companyService.createOrUpdate(payload);
-      actions.update(company);
-    } catch (error) {
-      throw error;
-    }
-  }),
+ 
   deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { companyService } = injections;
