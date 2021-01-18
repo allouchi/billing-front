@@ -60,7 +60,6 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const handleInfoClient = (e: React.ChangeEvent<HTMLInputElement>) => {
     setClientInfo({ ...clientInfo, [e.target.id]: e.target.value });
   };
-
   const handleAdresseClient = (e: React.ChangeEvent<HTMLInputElement>) => {
     setclientAdresse({ ...clientAdresse, [e.target.id]: e.target.value });
   };
@@ -147,7 +146,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   value={clientAdresse.numero}
                   variant="outlined"
                   color="secondary"
-                  //helperText="Numéro obligatoire."
+                  helperText="Numéro obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -158,7 +157,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   value={clientAdresse.rue}
                   variant="outlined"
                   color="secondary"
-                  //helperText="Voie obligatoire."
+                  helperText="Voie obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>              
@@ -169,7 +168,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   value={clientAdresse.codePostal}
                   variant="outlined"
                   color="secondary"
-                  //helperText="Code postale obligatoire."
+                  helperText="Code postale obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -180,7 +179,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   value={clientAdresse.localite}
                   variant="outlined"
                   color="secondary"
-                  //helperText="Nom localite obligatoire."
+                  helperText="Nom localite obligatoire."
                   onChange={handleAdresseClient}
                 />
               </Grid>
@@ -191,8 +190,8 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   value={clientAdresse.pays}
                   variant="outlined"
                   color="secondary"
-                  //helperText="Nom pays obligatoire."
-                  defaultValue="France"
+                  helperText="Nom pays obligatoire."
+                  defaultValue="FRANCE"
                   onChange={handleAdresseClient}
                 />
               </Grid>

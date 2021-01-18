@@ -63,10 +63,11 @@ const PrestationList: FC<{}> = () => {
   const [currentItem, setCurrentItem] = useState<Prestation>();
   const siret: string = useSiret();
 
-  const handleEditFacture = (item: Prestation) => {    
-    setCurrentItem(item);    
-    setClickOn(true);
+  const handleEditFacture = (item: Prestation, click: boolean) => {    
+    setCurrentItem(item);      
+    setClickOn(click);
   };
+  
   useEffect(() => {     
     if (!isLoaded) {     
       findAllBySiret(siret).catch((e: Error) => {
@@ -79,6 +80,7 @@ const PrestationList: FC<{}> = () => {
   if (!isLoaded && !onError) {
     return <CircularProgress color="inherit" />;
   }
+  
   return (
     <div className={classes.table}>
       <TableContainer component={Paper}>
@@ -90,16 +92,14 @@ const PrestationList: FC<{}> = () => {
                   <StyledTableCell align="left">Id</StyledTableCell>
                   <StyledTableCell align="left">Tarif HT</StyledTableCell>
                   <StyledTableCell align="left">Numéro de commande</StyledTableCell>
-                  <StyledTableCell align="left">
-                    Délai de paiement
-                  </StyledTableCell>
+                  <StyledTableCell align="left">Délai de paiement</StyledTableCell>
                   <StyledTableCell align="left">Consultant</StyledTableCell>
                   <StyledTableCell align="left">Client</StyledTableCell>
                   <StyledTableCell align="left">{}</StyledTableCell>                  
                 </TableRow>
               </TableHead>
               <TableBody>
-                {items.map((prestation: Prestation, index: number) => (
+                {items && items.map((prestation: Prestation, index: number) => (
                   <PrestationItem
                     key={index}
                     item={prestation}

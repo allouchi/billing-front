@@ -9,7 +9,10 @@ export default interface Prestation {
   consultant: Consultant;
   client: Client;
   facture: Facture[];
-  numeroCommande: string;   
+  designation : string;
+  numeroCommande: string; 
+  clientPrestation: string;
+  quantite: number,  
   startDate?: Date;
   endDate?: Date;
 }

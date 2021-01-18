@@ -7,6 +7,7 @@ import AppHeader from './components/Header/AppHeader';
 import AppFooter from './components/Footer/AppFooter';
 import PdfViewer from './pages/Pdf/PdfViewer';
 
+const SignIn = React.lazy(() => import('./pages/User/SignIn'));
 const Home = React.lazy(() => import('./pages/Home'));
 const Factures = React.lazy(() => import('./pages/Facture/Read'));
 const Facture = React.lazy(() => import('./pages/Facture/Update'));
@@ -31,6 +32,7 @@ const App: React.FunctionComponent<{}> = () => {
                 fallback={<>Loading</>}
               >
                 <Switch>
+                  <Route exact path="/signin" component={SignIn} />
                   <Route exact path="/" component={Home} />
                   <Route exact  path="/companies" component={Companies} />
                   <Route exact  path="/company" component={Company} />

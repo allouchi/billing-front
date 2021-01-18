@@ -63,7 +63,6 @@ export const prestationsModel: PrestationsModel = {
           payload.prestation,
           payload.siret
         );
-
         if (isNew) {
           actions.add(prestation);
         } else {

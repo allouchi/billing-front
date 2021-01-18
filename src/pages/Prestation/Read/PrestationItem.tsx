@@ -23,24 +23,19 @@ export const StyledTableRow = withStyles((theme: Theme) =>
   })
 )(TableRow);
 
-interface PrestationItemProps {
+interface PrestationItemProps { 
   item: Prestation;
-  editerFacture(item: Prestation): void;
+  editerFacture(item: Prestation, click : boolean): void;
 }
-const FactureItem: FC<PrestationItemProps> = ({
-  item,
-  ...props
-}): ReactElement => {
+const FactureItem: FC<PrestationItemProps> = ({item,...props}): ReactElement => {
   const intl = useIntl();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
-  const deleteById = useStoreActions(
-    (actions) => actions.prestations.deleteById
-  ); 
+  const deleteById = useStoreActions((actions) => actions.prestations.deleteById); 
 
-  const handleEditClick = () => {
-    props.editerFacture(item);   
+  const handleEditClick = () => {   
+    props.editerFacture(item, true);   
   };
 
   const handleDeleteClick = () => {

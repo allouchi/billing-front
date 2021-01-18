@@ -12,7 +12,6 @@ import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import useSiret from "../../../hooks/siret.hook";
 import Prestation from "../../../domains/Prestation";
-import FacturePrestation from "../../../store/facture/factures.model";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import PdfPath from "../../../store/pdf/pdf.model";

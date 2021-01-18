@@ -4,7 +4,6 @@ import { useStoreActions } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import { useIntl } from "react-intl";
 import useSiret from "../../../hooks/siret.hook";
-import FacturePrestation from "../../../store/facture/factures.model";
 import { useSnackbar } from "notistack";
 import {
   Button,
@@ -14,47 +13,42 @@ import {
   DialogContentText,
   TextField,
 } from "@material-ui/core";
+import PrestationSiret from "../../../store/prestation/prestations.model";
 
 interface FactureEditProps {
   item: Prestation;
   clickOn: boolean;
 }
 const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
+  
   const history = useHistory();
   const siret: string = useSiret();
   const intl = useIntl();
-  const create = useStoreActions((actions) => actions.factures.create);  
+  const createOrUpdate = useStoreActions(
+    (actions) => actions.prestations.createOrUpdate
+  );
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
-   const [state, setState] = useState({
-    prestationId: item.id,      
-    facture: {
-      id: 0,
-      numeroFacture: "",
-      dateFacturation: "",
-      dateEcheance: "",
-      dateEncaissement: "",
-      delaiPaiement: 0,
-      montantTVA: 0,
-      prixTotalHT: 0,
-      prixTotalTTC: 0,
-      nbJourRetard: 0,
-      fraisRetard: 0,
-      factureStatus: "KO",
+  const [state, setState] = useState({
+    prestation : {
+      id: item.id,
+      tarifHT: item.tarifHT,
+      delaiPaiement: item.delaiPaiement,
+      consultant: item.consultant,
+      client: item.client,
+      designation: 'Prestation',
+      numeroCommande: `${item.numeroCommande}`,
+      clientPrestation: `${item.client.socialReason}`,     
       quantite: 0,
-      numeroCommande: "",
-      designation: "Prestation",
-      clientPrestation : `${item.client.socialReason}`,
-      filePath: '',     
     },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;   
+    const value: string = e.target.value;    
     setState({
       ...state,
-      facture: { ...state.facture, [id]: value },
+      prestation: { ...state.prestation, [id]: value },
     });
   };
 
@@ -62,40 +56,40 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     setOpen(false);
   };
 
-  const handleValider = () => {   
-    setOpen(false);
-    const facturePrestation: FacturePrestation = {
-      prestationId: state.prestationId,         
-      facture:state.facture,      
-      siret: siret,      
-    };
+  const handleValider = () => {
+    const requiredMsg = intl.formatMessage({ id: "messages.required" });
+    setOpen(true);
 
+    const prestationSiret: PrestationSiret = {
+      prestation: state.prestation,
+      siret: siret,
+    };
     if (
-      facturePrestation.facture.numeroCommande === "" ||
-      facturePrestation.facture.quantite === 0 ||
-      facturePrestation.facture.designation === "" ||
-      facturePrestation.facture.clientPrestation === ""
+      prestationSiret.prestation.numeroCommande === "" ||
+      prestationSiret.prestation.designation === "" ||
+      prestationSiret.prestation.quantite === 0 ||
+      prestationSiret.prestation.clientPrestation === ""
     ) {
-      enqueueSnackbar("La saisie de tous les champs est obligatoire", { variant: "error" });
+      enqueueSnackbar(requiredMsg, { variant: "error" });
       setOpen(true);
       return;
     }
-    const message = intl.formatMessage(
+    const successMsg = intl.formatMessage(
       { id: "messages.create.success" },
       { cle: "La facture" }
     );
 
-    create(facturePrestation)
+    createOrUpdate(prestationSiret)
       .then(() => history.push("/factures"))
       .then(() =>
-        enqueueSnackbar(message, {
+        enqueueSnackbar(successMsg, {
           variant: "success",
         })
       )
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-      }); 
-  };
+      });
+  }; 
 
   return (
     <div>
@@ -109,41 +103,41 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             Veuillez saisir le numéro de commande client
           </DialogContentText>
           <TextField
+           id="numeroCommande"
             autoFocus
-            margin="dense"
-            id="numeroCommande"
+            margin="dense"            
             label="Numéro de commande"
-            value={state.facture.numeroCommande}
+            value={state.prestation.numeroCommande}
             type="text"
             required
             fullWidth
             onChange={handleChange}
           />
           <TextField
-            margin="dense"
             id="quantite"
+            margin="dense"            
             label="Quantité"
-            value={state.facture.quantite}
+            value={state.prestation.quantite}
             type="number"
             required
             fullWidth
             onChange={handleChange}
           />
           <TextField
-            margin="dense"
-            id="designation"
-            label="Désignation"
-            value={state.facture.designation}
+           id="designation"
+            margin="dense"            
+            label="Désignation"            
+            value={state.prestation.designation}
             type="text"
             required
             fullWidth
             onChange={handleChange}
           />
-           <TextField
+          <TextField
             margin="dense"
             id="clientPrestation"
             label="Client prestation"
-            value={state.facture.clientPrestation}
+            value={state.prestation.clientPrestation}
             type="text"
             required
             fullWidth

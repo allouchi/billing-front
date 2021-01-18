@@ -1,11 +1,9 @@
 import React, { FC, ReactElement, useState } from "react";
 import Facture from "../../../domains/Facture";
 import { useHistory } from "react-router-dom";
-import { useStoreActions, useStoreState } from "../../../store/hooks";
-import FacturePrestation from "../../../store/facture/factures.model";
+import { useStoreActions } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import {
-  findPrestationId,
   isEmptyString,
   isNotEmptyString,
   parseFactureJsonObject,
@@ -13,8 +11,8 @@ import {
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import { useIntl } from "react-intl";
 import { Grid, makeStyles, Paper, TextField, Button } from "@material-ui/core";
-import useSiret from "../../../hooks/siret.hook";
-import Prestation from "../../../domains/Prestation";
+
+
 
 const emptyFacture: Facture = {
   id: 0,
@@ -71,7 +69,6 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const classes = useStyles();
-  let siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar(); 
   
   const update = useStoreActions(
@@ -122,7 +119,6 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
     );
 
     const messageRequired = intl.formatMessage({ id: "messages.required" });
-
     if (state.facture.dateEncaissement === '' ) {
       enqueueSnackbar(messageRequired, 
       { variant: "error" });      
@@ -135,8 +131,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
       enqueueSnackbar(messageUpdate, {
         variant: "success",
       })
-    )
-    .catch((err: Error) => {
+    ).catch((err: Error) => {
       enqueueSnackbar(err.message, { variant: "error" });
     });  
   }

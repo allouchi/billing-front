@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useState } from "react";
+import React, { FC, ReactElement, useEffect } from "react";
 import {
   withStyles,
   Theme,
@@ -15,14 +15,13 @@ import Paper from "@material-ui/core/Paper";
 import FactureItem from "./FactureItem";
 import Facture from "../../../domains/Facture";
 import Alert from "@material-ui/lab/Alert";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import useSiret from "../../../hooks/siret.hook";
 //import {useIntl} from 'react-intl';
 
 export const StyledTableCell = withStyles((theme: Theme) =>
-  createStyles({    
+  createStyles({
     head: {
       backgroundColor: theme.palette.common.black,
       color: theme.palette.common.white,
@@ -39,27 +38,29 @@ const useStyles = makeStyles({
   },
 });
 
-const factures = ( items: Facture[], classes: Record<"table", string>
+const factures = (
+  items: Facture[],
+  classes: Record<"table", string>
 ): ReactElement => {
   return (
     <Table className={classes.table} aria-label="customized table">
       <TableHead>
-        <TableRow>    
-          <StyledTableCell>{}</StyledTableCell>     
-          <StyledTableCell align="left">Numéro Facture</StyledTableCell>                  
-          <StyledTableCell align="left">Quantité</StyledTableCell>         
-          <StyledTableCell align="left">Prix Total HT</StyledTableCell>
-          <StyledTableCell align="left">Prix Total TTC</StyledTableCell>          
-          <StyledTableCell align="left">Date d'Echéance</StyledTableCell>          
-          <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>                   
+        <TableRow>
           <StyledTableCell>{}</StyledTableCell>
-          
+          <StyledTableCell align="left">Numéro Facture</StyledTableCell>
+          <StyledTableCell align="left">Quantité</StyledTableCell>
+          <StyledTableCell align="left">Prix Total HT</StyledTableCell>
+          <StyledTableCell align="left">Prix Total TTC</StyledTableCell>
+          <StyledTableCell align="left">Date d'Echéance</StyledTableCell>
+          <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>
+          <StyledTableCell>{}</StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {items && items.map((facture: Facture, index: number) => (
-          <FactureItem key={index} item={facture} />
-        ))}
+        {items &&
+          items.map((facture: Facture, index: number) => (
+            <FactureItem key={index} item={facture} />
+          ))}
       </TableBody>
     </Table>
   );
@@ -71,25 +72,17 @@ const FactureList: FC<{}> = () => {
   const findAllBySiret = useStoreActions(
     (actions) => actions.factures.findAllBySiret
   );
-  const isLoaded: boolean = useStoreState((state) => state.factures.isLoaded);  
+ 
   const items: Facture[] = useStoreState((state) => state.factures.items);
-  const { enqueueSnackbar } = useSnackbar();
-  const [onError, setOnError] = useState(false);
-  
-  
-  useEffect(() => {   
-    if (!isLoaded) {
-      findAllBySiret(siret).catch((e: Error) => {
-        enqueueSnackbar(e.message, { variant: "error" });
-        setOnError(true);
-      });
-    }
-  }, [findAllBySiret, enqueueSnackbar, isLoaded, siret]);
+  const { enqueueSnackbar } = useSnackbar();  
 
-  if (!isLoaded && !onError) {
-    return <CircularProgress color="inherit" />;
-  };
+  useEffect(() => {
+    findAllBySiret(siret).catch((e: Error) => {
+      enqueueSnackbar(e.message, { variant: "error" });     
+    });
+  }, [findAllBySiret, enqueueSnackbar, siret]);
 
+ 
   return (
     <div className={classes.table}>
       <TableContainer component={Paper}>

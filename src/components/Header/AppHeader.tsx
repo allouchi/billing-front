@@ -1,9 +1,5 @@
 import React, { FC } from "react";
-import {
-  makeStyles,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -12,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { Button } from "@material-ui/core";
+import { Button} from "@material-ui/core";
 import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
 
@@ -48,13 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up("md")]: {
         display: "flex",
       },
-    },
-    sectionMobile: {
-      display: "flex",
-      [theme.breakpoints.up("md")]: {
-        display: "none",
-      },
-    },
+    },    
   })
 );
 
@@ -64,9 +54,26 @@ const AppHeader: FC<{}> = () => {
   const intl = useIntl();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+ 
 
+  const options = [
+    'SE CONNECTER',
+    'SE DECONNECTER'  
+  ];
+  
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {    
+    setSelectedIndex(index);
+    setAnchorEl(null);
+    if(index === 0){
+      history.push("/signin");
+    }
+    if(index === 1){
+      history.push("/");
+    }
+  };
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget);    
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -83,8 +90,15 @@ const AppHeader: FC<{}> = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+     {options.map((option, index) => (
+          <MenuItem
+            key={option}           
+            selected={index === selectedIndex}
+            onClick={(event) => handleMenuItemClick(event, index)}
+          >
+            {option}
+          </MenuItem>
+        ))}
     </Menu>
   );
 
@@ -109,7 +123,10 @@ const AppHeader: FC<{}> = () => {
             <Button color="inherit" onClick={() => history.push("/companies")}>
               {intl.formatMessage({ id: "menu.companies" })}
             </Button>
-            <Button color="inherit" onClick={() => history.push("/prestations")}>
+            <Button
+              color="inherit"
+              onClick={() => history.push("/prestations")}
+            >
               {intl.formatMessage({ id: "menu.prestations" })}
             </Button>
             <Button color="inherit" onClick={() => history.push("/factures")}>
@@ -118,9 +135,12 @@ const AppHeader: FC<{}> = () => {
             <Button color="inherit" onClick={() => history.push("/clients")}>
               {intl.formatMessage({ id: "menu.clients" })}
             </Button>
-            <Button color="inherit" onClick={() => history.push("/consultants")}>
+            <Button
+              color="inherit"
+              onClick={() => history.push("/consultants")}
+            >
               {intl.formatMessage({ id: "menu.consultants" })}
-            </Button>            
+            </Button>
             <IconButton
               edge="end"
               aria-label="account of current user"

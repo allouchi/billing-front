@@ -84,7 +84,12 @@ const PrestationPage: FC<{}> = (): ReactElement => {
         pays: "",
       },
     },
-    prestation: {},
+    prestation: {
+    designation : "",
+    numeroCommande: "",
+    clientPrestation: "",
+    quantite: 0   
+    },
     clientsOnError: false,
     consultantsOnError: false,
   });
@@ -140,7 +145,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
     setState({
       ...state,
       prestation: { ...state.prestation, client: value },
-    });
+    })    
   };
 
   const consultantsAutocomplete = () => {
@@ -175,8 +180,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
     ) : (
       <Autocomplete
         id="client"
-        options={clients}
-        value={state.client}
+        options={clients}        
         className={classes.textField}             
         getOptionLabel={(option: Client) => clientIdentity(option)}
         onChange={(e, value) => onSelectClient(value)}       

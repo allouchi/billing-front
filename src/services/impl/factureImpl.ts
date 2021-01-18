@@ -13,8 +13,7 @@ export class FactureServiceImpl implements IFactureService {
 
   async update(
     facture: Facture    
-  ): Promise<Facture> {
-    const isNew: boolean = !facture.id || facture.id === 0;
+  ): Promise<Facture> {    
     try {
       let response = await Webservice.getInstance().put(
         `${FactureServiceImpl.FACTURES_PATH}`,
@@ -30,7 +29,7 @@ export class FactureServiceImpl implements IFactureService {
     siret: string,
     prestationId: number
   ): Promise<Facture> {
-    const isNew: boolean = !facture.id || facture.id === 0;
+    //const isNew: boolean = !facture.id || facture.id === 0;
     try {
            
         let response = await Webservice.getInstance().post(
@@ -65,6 +64,5 @@ export class FactureServiceImpl implements IFactureService {
         `Error during deleting facture with id ${factureId}`
       );
     }
-  }
- 
+  } 
 }
