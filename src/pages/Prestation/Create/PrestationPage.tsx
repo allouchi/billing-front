@@ -129,7 +129,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       });
   };
 
-  const onSelectConsultant = (value: Consultant | null): void => {
+  const onSelectConsultant = (event : any, value : Consultant): void => {
     if (!value) {
       return;
     }
@@ -138,7 +138,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       prestation: { ...state.prestation, consultant: value },
     });
   };
-  const onSelectClient = (value: Client | null): void => {
+  const onSelectClient = (event : any, value : Client): void => {    
     if (!value) {
       return;
     }
@@ -158,11 +158,10 @@ const PrestationPage: FC<{}> = (): ReactElement => {
 
       <Autocomplete
         id="consultant"
-        options={consultants}
-        value={state.consultant}
+        options={consultants}        
         className={classes.textField}
         getOptionLabel={(option: Consultant) => consultantIdentity(option)}
-        onChange={(e, value) => onSelectConsultant(value)}
+        onChange={onSelectConsultant}
         renderInput={(params) => (
           <TextField {...params} label="Consultant" variant="outlined" />
         )}
@@ -179,11 +178,11 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       </Alert>
     ) : (
       <Autocomplete
-        id="client"
-        options={clients}        
+        id="client"        
+        options={clients}          
         className={classes.textField}             
         getOptionLabel={(option: Client) => clientIdentity(option)}
-        onChange={(e, value) => onSelectClient(value)}       
+        onChange={onSelectClient}       
         renderInput={(params) => (
           <TextField {...params} label="Client" variant="outlined" />
         )}

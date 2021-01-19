@@ -22,6 +22,8 @@ const Company = React.lazy(() => import('./pages/Company/Create'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const App: React.FunctionComponent<{}> = () => {
+
+  
   return (
     <Providers>
       <AppLayout

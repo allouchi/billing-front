@@ -1,40 +1,44 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-
+import React, { ReactElement, useContext, useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { FirebaseContext } from "../../auth";
+import User from "../../domains/User";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '35vh',
+    height: "35vh",
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundRepeat: 'repeat',
+    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundRepeat: "repeat",
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+      theme.palette.type === "light"
+        ? theme.palette.grey[50]
+        : theme.palette.grey[900],
+    backgroundSize: "cover",
+    backgroundPosition: "center",
   },
   paper: {
     margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -42,8 +46,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+const SignIn = (): ReactElement => {
   const classes = useStyles();
+  const data = {
+    email: "",
+    password: "",
+  };
+
+  const firebase = useContext(FirebaseContext);
+  const [error, setError] = useState();
+  const [loginData, setLoginData] = useState(data);
+
+  const handleChange = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    setLoginData({
+      ...loginData,
+      [id]: value,
+    });
+  };
+  const handleValider = (e) => {
+    e.preventDefault();
+
+    const { email, password } = loginData;
+    firebase
+      .loginUser(email, password)
+      .then((user) => {
+        console.log("user : ", user);
+        setLoginData({
+          ...data,
+        });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setLoginData({
+          ...data,
+        });
+      });
+  };
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -59,17 +99,19 @@ export default function SignInSide() {
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
+              id="email"
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Addresse Email"
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleChange}
             />
             <TextField
+              id="password"
               variant="outlined"
               margin="normal"
               required
@@ -77,15 +119,21 @@ export default function SignInSide() {
               name="password"
               label="Password"
               type="password"
-              id="password"
               autoComplete="current-password"
-            />            
+              onChange={handleChange}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Rester connecter"
+            />
             <Button
+              id="valider"
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={handleValider}
             >
               Connexion
             </Button>
@@ -94,11 +142,13 @@ export default function SignInSide() {
                 <Link href="#" variant="body2">
                   Mot de passe oublié?
                 </Link>
-              </Grid>              
-            </Grid>           
+              </Grid>
+            </Grid>
           </form>
         </div>
       </Grid>
     </Grid>
   );
-}
+};
+
+export default SignIn;
