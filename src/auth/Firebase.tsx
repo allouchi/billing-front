@@ -11,7 +11,7 @@ const config = {
 };
 
 class Firebase {
-  auth: any;
+  auth: {};
   constructor() {
     if (app.initializeApp.length === 0) {
       app.initializeApp(config);
@@ -19,12 +19,25 @@ class Firebase {
     }
   }
 
-  loginUser = (email: string, password: string) => {
-    this.auth.signInWithEmailAndPassword(email, password);
+  loginUser = (email: string, password: string): Promise<any> => {
+    let reponse;
+    reponse = app.auth().signInWithEmailAndPassword(email, password);
+    return reponse;
   };
 
-  loginOutUser = () => {
-    this.auth.signOut();
+  createLoginUser = (email: string, password: string): Promise<any> => {
+    let reponse = app.auth().createUserWithEmailAndPassword(email, password);
+    return reponse;
+  };
+
+  subscribe = (): any => {
+    return app.auth();
+  };
+
+  loginOutUser = (): Promise<any> => {
+    let reponse;
+    reponse = app.auth().signOut();
+    return reponse;
   };
 }
 

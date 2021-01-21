@@ -1,7 +1,12 @@
 import React, { FC, ReactElement } from "react";
 import TableRow from "@material-ui/core/TableRow";
 import { useSnackbar } from "notistack";
-import { withStyles, Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  Theme,
+  createStyles,
+  makeStyles,
+} from "@material-ui/core/styles";
 import Facture from "../../../domains/Facture";
 import { StyledTableCell } from "./FactureList";
 import { useIntl } from "react-intl";
@@ -75,7 +80,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
       { cle: "La facture" }
-    );  
+    );
 
     deleteById(item.id)
       .then(() => history.push("/factures"))
@@ -106,16 +111,15 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
         enqueueSnackbar(message, {
           variant: "success",
         })
-      ).catch((err: Error) => {
+      )
+      .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
   };
 
   const onClickTable = () => {
     setOpen(!open);
-  };  
-  const styleStatus =
-    item.factureStatus === "OK" ? "style = color:green" : "style = color: red";
+  };
 
   return (
     <>
@@ -126,7 +130,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
         <StyledTableCell>{item.numeroFacture}</StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>
         <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
-        <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>        
+        <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
         <StyledTableCell>{item.dateEcheance}</StyledTableCell>
         <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
         <StyledTableCell>
@@ -157,7 +161,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
             </IconButton>
           </Tooltip>
         </StyledTableCell>
-      </StyledTableRow>     
+      </StyledTableRow>
       <StyledTableRow>
         <StyledTableCell
           style={{ paddingBottom: 0, paddingTop: 0 }}
@@ -168,7 +172,11 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
               <Typography variant="h6" gutterBottom component="div">
                 Détail facture
               </Typography>
-              <Table className={classes.table} size="small" aria-label="customized table">
+              <Table
+                className={classes.table}
+                size="small"
+                aria-label="customized table"
+              >
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="center">
@@ -190,7 +198,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                       Délai paiement
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                     Montant TVA
+                      Montant TVA
                     </StyledTableCell>
                   </TableRow>
                 </TableHead>
@@ -223,7 +231,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
             </Box>
           </Collapse>
         </StyledTableCell>
-      </StyledTableRow>      
+      </StyledTableRow>
     </>
   );
 };

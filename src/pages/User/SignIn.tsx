@@ -1,17 +1,18 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { Checkbox, Container, FormControlLabel } from "@material-ui/core";
 import { FirebaseContext } from "../../auth";
-import User from "../../domains/User";
+import { useSnackbar } from "notistack";
+import { useIntl } from "react-intl";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,16 +47,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = (): ReactElement => {
+const SignIn = (props): ReactElement => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const intl = useIntl();
   const data = {
     email: "",
     password: "",
   };
 
   const firebase = useContext(FirebaseContext);
-  const [error, setError] = useState();
+  const [btnIsValid, setBtnIsValid] = useState(true);
   const [loginData, setLoginData] = useState(data);
+
+  useEffect(() => {
+    if (loginData.email !== "" && loginData.password.length >= 6) {
+      setBtnIsValid(true);
+    } else if (btnIsValid) {
+      setBtnIsValid(false);
+    }
+  }, [loginData.email, loginData.password, btnIsValid]);
 
   const handleChange = (e) => {
     const id = e.target.id;
@@ -65,20 +76,27 @@ const SignIn = (): ReactElement => {
       [id]: value,
     });
   };
+
   const handleValider = (e) => {
     e.preventDefault();
-
+    const sucessMsq = intl.formatMessage({ id: "messages.authentif.success" });
+    const echecMsg = intl.formatMessage({ id: "messages.authentif.echec" });
     const { email, password } = loginData;
+
     firebase
       .loginUser(email, password)
       .then((user) => {
-        console.log("user : ", user);
+        //props.history.push("/home");
+        enqueueSnackbar(sucessMsq, {
+          variant: "success",
+        });
         setLoginData({
           ...data,
         });
       })
       .catch((error) => {
-        console.log(error.message);
+        props.history.push("/login");
+        enqueueSnackbar(echecMsg, { variant: "error" });
         setLoginData({
           ...data,
         });
@@ -86,68 +104,78 @@ const SignIn = (): ReactElement => {
   };
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Connexion
+        </Typography>
+        <form className={classes.form} noValidate>
+          <TextField
+            id="email"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={handleChange}
+            value={loginData.email}
+          />
+          <TextField
+            id="password"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            value={loginData.password}
+            onChange={handleChange}
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Rester connecter"
+          />
+          <Button
+            id="valider"
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            disabled={!btnIsValid}
+            onClick={handleValider}
+          >
             Connexion
-          </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              id="email"
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="Addresse Email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={handleChange}
-            />
-            <TextField
-              id="password"
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              onChange={handleChange}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Rester connecter"
-            />
-            <Button
-              id="valider"
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleValider}
-            >
-              Connexion
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Mot de passe oublié?
-                </Link>
-              </Grid>
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Mot de passe oublié?
+              </Link>
             </Grid>
-          </form>
-        </div>
-      </Grid>
-    </Grid>
+            <Grid item>
+              <NavLink
+                className="navbar-item"
+                activeClassName="is-active"
+                to="/signup"
+                exact
+              >
+                Vous n'avez pas encore de compte? inscrivez-vous
+              </NavLink>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
   );
 };
 

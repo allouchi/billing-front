@@ -1,16 +1,16 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useContext } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { useStoreState } from "../../store/hooks";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import { Button} from "@material-ui/core";
+import { Button, Switch } from "@material-ui/core";
 import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
+import Company from "../../domains/Company";
+import { FirebaseContext } from "../../auth";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,63 +44,37 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up("md")]: {
         display: "flex",
       },
-    },    
+    },
   })
 );
 
-const AppHeader: FC<{}> = () => {
+interface AppHeaderProps {
+  isAuthenticated: boolean;
+}
+
+const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps) => {
+  const { isAuthenticated } = props;
+
   const history = useHistory();
   const classes = useStyles();
   const intl = useIntl();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const isMenuOpen = Boolean(anchorEl);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
- 
+  const items: Company[] = useStoreState((state) => state.companies.items);
+  const [checked, setShecked] = React.useState(false);
+  const firebase = useContext(FirebaseContext);
 
-  const options = [
-    'SE CONNECTER',
-    'SE DECONNECTER'  
-  ];
-  
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {    
-    setSelectedIndex(index);
-    setAnchorEl(null);
-    if(index === 0){
-      history.push("/signin");
-    }
-    if(index === 1){
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+    setShecked(isChecked);
+  };
+
+  useEffect(() => {
+    if (checked) {
+      history.push("/login");
+    } else {
       history.push("/");
+      firebase.loginOutUser();
     }
-  };
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);    
-  };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-     {options.map((option, index) => (
-          <MenuItem
-            key={option}           
-            selected={index === selectedIndex}
-            onClick={(event) => handleMenuItemClick(event, index)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-    </Menu>
-  );
+  }, [checked, firebase, history]);
 
   return (
     <>
@@ -115,7 +89,7 @@ const AppHeader: FC<{}> = () => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Facturation
+            {intl.formatMessage({ id: "menu.role" })}
           </Typography>
 
           <div className={classes.grow} />
@@ -141,20 +115,16 @@ const AppHeader: FC<{}> = () => {
             >
               {intl.formatMessage({ id: "menu.consultants" })}
             </Button>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            <Switch
+              id="checked"
+              checked={checked || isAuthenticated}
+              onChange={handleChange}
+              name="checked"
+              inputProps={{ "aria-label": "secondary checkbox" }}
+            />
           </div>
         </Toolbar>
       </AppBar>
-      {renderMenu}
     </>
   );
 };

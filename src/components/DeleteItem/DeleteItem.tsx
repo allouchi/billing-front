@@ -12,12 +12,12 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { TransitionProps } from "@material-ui/core/transitions/transition";
 
 const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & { children?: React.ReactElement<any, any> },
-    ref: React.Ref<unknown>,
-  ) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-  
+  props: TransitionProps & { children?: React.ReactElement<any, any> },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 interface DeleteItemProps {
   id: number;
   cle: string;
@@ -31,15 +31,15 @@ const DeleteItem: FC<DeleteItemProps> = (
   const intl = useIntl();
   const [open, setOpen] = React.useState(false);
   let messageId = intl.formatMessage({ id: `tooltip.${cle}` });
-    
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {   
-    setOpen(false);    
+  const handleClose = () => {
+    setOpen(false);
   };
-  
+
   const handleDelete = () => {
     handleClose();
     deleteAction();
@@ -47,7 +47,9 @@ const DeleteItem: FC<DeleteItemProps> = (
 
   return (
     <>
-      <Tooltip title={intl.formatMessage({ id: "tooltip.delete" }, {cle: messageId})}>
+      <Tooltip
+        title={intl.formatMessage({ id: "tooltip.delete" }, { cle: messageId })}
+      >
         <IconButton
           aria-label="delete"
           size="small"
@@ -68,17 +70,18 @@ const DeleteItem: FC<DeleteItemProps> = (
         <DialogTitle id="alert-dialog-slide-title">{"Attention ?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-          {intl.formatMessage({id: "deleteItem.confirmation"})} {intl.formatMessage({id: `deleteItem.${cle}`})} ({value}) ?
+            {intl.formatMessage({ id: "deleteItem.confirmation" })}{" "}
+            {intl.formatMessage({ id: `deleteItem.${cle}` })} ({value}) ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" variant="outlined">
             <CancelIcon style={{ marginRight: 5 }} />
-            {intl.formatMessage({id: "buttons.cancelButton"})}
+            {intl.formatMessage({ id: "buttons.cancelButton" })}
           </Button>
           <Button onClick={handleDelete} color="secondary" variant="contained">
             <DeleteForeverIcon style={{ marginRight: 5 }} />
-            {intl.formatMessage({id: "buttons.deleteButton"})}
+            {intl.formatMessage({ id: "buttons.deleteButton" })}
           </Button>
         </DialogActions>
       </Dialog>

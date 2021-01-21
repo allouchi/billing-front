@@ -8,7 +8,10 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Button, Paper, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
-import { parseCompanyJsonObject, parseModeJsonObject } from "../../../shared/Utils";
+import {
+  parseCompanyJsonObject,
+  parseModeJsonObject,
+} from "../../../shared/Utils";
 import NumberFormat from "react-number-format";
 
 /*
@@ -47,65 +50,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface NumberFormatCustomProps {
-  inputRef: (instance: NumberFormat | null) => void;
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
-
-const NumberFormatCustom = (props: NumberFormatCustomProps) => {
-  const { inputRef, onChange, ...other } = props;
-
-  return (
-    <NumberFormat
-      {...other}
-      getInputRef={inputRef}
-      onValueChange={(values) => {
-        
-        onChange({
-          target: {
-            name: props.name,
-            value: values.value,
-          },
-        });
-      }}
-      thousandSeparator
-      isNumericString
-      prefix=""
-    />
-  );
-};
-
-interface State {
-  textmask: string;
-  numberformat: string;
-}
 const CompanyPage: FC<{}> = (): ReactElement => {
   const classes = useStyles();
   const history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const createOrUpdate = useStoreActions((actions) => actions.companies.createOrUpdate);  
+  const createOrUpdate = useStoreActions(
+    (actions) => actions.companies.createOrUpdate
+  );
   const company = parseCompanyJsonObject(history.location.state);
   const [companyInfo, setCompanyInfo] = useState(company);
   const [companyAdress, setCompanyAdress] = useState(company.companyAdresse);
-
-  const [values, setValues] = React.useState<State>({
-    textmask: '   ',
-    numberformat: '1320',
-  });
 
   const handleInfoCompany = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
     setCompanyInfo({ ...companyInfo, [id]: value });
-   
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
-    
   };
 
   const handleAdressCompany = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,8 +105,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>
-            <Typography className={classes.heading}>Société
-            </Typography>
+            <Typography className={classes.heading}>Société</Typography>
             <Grid
               container
               direction="row"
@@ -175,7 +135,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   helperText="Statut obligatoire."
                   onChange={handleInfoCompany}
                 />
-              </Grid>              
+              </Grid>
               <Grid item xs={4}>
                 <TextField
                   id="codeApe"
@@ -195,9 +155,8 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Numéro Siret"
                   variant="outlined"
                   color="secondary"
-                  value={values.textmask}
                   helperText="Numéro Siret obligatoire."
-                  onChange={handleInfoCompany}                  
+                  onChange={handleInfoCompany}
                 ></TextField>
               </Grid>
               <Grid item xs={4}>
