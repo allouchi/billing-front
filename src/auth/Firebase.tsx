@@ -19,26 +19,37 @@ class Firebase {
     }
   }
 
-  loginUser = (email: string, password: string): Promise<any> => {
+  doSignInWithEmailAndPassword = (
+    email: string,
+    password: string
+  ): Promise<any> => {
     let reponse;
     reponse = app.auth().signInWithEmailAndPassword(email, password);
     return reponse;
   };
 
-  createLoginUser = (email: string, password: string): Promise<any> => {
+  doCreateUserWithEmailAndPassword = (
+    email: string,
+    password: string
+  ): Promise<any> => {
     let reponse = app.auth().createUserWithEmailAndPassword(email, password);
     return reponse;
   };
 
-  subscribe = (): any => {
+  doAutentification = (): any => {
     return app.auth();
   };
 
-  loginOutUser = (): Promise<any> => {
+  doSignOut = (): Promise<any> => {
     let reponse;
     reponse = app.auth().signOut();
     return reponse;
   };
+
+  doPasswordReset = (email) => app.auth().sendPasswordResetEmail(email);
+
+  doPasswordUpdate = (password) =>
+    app.auth().currentUser.updatePassword(password);
 }
 
 export default Firebase;

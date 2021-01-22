@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useContext } from "react";
+import React, { FC, useContext, useState, ReactElement } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { useStoreState } from "../../store/hooks";
 import AppBar from "@material-ui/core/AppBar";
@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       transition: theme.transitions.create("width"),
       width: "100%",
@@ -50,31 +49,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AppHeaderProps {
   isAuthenticated: boolean;
+  preventSubscribe(authenticated: boolean): void;
 }
 
-const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps) => {
+const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
   const { isAuthenticated } = props;
-
   const history = useHistory();
   const classes = useStyles();
   const intl = useIntl();
   const items: Company[] = useStoreState((state) => state.companies.items);
-  const [checked, setShecked] = React.useState(false);
+  const [checked, setShecked] = useState(isAuthenticated);
   const firebase = useContext(FirebaseContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     setShecked(isChecked);
-  };
-
-  useEffect(() => {
-    if (checked) {
+    if (isChecked) {
+      firebase.doSignOut();
       history.push("/login");
-    } else {
-      history.push("/");
-      firebase.loginOutUser();
+      //props.preventSubscribe(true);
     }
-  }, [checked, firebase, history]);
+    if (isChecked === false) {
+      firebase.doSignOut();
+      history.push("/");
+      //props.preventSubscribe(false);
+    }
+  };
 
   return (
     <>
@@ -117,7 +117,7 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps) => {
             </Button>
             <Switch
               id="checked"
-              checked={checked || isAuthenticated}
+              checked={checked}
               onChange={handleChange}
               name="checked"
               inputProps={{ "aria-label": "secondary checkbox" }}

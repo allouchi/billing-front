@@ -31,40 +31,49 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const App: React.FunctionComponent<{}> = (props) => {
   const firebase: any = useContext(FirebaseContext);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  /*
-  const subscribe = firebase.subscribe();
-  let listener = subscribe.onAuthStateChanged((user) => {
-    if (user) {
-      setIsAuthenticated(true);
-      setUser(user);
-    }
-    listener();
-  });
-  */
 
   useEffect(() => {
-    const subscribe = firebase.subscribe();
+    //let reponse = firebase.doSignOut();
+    const subscribe = firebase.doAutentification();
     let cleanUp = subscribe.onAuthStateChanged((user) => {
       if (user) {
         setIsAuthenticated(true);
-        setUser(user);
       }
     });
-    return () => subscribe();
-  }, []);
+    return () => cleanUp();
+  }, [isAuthenticated, firebase]);
+
+  const preventSubscribe = (authenticated: boolean) => {
+    alert(authenticated);
+    setIsAuthenticated(authenticated);
+  };
 
   return (
     <Providers>
       <AppLayout
-        header={<AppHeader isAuthenticated={isAuthenticated} />}
+        header={
+          <AppHeader
+            preventSubscribe={preventSubscribe}
+            isAuthenticated={isAuthenticated}
+          />
+        }
         content={
           <ErrorBoundary>
             <Suspense fallback={<>Loading</>}>
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/signup" component={SignUp} />
-                <Route exact path="/login" component={SignIn} />
+                <Route
+                  exact
+                  path="/login"
+                  render={(props) => (
+                    <SignIn
+                      {...props}
+                      isAuthenticated={isAuthenticated}
+                      preventSubscribe={preventSubscribe}
+                    />
+                  )}
+                />
 
                 <PrivateRoute
                   exact
@@ -108,7 +117,6 @@ const App: React.FunctionComponent<{}> = (props) => {
                   component={Client}
                   authenticated={isAuthenticated}
                 />
-
                 <PrivateRoute
                   exact
                   path="/prestations"

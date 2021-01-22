@@ -18,7 +18,6 @@ import Alert from "@material-ui/lab/Alert";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import useSiret from "../../../hooks/siret.hook";
-//import {useIntl} from 'react-intl';
 
 export const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -72,17 +71,16 @@ const FactureList: FC<{}> = () => {
   const findAllBySiret = useStoreActions(
     (actions) => actions.factures.findAllBySiret
   );
- 
+
   const items: Facture[] = useStoreState((state) => state.factures.items);
-  const { enqueueSnackbar } = useSnackbar();  
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     findAllBySiret(siret).catch((e: Error) => {
-      enqueueSnackbar(e.message, { variant: "error" });     
+      enqueueSnackbar(e.message, { variant: "error" });
     });
   }, [findAllBySiret, enqueueSnackbar, siret]);
 
- 
   return (
     <div className={classes.table}>
       <TableContainer component={Paper}>

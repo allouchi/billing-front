@@ -1,23 +1,15 @@
-import User from '../domains/User';
+import User from "../domains/User";
 
 /**
  * User fetcher port
  *
  */
-export interface IUserService { 
+export interface IUserService {
   /**
-   * Connect user
+   * Find user
    *
-   * @param user user to find
+   * @param email email
    * @returns Promise<User>
    */
-  connect(user: Partial<User>): Promise<User>;
-
-  /**
-   * Disconnect user
-   *
-   * @param user user
-   * @returns Promise<void>
-   */
-  disconnect(user: User): Promise<void>;
+  findUserByEMail(email: string): Promise<User>;
 }

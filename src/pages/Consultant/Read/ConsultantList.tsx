@@ -19,6 +19,7 @@ import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import Alert from "@material-ui/lab/Alert";
 import User from "../../../domains/User";
+import useSiret from "../../../hooks/siret.hook";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -65,17 +66,18 @@ const consultants = (
           <StyledTableCell>Id</StyledTableCell>
           <StyledTableCell align="left">Prénom</StyledTableCell>
           <StyledTableCell align="left">Nom</StyledTableCell>
-          <StyledTableCell align="left">Fonction</StyledTableCell>         
+          <StyledTableCell align="left">Fonction</StyledTableCell>
           <StyledTableCell align="left">Adresse mail</StyledTableCell>
           <StyledTableCell align="left">{}</StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {items && items.map((consultant: Consultant, index: number) => (
-          <StyledTableRow key={index}>
-            <ConsultantItem key={index} item={consultant} />
-          </StyledTableRow>
-        ))}
+        {items &&
+          items.map((consultant: Consultant, index: number) => (
+            <StyledTableRow key={index}>
+              <ConsultantItem key={index} item={consultant} />
+            </StyledTableRow>
+          ))}
       </TableBody>
     </Table>
   );
@@ -90,11 +92,16 @@ const ConsultantList: FC<{}> = () => {
     (state) => state.consultants.isLoaded
   );
   const items: Consultant[] = useStoreState((state) => state.consultants.items);
-  const connectedUser: Partial<User> = useStoreState((state) => state.user.user);
+  /*
+  const connectedUser: Partial<User> = useStoreState(
+    (state) => state.user.user
+  );
+  */
 
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-  let siret: string = connectedUser && connectedUser.company && connectedUser.company.siret ? connectedUser.company.siret : "85292702900011";
+  //let siret: string = connectedUser && connectedUser.company && connectedUser.company.siret ? connectedUser.company.siret : "85292702900011";
+  let siret = useSiret();
 
   useEffect(() => {
     if (!isLoaded) {

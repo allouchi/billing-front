@@ -1,4 +1,10 @@
-import React, { ReactElement, useContext, useEffect, useState } from "react";
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,7 +18,11 @@ import { Checkbox, Container, FormControlLabel } from "@material-ui/core";
 import { FirebaseContext } from "../../auth";
 import { useSnackbar } from "notistack";
 import { useIntl } from "react-intl";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
+import User from "../../domains/User";
+import { useStoreActions, useStoreState } from "../../store/hooks";
+import useSiret from "../../hooks/siret.hook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,61 +57,107 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = (props): ReactElement => {
+interface SignUpProps {
+  isAuthenticated: boolean;
+  preventSubscribe(authenticated: boolean): void;
+}
+
+const SignIn: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
+  const history = useHistory();
+  const { isAuthenticated, preventSubscribe } = props;
+
+  const findUserByEMail = useStoreActions(
+    (actions) => actions.user.findUserByEMail
+  );
+  const item: User = useStoreState((state) => state.user.item);
   const classes = useStyles();
+  const siret = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
-  const data = {
+  const firebase = useContext(FirebaseContext);
+  const [errorFirebase, setErrorFirebase] = useState(false);
+  const [errorServer, setErrorServer] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loginData, setLoginData] = useState({
     email: "",
     password: "",
-  };
+    passwordMessage: "",
+    emailMessage: "",
+  });
 
-  const firebase = useContext(FirebaseContext);
-  const [btnIsValid, setBtnIsValid] = useState(true);
-  const [loginData, setLoginData] = useState(data);
+  const sucessMsg = intl.formatMessage({ id: "messages.authentif.success" });
+  const echecMsg = intl.formatMessage({ id: "messages.authentif.echec" });
 
-  useEffect(() => {
-    if (loginData.email !== "" && loginData.password.length >= 6) {
-      setBtnIsValid(true);
-    } else if (btnIsValid) {
-      setBtnIsValid(false);
-    }
-  }, [loginData.email, loginData.password, btnIsValid]);
-
-  const handleChange = (e) => {
+  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id;
     const value = e.target.value;
     setLoginData({
       ...loginData,
       [id]: value,
+      [`${id}Message`]: isEmptyString(value) ? "Required" : "",
     });
   };
 
-  const handleValider = (e) => {
-    e.preventDefault();
-    const sucessMsq = intl.formatMessage({ id: "messages.authentif.success" });
-    const echecMsg = intl.formatMessage({ id: "messages.authentif.echec" });
-    const { email, password } = loginData;
-
-    firebase
-      .loginUser(email, password)
-      .then((user) => {
-        //props.history.push("/home");
-        enqueueSnackbar(sucessMsq, {
+  const findUserSever = (email: string): void => {
+    findUserByEMail(email)
+      .then(() => {
+        enqueueSnackbar(sucessMsg, {
           variant: "success",
         });
-        setLoginData({
-          ...data,
+      })
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+        setErrorServer(true);
+        history.push("/login");
+      });
+  };
+
+  const findUserFirebase = (email: string, password: string): void => {
+    firebase
+      .doSignInWithEmailAndPassword(email, password)
+      .then((user) => {
+        enqueueSnackbar(sucessMsg, {
+          variant: "success",
         });
       })
       .catch((error) => {
-        props.history.push("/login");
+        history.push("/login");
         enqueueSnackbar(echecMsg, { variant: "error" });
-        setLoginData({
-          ...data,
-        });
+        setLoginData({ ...loginData });
+        setErrorFirebase(true);
+        history.push("/login");
       });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = loginData;
+    findUserFirebase(email, password);
+    findUserSever(email);
+  };
+
+  const isValidForm = (): boolean => {
+    return (
+      isNotEmptyString(loginData.email) &&
+      isEmptyString(loginData.emailMessage) &&
+      isNotEmptyString(loginData.password) &&
+      loginData.password.length >= 6 &&
+      isEmptyString(loginData.passwordMessage)
+    );
+  };
+
+  useEffect(() => {
+    props.preventSubscribe(false);
+    console.log("errorServer ", errorServer);
+    console.log("errorFirebase ", errorFirebase);
+    if (errorServer === false && errorFirebase === false) {
+      history.push("/");
+      props.preventSubscribe(true);
+    } else {
+      history.push("/login");
+      props.preventSubscribe(false);
+    }
+  }, [errorServer, errorFirebase, props]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -124,7 +180,7 @@ const SignIn = (props): ReactElement => {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={handleChange}
+            onChange={handleLoginChange}
             value={loginData.email}
           />
           <TextField
@@ -138,7 +194,7 @@ const SignIn = (props): ReactElement => {
             type="password"
             autoComplete="current-password"
             value={loginData.password}
-            onChange={handleChange}
+            onChange={handleLoginChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -151,8 +207,8 @@ const SignIn = (props): ReactElement => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={!btnIsValid}
-            onClick={handleValider}
+            disabled={!isValidForm()}
+            onClick={handleSubmit}
           >
             Connexion
           </Button>

@@ -12,8 +12,6 @@ import PageLayout from "../../../components/PageLayout/PageLayout";
 import { useIntl } from "react-intl";
 import { Grid, makeStyles, Paper, TextField, Button } from "@material-ui/core";
 
-
-
 const emptyFacture: Facture = {
   id: 0,
   numeroFacture: "",
@@ -57,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: 200,
-  }
+  },
 }));
 
 interface FacturePageProps {
@@ -69,45 +67,43 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar(); 
-  
-  const update = useStoreActions(
-    (actions) => actions.factures.update
-  );
-  
+  const { enqueueSnackbar } = useSnackbar();
+
+  const update = useStoreActions((actions) => actions.factures.update);
+
   let factureToEdit = parseFactureJsonObject(history.location.state);
 
   const [state, setState] = useState({
-    facture: factureToEdit ? factureToEdit : emptyFacture,   
-    dateEncaissementMessage: "",    
+    facture: factureToEdit ? factureToEdit : emptyFacture,
+    dateEncaissementMessage: "",
   });
 
   const isValidForm = (): boolean => {
-    return (      
+    return (
       isNotEmptyString(state.facture.dateEncaissement) &&
-      isEmptyString(state.dateEncaissementMessage)     
+      isEmptyString(state.dateEncaissementMessage)
     );
   };
 
   const handleInfoFacture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;    
+    const value: string = e.target.value;
     setState({
       ...state,
       facture: { ...state.facture, [id]: value },
       [`${id}Message`]: isEmptyString(value) ? "Required" : "",
     });
-  }; 
+  };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;   
+    const value: string = e.target.value;
     setState({
       ...state,
       [`${id}Message`]: isEmptyString(value) ? "factureStatusRequired" : "",
     });
-  }; 
- 
+  };
+
   const cancelFactureInfo = () => {
     history.push("/factures");
   };
@@ -119,41 +115,44 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
     );
 
     const messageRequired = intl.formatMessage({ id: "messages.required" });
-    if (state.facture.dateEncaissement === '' ) {
-      enqueueSnackbar(messageRequired, 
-      { variant: "error" });      
+    if (state.facture.dateEncaissement === "") {
+      enqueueSnackbar(messageRequired, { variant: "error" });
       return;
     }
 
     update(state.facture)
-    .then(() => history.push("/factures"))
-    .then(() =>
-      enqueueSnackbar(messageUpdate, {
-        variant: "success",
-      })
-    ).catch((err: Error) => {
-      enqueueSnackbar(err.message, { variant: "error" });
-    });  
-  }
+      .then(() => history.push("/factures"))
+      .then(() =>
+        enqueueSnackbar(messageUpdate, {
+          variant: "success",
+        })
+      )
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
 
   return (
     <PageLayout
-      title={intl.formatMessage({ id: "factures.update.title" },  {cle: state.facture.numeroFacture})}
+      title={intl.formatMessage(
+        { id: "factures.update.title" },
+        { cle: state.facture.numeroFacture }
+      )}
       content={
         <Grid container className={classes.root}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <form className={classes.root} noValidate autoComplete="on">                
+              <form className={classes.root} noValidate autoComplete="on">
                 <div>
                   <TextField
                     id="dateEncaissement"
                     label="Date Encaissement"
                     variant="outlined"
-                    color="secondary"                   
+                    color="secondary"
                     value={state.facture.dateEncaissement}
                     helperText={state.dateEncaissementMessage}
                     type="date"
-                    className={classes.textField}                  
+                    className={classes.textField}
                     error={state.dateEncaissementMessage !== ""}
                     onChange={handleInfoFacture}
                     onBlur={handleBlur}
@@ -161,7 +160,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
                       shrink: true,
                     }}
                   />
-                </div>               
+                </div>
               </form>
               <Button
                 variant="contained"

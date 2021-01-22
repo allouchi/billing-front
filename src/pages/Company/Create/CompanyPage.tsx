@@ -12,15 +12,6 @@ import {
   parseCompanyJsonObject,
   parseModeJsonObject,
 } from "../../../shared/Utils";
-import NumberFormat from "react-number-format";
-
-/*
-import MaskedInput from 'react-text-mask';
-import NumberFormat from 'react-number-format';
-import { createStyles, Theme } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl'; */
 
 const useStyles = makeStyles((theme) => ({
   root: {

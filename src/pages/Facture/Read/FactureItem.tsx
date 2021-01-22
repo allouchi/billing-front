@@ -124,9 +124,15 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   return (
     <>
       <StyledTableRow>
-        <IconButton aria-label="expand row" size="small" onClick={onClickTable}>
-          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </IconButton>
+        <StyledTableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={onClickTable}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </StyledTableCell>
         <StyledTableCell>{item.numeroFacture}</StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>
         <StyledTableCell>{item.prixTotalHT}</StyledTableCell>

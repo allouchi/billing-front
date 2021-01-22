@@ -18,6 +18,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import Alert from "@material-ui/lab/Alert";
+import useSiret from "../../../hooks/siret.hook";
 import User from "../../../domains/User";
 
 const StyledTableCell = withStyles((theme: Theme) =>
@@ -62,20 +63,20 @@ const clients = (
     <Table className={classes.table} aria-label="customized table">
       <TableHead>
         <TableRow>
-
           <StyledTableCell>Id</StyledTableCell>
           <StyledTableCell align="left">Raison sociale</StyledTableCell>
           <StyledTableCell align="left">Adresse Email</StyledTableCell>
           <StyledTableCell align="left">Adresse client</StyledTableCell>
-          <StyledTableCell align="left">{}</StyledTableCell>                            
+          <StyledTableCell align="left">{}</StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {items && items.map((client: Client, index: number) => (
-          <StyledTableRow key={index}>
-            <ClientItem key={index} item={client} />
-          </StyledTableRow>
-        ))}
+        {items &&
+          items.map((client: Client, index: number) => (
+            <StyledTableRow key={index}>
+              <ClientItem key={index} item={client} />
+            </StyledTableRow>
+          ))}
       </TableBody>
     </Table>
   );
@@ -83,18 +84,16 @@ const clients = (
 
 const ClientList: FC<{}> = () => {
   const classes = useStyles();
+  const siret = useSiret();
   const findAllBySiret = useStoreActions(
     (actions) => actions.clients.findAllBySiret
   );
-  const isLoaded: boolean = useStoreState(
-    (state) => state.clients.isLoaded
-  );
+  const isLoaded: boolean = useStoreState((state) => state.clients.isLoaded);
   const items: Client[] = useStoreState((state) => state.clients.items);
-  const connectedUser: Partial<User> = useStoreState((state) => state.user.user);
+  //const connectedUser: Partial<User> = useStoreState((state) => state.user.user);
 
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-  let siret: string = connectedUser && connectedUser.company && connectedUser.company.siret ? connectedUser.company.siret : "85292702900011";
 
   useEffect(() => {
     if (!isLoaded) {

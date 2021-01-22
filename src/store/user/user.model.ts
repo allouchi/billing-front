@@ -1,49 +1,33 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { action, Action, Thunk, thunk } from 'easy-peasy';
-import User from '../../domains/User';
-import { Injections } from '../injections';
-
+import { action, Action, Thunk, thunk } from "easy-peasy";
+import User from "../../domains/User";
+import { Injections } from "../injections";
 
 export interface UserModel {
-  isConnected: boolean;
-  user: Partial<User>;
+  isLoaded: boolean;
+  item: User;
 
   // Actions
-  doConnect: Action<UserModel, User>;
-  doDisconnect: Action<UserModel, void>;
-
-  // Thunk  
-  connect: Thunk<UserModel, Partial<User>, Injections>;
-  disconnect: Thunk<UserModel, User, Injections>;
+  loadSuccess: Action<User, User>;
+  findUserByEMail: Thunk<User, string, Injections>;
 }
 
 export const userModel: UserModel = {
-  isConnected: false,
-  user: {company: {siret: '85292702900011'}},
+  isLoaded: false,
+  item: null,
 
-  // Actions  
-  doConnect: action((state, payload: User) => {
-    state.user = payload;
-    state.isConnected= true;
+  // Actions
+  loadSuccess: action((state, payload: User) => {
+    //state.items = payload;
+    //state.isLoaded = true;
   }),
-  doDisconnect: action((state, _void) => {
-    state.isConnected= false;
-  }),
+
   // Thunks
-  connect: thunk(async (actions, payload: Partial<User>, { injections }) => {
+  findUserByEMail: thunk(async (actions, payload: string, { injections }) => {
     try {
       const { userService } = injections;
-      const user = await userService.connect(payload);      
-      actions.doConnect(user);
-    } catch (error) {
-      throw error;
-    }
-  }),
-  disconnect: thunk(async (actions, payload: User, { injections }) => {
-    try {
-      const { userService } = injections;
-      await userService.disconnect(payload);      
-      actions.doDisconnect();
+      const user = await userService.findUserByEMail(payload);
+      //actions.loadSuccess(user);
     } catch (error) {
       throw error;
     }
