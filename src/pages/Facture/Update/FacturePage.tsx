@@ -3,11 +3,7 @@ import Facture from "../../../domains/Facture";
 import { useHistory } from "react-router-dom";
 import { useStoreActions } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
-import {
-  isEmptyString,
-  isNotEmptyString,
-  parseFactureJsonObject,
-} from "../../../shared/Utils";
+import { isEmptyString, parseFactureJsonObject } from "../../../shared/Utils";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import { useIntl } from "react-intl";
 import { Grid, makeStyles, Paper, TextField, Button } from "@material-ui/core";
@@ -60,15 +56,12 @@ const useStyles = makeStyles((theme) => ({
 
 interface FacturePageProps {
   location: Location;
-
-  // Le reste des props ici
 }
 const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-
   const update = useStoreActions((actions) => actions.factures.update);
 
   let factureToEdit = parseFactureJsonObject(history.location.state);
@@ -79,10 +72,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
   });
 
   const isValidForm = (): boolean => {
-    return (
-      isNotEmptyString(state.facture.dateEncaissement) &&
-      isEmptyString(state.dateEncaissementMessage)
-    );
+    return isEmptyString(state.facture.dateEncaissement);
   };
 
   const handleInfoFacture = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,7 +163,7 @@ const FacturePage: FC<FacturePageProps> = (props): ReactElement => {
               <Button
                 variant="contained"
                 color="secondary"
-                disabled={!isValidForm()}
+                disabled={isValidForm()}
                 className={classes.button}
                 onClick={updateFacture}
               >

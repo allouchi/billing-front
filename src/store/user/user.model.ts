@@ -8,8 +8,10 @@ export interface UserModel {
   item: User;
 
   // Actions
-  loadSuccess: Action<User, User>;
-  findUserByEMail: Thunk<User, string, Injections>;
+  loadSuccess: Action<UserModel, User>;
+
+  // Thunk
+  findUserByEMail: Thunk<UserModel, string, Injections>;
 }
 
 export const userModel: UserModel = {
@@ -18,8 +20,8 @@ export const userModel: UserModel = {
 
   // Actions
   loadSuccess: action((state, payload: User) => {
-    //state.items = payload;
-    //state.isLoaded = true;
+    state.item = payload;
+    state.isLoaded = true;
   }),
 
   // Thunks
@@ -27,7 +29,7 @@ export const userModel: UserModel = {
     try {
       const { userService } = injections;
       const user = await userService.findUserByEMail(payload);
-      //actions.loadSuccess(user);
+      actions.loadSuccess(user);
     } catch (error) {
       throw error;
     }

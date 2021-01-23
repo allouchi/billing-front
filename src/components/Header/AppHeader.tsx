@@ -9,8 +9,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { Button, Switch } from "@material-ui/core";
 import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
-import Company from "../../domains/Company";
 import { FirebaseContext } from "../../auth";
+import User from "../../domains/User";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,27 +53,30 @@ interface AppHeaderProps {
 }
 
 const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
-  const { isAuthenticated } = props;
+  const { preventSubscribe, isAuthenticated } = props;
   const history = useHistory();
   const classes = useStyles();
   const intl = useIntl();
-  const items: Company[] = useStoreState((state) => state.companies.items);
-  const [checked, setShecked] = useState(isAuthenticated);
+  const [checked, setChecked] = useState(isAuthenticated);
   const firebase = useContext(FirebaseContext);
+  const user: User = useStoreState((state) => state.user.item);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
-    setShecked(isChecked);
-    if (isChecked) {
+    setChecked(isChecked);
+    if (!isChecked) {
       firebase.doSignOut();
-      history.push("/login");
-      //props.preventSubscribe(true);
-    }
-    if (isChecked === false) {
-      firebase.doSignOut();
+      preventSubscribe(false);
       history.push("/");
-      //props.preventSubscribe(false);
     }
+  };
+
+  const displayUser = () => {
+    return (
+      user &&
+      user.company &&
+      ` : ${user.company.socialReason} (${user.firstName} ${user.lastName})`
+    );
   };
 
   return (
@@ -89,7 +92,7 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            {intl.formatMessage({ id: "menu.role" })}
+            {intl.formatMessage({ id: "menu.role" })} {displayUser()}
           </Typography>
 
           <div className={classes.grow} />
@@ -117,7 +120,7 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
             </Button>
             <Switch
               id="checked"
-              checked={checked}
+              checked={checked || isAuthenticated}
               onChange={handleChange}
               name="checked"
               inputProps={{ "aria-label": "secondary checkbox" }}

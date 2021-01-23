@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  ReactElement,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { FC, ReactElement, useContext, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,7 +14,6 @@ import { useSnackbar } from "notistack";
 import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
-import User from "../../domains/User";
 import { useStoreActions, useStoreState } from "../../store/hooks";
 import useSiret from "../../hooks/siret.hook";
 
@@ -57,27 +50,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface SignUpProps {
+interface SignInProps {
   isAuthenticated: boolean;
   preventSubscribe(authenticated: boolean): void;
 }
 
-const SignIn: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
+const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
   const history = useHistory();
-  const { isAuthenticated, preventSubscribe } = props;
+  const { preventSubscribe } = props;
 
   const findUserByEMail = useStoreActions(
     (actions) => actions.user.findUserByEMail
   );
-  const item: User = useStoreState((state) => state.user.item);
   const classes = useStyles();
   const siret = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
   const firebase = useContext(FirebaseContext);
-  const [errorFirebase, setErrorFirebase] = useState(false);
-  const [errorServer, setErrorServer] = useState(false);
-  const [user, setUser] = useState(null);
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -87,6 +76,16 @@ const SignIn: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
 
   const sucessMsg = intl.formatMessage({ id: "messages.authentif.success" });
   const echecMsg = intl.formatMessage({ id: "messages.authentif.echec" });
+
+  const isValidForm = (): boolean => {
+    return (
+      isNotEmptyString(loginData.email) &&
+      isEmptyString(loginData.emailMessage) &&
+      isNotEmptyString(loginData.password) &&
+      loginData.password.length >= 6 &&
+      isEmptyString(loginData.passwordMessage)
+    );
+  };
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id;
@@ -101,14 +100,21 @@ const SignIn: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
   const findUserSever = (email: string): void => {
     findUserByEMail(email)
       .then(() => {
+        history.push("/");
+        preventSubscribe(true);
         enqueueSnackbar(sucessMsg, {
           variant: "success",
         });
       })
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
-        setErrorServer(true);
-        history.push("/login");
+        preventSubscribe(false);
+        setLoginData({
+          email: "",
+          password: "",
+          passwordMessage: "",
+          emailMessage: "",
+        });
       });
   };
 
@@ -116,16 +122,17 @@ const SignIn: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     firebase
       .doSignInWithEmailAndPassword(email, password)
       .then((user) => {
-        enqueueSnackbar(sucessMsg, {
-          variant: "success",
-        });
+        findUserSever(email);
       })
       .catch((error) => {
-        history.push("/login");
         enqueueSnackbar(echecMsg, { variant: "error" });
-        setLoginData({ ...loginData });
-        setErrorFirebase(true);
-        history.push("/login");
+        preventSubscribe(false);
+        setLoginData({
+          email: "",
+          password: "",
+          passwordMessage: "",
+          emailMessage: "",
+        });
       });
   };
 
@@ -133,31 +140,7 @@ const SignIn: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     e.preventDefault();
     const { email, password } = loginData;
     findUserFirebase(email, password);
-    findUserSever(email);
   };
-
-  const isValidForm = (): boolean => {
-    return (
-      isNotEmptyString(loginData.email) &&
-      isEmptyString(loginData.emailMessage) &&
-      isNotEmptyString(loginData.password) &&
-      loginData.password.length >= 6 &&
-      isEmptyString(loginData.passwordMessage)
-    );
-  };
-
-  useEffect(() => {
-    props.preventSubscribe(false);
-    console.log("errorServer ", errorServer);
-    console.log("errorFirebase ", errorFirebase);
-    if (errorServer === false && errorFirebase === false) {
-      history.push("/");
-      props.preventSubscribe(true);
-    } else {
-      history.push("/login");
-      props.preventSubscribe(false);
-    }
-  }, [errorServer, errorFirebase, props]);
 
   return (
     <Container component="main" maxWidth="xs">

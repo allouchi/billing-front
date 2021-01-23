@@ -44,7 +44,6 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   const classes = useStyles();
   const history = useHistory();
   const intl = useIntl();
-  //const location = useLocation();
   const createOrUpdate = useStoreActions(
     (actions) => actions.consultants.createOrUpdate
   );
@@ -119,7 +118,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   const cancelConsultantInfo = () => {
     history.push("/consultants");
   };
-    
+
   let mode = parseModeJsonObject(history.location.state);
 
   return (
@@ -158,7 +157,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                     onChange={handleInfoConsultant}
                     onBlur={handleBlur}
                   />
-                </div>                              
+                </div>
                 <div>
                   <TextField
                     id="mail"
@@ -172,23 +171,22 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                     onChange={handleInfoConsultant}
                     onBlur={handleBlur}
                   />
-                </div>               
+                </div>
                 <div>
-                <TextField
+                  <TextField
                     id="fonction"
                     label="Fonction"
                     multiline
-                    rows={2}   
-                    color="secondary"                   
+                    rows={2}
+                    color="secondary"
                     variant="outlined"
                     value={state.consultant.fonction}
                     helperText={state.fonctionMessage}
                     error={state.fonctionMessage !== ""}
                     onChange={handleInfoConsultant}
                     onBlur={handleBlur}
-                />
+                  />
                 </div>
-               
               </form>
               <Button
                 variant="contained"

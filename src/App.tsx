@@ -32,19 +32,16 @@ const App: React.FunctionComponent<{}> = (props) => {
   const firebase: any = useContext(FirebaseContext);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  let [user, setUser] = useState(null);
+
   useEffect(() => {
-    //let reponse = firebase.doSignOut();
     const subscribe = firebase.doAutentification();
-    let cleanUp = subscribe.onAuthStateChanged((user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      }
+    return subscribe.onAuthStateChanged((user) => {
+      setUser(user);
     });
-    return () => cleanUp();
-  }, [isAuthenticated, firebase]);
+  }, [firebase]);
 
   const preventSubscribe = (authenticated: boolean) => {
-    alert(authenticated);
     setIsAuthenticated(authenticated);
   };
 
@@ -74,7 +71,6 @@ const App: React.FunctionComponent<{}> = (props) => {
                     />
                   )}
                 />
-
                 <PrivateRoute
                   exact
                   path="/companies"
@@ -139,7 +135,7 @@ const App: React.FunctionComponent<{}> = (props) => {
                   exact
                   path="/consultant"
                   component={Consultant}
-                  authenticated={Consultant}
+                  authenticated={isAuthenticated}
                 />
                 <Route exact path="/pdf" component={PdfViewer} />
                 <Route component={NotFound} />

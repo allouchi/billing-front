@@ -18,7 +18,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import Alert from "@material-ui/lab/Alert";
-import User from "../../../domains/User";
 import useSiret from "../../../hooks/siret.hook";
 
 const StyledTableCell = withStyles((theme: Theme) =>

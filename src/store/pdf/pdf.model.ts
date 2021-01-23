@@ -8,7 +8,7 @@ export interface PdfModel {
 
   // Actions
   loadSuccess: Action<PdfModel, DataPDF[]>;
- 
+
   // Thunk
   downloadPdf: Thunk<PdfModel, PdfPath, Injections>;
 }
@@ -19,19 +19,20 @@ export const pdfModel: PdfModel = {
 
   // Actions
   loadSuccess: action((state, payload: DataPDF[]) => {
-    state.items = payload; 
-    state.isLoaded = true;    
+    state.items = payload;
+    state.isLoaded = true;
   }),
 
   // Thunks
   downloadPdf: thunk(async (actions, payload: PdfPath, { injections }) => {
     try {
-      const { pdfService } = injections;     
+      const { pdfService } = injections;
       const data = await pdfService.download(
         payload.siret,
         payload.prestationId,
         payload.factureId
-      );      
+      );
+
       actions.loadSuccess(data);
     } catch (error) {
       throw error;

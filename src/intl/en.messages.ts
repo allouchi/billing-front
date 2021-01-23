@@ -1,110 +1,142 @@
 export default {
   // Application title
-  "application-name": "Billing App",
+  "application-name": "Application de facturation",
   // NavBar menu items
   menu: {
+    role: "Facturation",
     title: "Menu",
-    home: "Home",
-    companies : "Company",
-    factures: "Bills",
-    consultants: "Consultant",
-    cliente: "Customer",
-    prestations: "Prestation"
+    home: "Accueil",
+    companies: "Sociétés",
+    factures: "Factures",
+    consultants: "Consultants",
+    clients: "Clients",
+    prestations: "Prestations",
   },
   // Internal/unknown error
-  internalError: "Something's wrong.",
-  internalErrorMessage: "We're unable to complete your request at the moment.",
-  internalErrorContact: "Contact us",
-  internalErrorTryAgain: "Try Again",
+  internalError: "Une erreur est survenue",
+  internalErrorMessage:
+    "Nous ne pouvons pas compléter votre demande pour le moment.",
+  internalErrorContact: "Contactez nous",
+  internalErrorTryAgain: "Réessayer",
   // Common Messages
-  loadingMessage: "Loading...Please wait",
+  loadingMessage: "Chargement en cours...Veuillez patienter",
   // Page not found
-  notFound: "Page not found.",
-  notFoundMessage: "Sorry, we couldn't find this page",
-  notFoundContact: "Contact us",
-  notFoundGoBack: "Go back",
-  // Home page
-  home: {
-    "edit-source-code": " Edit {codeContent} and save to reload.",
-    "learn-react": "Learn React",
-  },
-  messages:{
+  notFound: "Page non trouvée.",
+  notFoundMessage: "Désolé, nous n'avons pas trouvé cette page",
+  notFoundContact: "Contactez nous",
+  notFoundGoBack: "Retour",
+  messages: {
+    authentif: {
+      success: "Bienvenue, vous êtes désormais connecté",
+      echec:
+        "L'identiant ou/et le mot de passe sont incorrects, vous devez vous reconnecter",
+    },
     create: {
-      success: "La {cle} a été crée avec succès",
+      success: "{cle} a été créee avec succès",
     },
     edit: {
-      success: "La {cle} a été éditée avec succès",
+      success: "{cle} a été éditée avec succès",
     },
-    delete:{
-      success: "La {cle} a été supprimée avec succès",
-    }   
-  }, 
+    update: {
+      success: "{cle} a été mise à jour avec succès",
+      echec: "{cle} n'a pas été mise à jour",
+    },
+    delete: {
+      success: "{cle} a été supprimée avec succès",
+    },
+    download: {
+      success: "{cle} a été téléchargée avec succès",
+      echec: "{cle} n'a pas été téléchargée",
+    },
+    required: "La saisie de tous les champs est obligatoire",
+  },
+
+  // Home page
+  home: {
+    "edit-source-code":
+      "Modifier {codeContent} et enregistrer pour raffraichir la page.",
+    "learn-react": "Apprendre React",
+  },
   factures: {
-    title: "Bills List",
+    title: "Liste des factures",
+    update: {
+      title: "Mise à jour de la facture N° : {cle}",
+    },
   },
   companies: {
-    title: "Companies List",
-    buttonAdd: "New",
-    buttonSubmit : "Submit",
-    companyAdress : "Company adress",
+    title: "Liste des sociétés",
+    buttonAdd: "Nouveau",
+    buttonSubmit: "Valider",
+    companyAdress: "Adresse société",
     create: {
-      title: 'Création d\'un nouvelle société'
-    } 
+      title: "Création d'un nouvelle société",
+    },
+    update: {
+      title: "Mise à jour de la société : {cle}",
+    },
+  },
+  billErrors: {
+    billsNotFound: "Erreur lors de la recherche des factures",
   },
   clients: {
     title: "Liste des Clients",
     buttonAdd: "Nouveau",
-    buttonSubmit : "Valider",
-    clientAdress : "Adresse client",
+    buttonSubmit: "Valider",
+    clientAdress: "Adresse client",
     create: {
-      title: 'Création d\'un nouveau client',
-      info: 'Infos client',
-    }
+      title: "Création d'un nouveau client",
+      info: "Infos client",
+    },
+    update: {
+      title: "Mise à jour du client : {cle}",
+    },
   },
   consultants: {
-    title: "Consultants List",
-    buttonAdd: "New",
-    buttonSubmit : "Submit",
+    title: "Liste des Consultants",
+    buttonAdd: "Nouveau",
+    buttonSubmit: "Valider",
     create: {
-      title: 'Création d\'un nouveau consultant',
-      info: 'Infos consultant',
-    } 
+      title: "Création d'un nouveau consultant",
+    },
+    update: {
+      title: "Mise à jour du consulant : {cle}",
+    },
   },
   prestations: {
-    title: "Prestations List",
-    buttonAdd: "New",
-    buttonSubmit : "Submit",
+    title: "Liste des Prestations",
+    buttonAdd: "Nouveau",
+    buttonSubmit: "Valider",
     create: {
-      title: 'Création d\'une nouvelle prestation'
-    }  
+      title: "Création d'une nouvelle prestation",
+    },
+    update: {
+      title: "Mise à jour la prestation : {cle}",
+    },
   },
-
-  buttons: {    
-    addButton: "New",
-    submitButton : "Validate",
-    cancelButton: "Cancel",
-    deleteButton : "Delete bill", 
-    editButton : "Edit bill",   
-  },
-  deleteItem: {
-    company: 'la société',
-    consultant: 'le consultant',
-    client: 'le client',
-    facture: 'la facture',
-    prestation: 'la prestation',
-    confirmation : "Etes-vous sûr de bien vouloir supprimer"
+  buttons: {
+    addButton: "Nouveau",
+    submitButton: "Valider",
+    cancelButton: "Annuler",
+    deleteButton: "Supprimer",
+    editButton: "Editer facture",
   },
   tooltip: {
-    edit: 'Edit {cle}',
-    delete: 'Delete {cle}',
-    prestation: 'prestation',
-    facture: 'bill',
-    client: 'client',
-    consultant: 'consultant',
-    company: 'campany',
+    download: "Télécharger {cle}",
+    edit: "Editer {cle}",
+    update: "Modifier {cle}",
+    delete: "Supprimer {cle}",
+    prestation: "prestation",
+    facture: "facture",
+    client: "client",
+    consultant: "consultant",
+    company: "société",
   },
-   
-  billErrors: {
-    billsNotFound: "Error during getting bills",
+  deleteItem: {
+    company: "la société",
+    consultant: "le consultant",
+    client: "le client",
+    facture: "la facture",
+    prestation: "la prestation",
+    confirmation: "Etes-vous sûr de bien vouloir supprimer",
   },
 };

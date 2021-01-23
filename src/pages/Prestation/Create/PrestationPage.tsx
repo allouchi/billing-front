@@ -14,9 +14,12 @@ import { Button, CircularProgress } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import useSiret from "../../../hooks/siret.hook";
 import Alert from "@material-ui/lab/Alert";
-import { clientIdentity, consultantIdentity } from "../../../shared/Utils";
+import {
+  clientIdentity,
+  consultantIdentity,
+  isNotEmptyString,
+} from "../../../shared/Utils";
 import PageLayout from "../../../components/PageLayout/PageLayout";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     width: "35ch",
+  },
+  button: {
+    margin: theme.spacing(1),
   },
 }));
 
@@ -47,7 +53,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
   const intl = useIntl();
   const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
-  
+
   const createOrUpdate = useStoreActions(
     (actions) => actions.prestations.createOrUpdate
   );
@@ -70,7 +76,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
   );
 
   const [state, setState] = useState<PrestationState>({
-    consultant: { id: 0, firstName: "", lastName: "", mail: "", fonction:"" },
+    consultant: { id: 0, firstName: "", lastName: "", mail: "", fonction: "" },
     client: {
       id: 0,
       socialReason: "",
@@ -78,17 +84,17 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       adresseClient: {
         id: 0,
         numero: "",
-        rue: "",   
+        rue: "",
         codePostal: "",
         localite: "",
         pays: "",
       },
     },
     prestation: {
-    designation : "",
-    numeroCommande: "",
-    clientPrestation: "",
-    quantite: 0   
+      designation: "",
+      numeroCommande: "",
+      clientPrestation: "",
+      quantite: 0,
     },
     clientsOnError: false,
     consultantsOnError: false,
@@ -102,6 +108,16 @@ const PrestationPage: FC<{}> = (): ReactElement => {
         [e.target.id]: e.target.value,
       },
     });
+  };
+
+  const isValidForm = (): boolean => {
+    return (
+      state.prestation.tarifHT !== undefined &&
+      state.prestation.delaiPaiement !== undefined &&
+      state.prestation.client !== undefined &&
+      state.prestation.consultant !== undefined &&
+      isNotEmptyString(state.prestation.numeroCommande)
+    );
   };
 
   const addPrestation = () => {
@@ -129,7 +145,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       });
   };
 
-  const onSelectConsultant = (event : any, value : Consultant): void => {
+  const onSelectConsultant = (event: any, value: Consultant): void => {
     if (!value) {
       return;
     }
@@ -138,14 +154,14 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       prestation: { ...state.prestation, consultant: value },
     });
   };
-  const onSelectClient = (event : any, value : Client): void => {    
+  const onSelectClient = (event: any, value: Client): void => {
     if (!value) {
       return;
     }
     setState({
       ...state,
       prestation: { ...state.prestation, client: value },
-    })    
+    });
   };
 
   const consultantsAutocomplete = () => {
@@ -155,10 +171,9 @@ const PrestationPage: FC<{}> = (): ReactElement => {
         consultants
       </Alert>
     ) : (
-
       <Autocomplete
         id="consultant"
-        options={consultants}        
+        options={consultants}
         className={classes.textField}
         getOptionLabel={(option: Consultant) => consultantIdentity(option)}
         onChange={onSelectConsultant}
@@ -178,17 +193,21 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       </Alert>
     ) : (
       <Autocomplete
-        id="client"        
-        options={clients}          
-        className={classes.textField}             
+        id="client"
+        options={clients}
+        className={classes.textField}
         getOptionLabel={(option: Client) => clientIdentity(option)}
-        onChange={onSelectClient}       
+        onChange={onSelectClient}
         renderInput={(params) => (
           <TextField {...params} label="Client" variant="outlined" />
         )}
         disablePortal
       />
     );
+  };
+
+  const cancelPrestationInfo = () => {
+    history.push("/prestations");
   };
 
   useEffect(() => {
@@ -267,10 +286,20 @@ const PrestationPage: FC<{}> = (): ReactElement => {
             justify="center"
             alignItems="center"
           >
-            <Grid item xs={1}>
+            <Grid item xs={6}>
               <Button
                 variant="contained"
                 color="secondary"
+                className={classes.button}
+                onClick={cancelPrestationInfo}
+              >
+                {intl.formatMessage({ id: "buttons.cancelButton" })}
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                disabled={!isValidForm()}
                 onClick={addPrestation}
               >
                 {intl.formatMessage({ id: "buttons.submitButton" })}

@@ -11,7 +11,11 @@ import TextField from "@material-ui/core/TextField";
 import { Button, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import useSiret from "../../../hooks/siret.hook";
-import { parseClientJsonObject, parseModeJsonObject } from "../../../shared/Utils";
+import {
+  isNotEmptyString,
+  parseClientJsonObject,
+  parseModeJsonObject,
+} from "../../../shared/Utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,12 +31,11 @@ const useStyles = makeStyles((theme) => ({
     flex: "1 1 100%",
   },
   paper: {
-    //padding: theme.spacing.unit * 2,
     textAlign: "center",
     color: theme.palette.text.secondary,
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(25),
     fontWeight: theme.typography.fontWeightRegular,
     margin: 15,
   },
@@ -63,8 +66,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const handleAdresseClient = (e: React.ChangeEvent<HTMLInputElement>) => {
     setclientAdresse({ ...clientAdresse, [e.target.id]: e.target.value });
   };
-  clientInfo.adresseClient = clientAdresse; 
-
+  clientInfo.adresseClient = clientAdresse;
 
   const addClient = () => {
     let messageId = "";
@@ -75,7 +77,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
       messageId = "messages.edit.success";
     }
     const message = intl.formatMessage({ id: messageId }, { cle: "Le client" });
-    
+
     createOrUpdate({ client: clientInfo, siret: siret })
       .then(() => history.push("/clients"))
       .then(() =>
@@ -91,13 +93,26 @@ const ClientPage: FC<{}> = (): ReactElement => {
     history.push("/clients");
   };
 
+  const isValidForm = (): boolean => {
+    return (
+      isNotEmptyString(clientInfo.socialReason) &&
+      isNotEmptyString(clientInfo.mail) &&
+      isNotEmptyString(clientAdresse.numero) &&
+      isNotEmptyString(clientAdresse.rue) &&
+      isNotEmptyString(clientAdresse.localite) &&
+      isNotEmptyString(clientAdresse.codePostal) &&
+      isNotEmptyString(clientAdresse.pays)
+    );
+  };
+
   let mode = parseModeJsonObject(history.location.state);
-  
+
   return (
     <PageLayout
-    title={intl.formatMessage(
-      { id: `clients.${mode}.title` }, 
-      {cle: clientInfo.socialReason})}
+      title={intl.formatMessage(
+        { id: `clients.${mode}.title` },
+        { cle: clientInfo.socialReason }
+      )}
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>
@@ -108,7 +123,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
               alignItems="center"
             >
               <Grid item xs={12}>
-                <Typography className={classes.heading}>
+                <Typography className={classes.heading} variant="h6">
                   {intl.formatMessage({ id: "clients.create.info" })}
                 </Typography>
               </Grid>
@@ -160,7 +175,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   helperText="Voie obligatoire."
                   onChange={handleAdresseClient}
                 />
-              </Grid>              
+              </Grid>
               <Grid item xs={2}>
                 <TextField
                   id="codePostal"
@@ -210,6 +225,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
             color="secondary"
             className={classes.button}
             onClick={addClient}
+            disabled={!isValidForm()}
           >
             {intl.formatMessage({ id: "clients.buttonSubmit" })}
           </Button>

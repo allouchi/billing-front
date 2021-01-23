@@ -20,7 +20,6 @@ interface FactureEditProps {
   clickOn: boolean;
 }
 const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
-  
   const history = useHistory();
   const siret: string = useSiret();
   const intl = useIntl();
@@ -30,22 +29,22 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const [open, setOpen] = useState(clickOn);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
-    prestation : {
+    prestation: {
       id: item.id,
       tarifHT: item.tarifHT,
       delaiPaiement: item.delaiPaiement,
       consultant: item.consultant,
       client: item.client,
-      designation: 'Prestation',
+      designation: "Prestation",
       numeroCommande: `${item.numeroCommande}`,
-      clientPrestation: `${item.client.socialReason}`,     
+      clientPrestation: `${item.client.socialReason}`,
       quantite: 0,
     },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
-    const value: string = e.target.value;    
+    const value: string = e.target.value;
     setState({
       ...state,
       prestation: { ...state.prestation, [id]: value },
@@ -89,7 +88,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
-  }; 
+  };
 
   return (
     <div>
@@ -103,9 +102,9 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             Veuillez saisir le numéro de commande client
           </DialogContentText>
           <TextField
-           id="numeroCommande"
+            id="numeroCommande"
             autoFocus
-            margin="dense"            
+            margin="dense"
             label="Numéro de commande"
             value={state.prestation.numeroCommande}
             type="text"
@@ -115,7 +114,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
           />
           <TextField
             id="quantite"
-            margin="dense"            
+            margin="dense"
             label="Quantité"
             value={state.prestation.quantite}
             type="number"
@@ -124,9 +123,9 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             onChange={handleChange}
           />
           <TextField
-           id="designation"
-            margin="dense"            
-            label="Désignation"            
+            id="designation"
+            margin="dense"
+            label="Désignation"
             value={state.prestation.designation}
             type="text"
             required

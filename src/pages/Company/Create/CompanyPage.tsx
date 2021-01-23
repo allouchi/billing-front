@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import { Button, Paper, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
 import {
+  isNotEmptyString,
   parseCompanyJsonObject,
   parseModeJsonObject,
 } from "../../../shared/Utils";
@@ -53,6 +54,24 @@ const CompanyPage: FC<{}> = (): ReactElement => {
   const company = parseCompanyJsonObject(history.location.state);
   const [companyInfo, setCompanyInfo] = useState(company);
   const [companyAdress, setCompanyAdress] = useState(company.companyAdresse);
+
+  const isValidForm = (): boolean => {
+    return (
+      isNotEmptyString(companyInfo.siret) &&
+      isNotEmptyString(companyInfo.socialReason) &&
+      isNotEmptyString(companyInfo.rcsName) &&
+      isNotEmptyString(companyInfo.numeroTva) &&
+      isNotEmptyString(companyInfo.numeroBic) &&
+      isNotEmptyString(companyInfo.numeroIban) &&
+      isNotEmptyString(companyInfo.codeApe) &&
+      isNotEmptyString(companyInfo.status) &&
+      isNotEmptyString(companyAdress.numero) &&
+      isNotEmptyString(companyAdress.rue) &&
+      isNotEmptyString(companyAdress.localite) &&
+      isNotEmptyString(companyAdress.codePostal) &&
+      isNotEmptyString(companyAdress.pays)
+    );
+  };
 
   const handleInfoCompany = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
@@ -110,6 +129,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Raison sociale"
                   variant="outlined"
                   color="secondary"
+                  autoFocus
                   value={companyInfo.socialReason}
                   helperText="Raison sociale obligatoire."
                   onChange={handleInfoCompany}
@@ -283,6 +303,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   variant="contained"
                   color="secondary"
                   className={classes.button}
+                  disabled={!isValidForm()}
                   onClick={addCompany}
                 >
                   {intl.formatMessage({ id: "companies.buttonSubmit" })}

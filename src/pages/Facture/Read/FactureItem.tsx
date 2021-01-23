@@ -68,7 +68,14 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const [open, setOpen] = React.useState(false);
 
   const updateFactureClick = () => {
+    let dateEncaissement = item.dateEncaissement;
+    if (dateEncaissement && dateEncaissement !== "") {
+      let newDate = dateEncaissement.split("/");
+      let date = newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+      item.dateEncaissement = date;
+    }
     let facture = JSON.stringify(item);
+
     history.push({
       pathname: "/facture",
       search: "",
