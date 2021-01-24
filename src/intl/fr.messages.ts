@@ -11,6 +11,7 @@ export default {
     consultants: "Consultants",
     clients: "Clients",
     prestations: "Prestations",
+    admin: "Admin.",
   },
   // Internal/unknown error
   internalError: "Une erreur est survenue",

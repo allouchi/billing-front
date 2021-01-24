@@ -3,7 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -82,8 +81,8 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
       isNotEmptyString(loginData.email) &&
       isEmptyString(loginData.emailMessage) &&
       isNotEmptyString(loginData.password) &&
-      loginData.password.length >= 6 &&
-      isEmptyString(loginData.passwordMessage)
+      isEmptyString(loginData.passwordMessage) &&
+      loginData.password.length >= 6
     );
   };
 
@@ -196,11 +195,6 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
             Connexion
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Mot de passe oublié?
-              </Link>
-            </Grid>
             <Grid item>
               <NavLink
                 className="navbar-item"
@@ -208,7 +202,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
                 to="/signup"
                 exact
               >
-                Vous n'avez pas encore de compte? inscrivez-vous
+                Mot de passe oublié?
               </NavLink>
             </Grid>
           </Grid>

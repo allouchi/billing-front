@@ -81,15 +81,6 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
     });
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const id: string = e.target.id;
-    const value: string = e.target.value;
-    setState({
-      ...state,
-      [`${id}Message`]: isEmptyString(value) ? "Required" : "",
-    });
-  };
-
   const addConsultant = () => {
     let messageId = "";
     const isNew: boolean = !state.consultant.id || state.consultant.id === 0;
@@ -131,62 +122,71 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
         <Grid container className={classes.root}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <form className={classes.root} noValidate autoComplete="off">
-                <div>
-                  <TextField
-                    id="firstName"
-                    label="Prénom"
-                    variant="outlined"
-                    color="secondary"
-                    value={state.consultant.firstName}
-                    helperText={state.firstNameMessage}
-                    error={state.firstNameMessage !== ""}
-                    onChange={handleInfoConsultant}
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    id="lastName"
-                    label="Nom"
-                    variant="outlined"
-                    color="secondary"
-                    value={state.consultant.lastName}
-                    helperText={state.lastNameMessage}
-                    error={state.lastNameMessage !== ""}
-                    onChange={handleInfoConsultant}
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    id="mail"
-                    label="Email"
-                    variant="outlined"
-                    color="secondary"
-                    type="mail"
-                    value={state.consultant.mail}
-                    helperText={state.mailMessage}
-                    error={state.mailMessage !== ""}
-                    onChange={handleInfoConsultant}
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    id="fonction"
-                    label="Fonction"
-                    multiline
-                    rows={2}
-                    color="secondary"
-                    variant="outlined"
-                    value={state.consultant.fonction}
-                    helperText={state.fonctionMessage}
-                    error={state.fonctionMessage !== ""}
-                    onChange={handleInfoConsultant}
-                    onBlur={handleBlur}
-                  />
-                </div>
+              <form className={classes.root} noValidate>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      autoComplete="fname"
+                      name="firstName"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
+                      autoFocus
+                      onChange={handleInfoConsultant}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      name="lastName"
+                      autoComplete="lname"
+                      onChange={handleInfoConsultant}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                      onChange={handleInfoConsultant}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      onChange={handleInfoConsultant}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="role"
+                      label="Role"
+                      type="text"
+                      id="role"
+                      onChange={handleInfoConsultant}
+                    />
+                  </Grid>
+                </Grid>
               </form>
               <Button
                 variant="contained"

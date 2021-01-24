@@ -12,4 +12,12 @@ export interface IUserService {
    * @returns Promise<User>
    */
   findUserByEMail(email: string): Promise<User>;
+
+  /**
+   * Create new user
+   *
+   * @param user user to create or to update
+   * @returns Promise<User>
+   */
+  createOrUpdate(user: User): Promise<User>;
 }

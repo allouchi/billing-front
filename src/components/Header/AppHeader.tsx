@@ -68,7 +68,21 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
       firebase.doSignOut();
       preventSubscribe(false);
       history.push("/");
+    } else {
+      history.push("/login");
     }
+  };
+
+  const displayMenuAdmin = () => {
+    return (
+      user &&
+      user !== null &&
+      user.role === "1" && (
+        <Button color="inherit" onClick={() => history.push("/signup")}>
+          {intl.formatMessage({ id: "menu.admin" })}
+        </Button>
+      )
+    );
   };
 
   const displayUser = () => {
@@ -118,6 +132,9 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
             >
               {intl.formatMessage({ id: "menu.consultants" })}
             </Button>
+
+            {displayMenuAdmin()}
+
             <Switch
               id="checked"
               checked={checked || isAuthenticated}
