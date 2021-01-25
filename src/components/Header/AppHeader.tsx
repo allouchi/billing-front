@@ -11,6 +11,7 @@ import { useIntl } from "react-intl";
 import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../auth";
 import User from "../../domains/User";
+import { isUserAdmin } from "../../shared/Utils";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,15 +75,17 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
   };
 
   const displayMenuAdmin = () => {
-    return (
-      user &&
-      user !== null &&
-      user.role === "1" && (
+    let isAdmin = isUserAdmin(user);
+
+    if (isAdmin) {
+      return (
         <Button color="inherit" onClick={() => history.push("/signup")}>
           {intl.formatMessage({ id: "menu.admin" })}
         </Button>
-      )
-    );
+      );
+    } else {
+      return "";
+    }
   };
 
   const displayUser = () => {

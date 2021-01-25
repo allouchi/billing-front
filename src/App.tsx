@@ -5,7 +5,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import AppLayout from "./components/AppLayout";
 import AppHeader from "./components/Header/AppHeader";
 import AppFooter from "./components/Footer/AppFooter";
-import PdfViewer from "./pages/Pdf/PdfViewer";
 import { FirebaseContext } from "./auth";
 import PrivateRoute from "./pages/User/PrivateRoute";
 
@@ -33,17 +32,18 @@ const App: React.FunctionComponent<{}> = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   let [user, setUser] = useState(null);
-
+  /*
   useEffect(() => {
     const subscribe = firebase.doAutentification();
     return subscribe.onAuthStateChanged((user) => {
       setUser(user);
     });
   }, [firebase]);
-
+*/
   const preventSubscribe = (authenticated: boolean) => {
     setIsAuthenticated(authenticated);
   };
+  //alert(isAuthenticated);
 
   return (
     <Providers>
@@ -59,7 +59,18 @@ const App: React.FunctionComponent<{}> = (props) => {
             <Suspense fallback={<>Loading</>}>
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/signup" component={SignUp} />
+
+                <Route
+                  exact
+                  path="/signup"
+                  render={(props) => (
+                    <SignUp
+                      {...props}
+                      isAuthenticated={isAuthenticated}
+                      preventSubscribe={preventSubscribe}
+                    />
+                  )}
+                />
                 <Route
                   exact
                   path="/login"
@@ -81,12 +92,6 @@ const App: React.FunctionComponent<{}> = (props) => {
                   exact
                   path="/company"
                   component={Company}
-                  authenticated={isAuthenticated}
-                />
-                <PrivateRoute
-                  exact
-                  path="/factures"
-                  component={Factures}
                   authenticated={isAuthenticated}
                 />
                 <PrivateRoute
@@ -137,7 +142,6 @@ const App: React.FunctionComponent<{}> = (props) => {
                   component={Consultant}
                   authenticated={isAuthenticated}
                 />
-                <Route exact path="/pdf" component={PdfViewer} />
                 <Route component={NotFound} />
               </Switch>
             </Suspense>

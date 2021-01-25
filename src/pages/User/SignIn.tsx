@@ -13,7 +13,7 @@ import { useSnackbar } from "notistack";
 import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
-import { useStoreActions, useStoreState } from "../../store/hooks";
+import { useStoreActions } from "../../store/hooks";
 import useSiret from "../../hooks/siret.hook";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +57,9 @@ interface SignInProps {
 const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
   const history = useHistory();
   const { preventSubscribe } = props;
-
+  const findRolesRef = useStoreActions(
+    (actions) => actions.userRolesRef.findRolesRef
+  );
   const findUserByEMail = useStoreActions(
     (actions) => actions.user.findUserByEMail
   );
@@ -96,10 +98,23 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
     });
   };
 
+  const findUserRolesRef = () => {
+    findRolesRef()
+      .then(() => {
+        enqueueSnackbar(sucessMsg, {
+          variant: "success",
+        });
+      })
+      .catch((err: Error) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
+
   const findUserSever = (email: string): void => {
     findUserByEMail(email)
       .then(() => {
         history.push("/");
+        findUserRolesRef();
         preventSubscribe(true);
         enqueueSnackbar(sucessMsg, {
           variant: "success",

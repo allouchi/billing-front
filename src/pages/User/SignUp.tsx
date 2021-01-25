@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, FC } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,10 +13,10 @@ import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import { isNotEmptyString } from "../../shared/Utils";
 import { useIntl } from "react-intl";
 import { useStoreActions, useStoreState } from "../../store/hooks";
-import Company from "../../domains/Company";
 import User from "../../domains/User";
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import UserRolesRef from "../../domains/UserRolesRef";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,16 +45,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = (): ReactElement => {
+interface SignUpProps {
+  isAuthenticated: boolean;
+  preventSubscribe(authenticated: boolean): void;
+}
+
+const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
   const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
+  const items: UserRolesRef[] = useStoreState(
+    (state) => state.userRolesRef.items
+  );
   const createOrUpdate = useStoreActions(
     (actions) => actions.user.createOrUpdate
   );
+  const { isAuthenticated, preventSubscribe } = props;
 
   const item: User = useStoreState((state) => state.user.item);
+
+  console.log("items : ", items);
 
   const [infosUser, setInfosUser] = useState({
     firstName: "",
@@ -122,21 +133,28 @@ const SignUp = (): ReactElement => {
       firstName: infosUser.firstName,
       lastName: infosUser.lastName,
       email: infosUser.mail,
-      role: infosUser.roleId,
+      userRole: {
+        id: 0,
+        roleId: infosUser.roleId,
+        roleName: infosUser.roleDesc,
+      },
       password: infosUser.password,
       company: {
         id: Number(infosUser.companyId),
       },
     };
 
+    preventSubscribe(true);
+
     createOrUpdate(user)
-      .then(() => history.push("/"))
+      .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
           variant: "success",
         })
       )
       .catch((err: Error) => {
+        preventSubscribe(false);
         enqueueSnackbar(err.message, { variant: "error" });
       });
   };

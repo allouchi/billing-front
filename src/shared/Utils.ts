@@ -3,7 +3,22 @@ import Consultant from "../domains/Consultant";
 import Facture from "../domains/Facture";
 import Company from "../domains/Company";
 import Prestation from "../domains/Prestation";
+import User from "../domains/User";
 
+export const isUserAdmin = (user: User): boolean => {
+  let isAdmin = false;
+  if (
+    user !== null &&
+    user !== undefined &&
+    user.userRole !== null &&
+    user.userRole !== undefined &&
+    user.userRole.roleId !== undefined &&
+    user.userRole.roleId === "1"
+  ) {
+    isAdmin = true;
+  }
+  return isAdmin;
+};
 
 export const clientIdentity = (client: Client): string => {
   return upperFirstCase(client.socialReason);
@@ -74,7 +89,7 @@ export const parseCompanyJsonObject = (jsonObject: any): Company => {
       siret: item.siret,
       rcsName: item.rcsName,
       numeroTva: item.numeroTva,
-      codeApe: item.codeApe,     
+      codeApe: item.codeApe,
       numeroIban: item.codeIban,
       numeroBic: item.codeBic,
       companyAdresse: {
@@ -238,7 +253,7 @@ export const findPrestationId = (
     }
   }
   return pestationId;
-}
+};
 
 export const parseModeJsonObject = (jsonObject: any): string => {
   let retour = "create";
@@ -248,12 +263,11 @@ export const parseModeJsonObject = (jsonObject: any): string => {
     jsonObject.mode !== null &&
     jsonObject.mode !== undefined
   ) {
-    let mode = jsonObject.mode;  
-    
-    if(mode === 'update'){
+    let mode = jsonObject.mode;
+
+    if (mode === "update") {
       retour = "update";
     }
   }
   return retour;
-}
-
+};

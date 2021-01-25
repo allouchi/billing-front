@@ -1,3 +1,4 @@
+import UserRole from "./UseRole";
 import Company from "./Company";
 
 export default interface User {
@@ -5,7 +6,7 @@ export default interface User {
   firstName: string;
   lastName: string;
   email: string;
-  role: string;
   password: string;
   company: Partial<Company>;
+  userRole?: UserRole;
 }

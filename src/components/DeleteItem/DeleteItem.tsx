@@ -27,7 +27,7 @@ interface DeleteItemProps {
 const DeleteItem: FC<DeleteItemProps> = (
   props: DeleteItemProps
 ): ReactElement => {
-  const { id, cle, value, deleteAction } = props;
+  const { cle, value, deleteAction } = props;
   const intl = useIntl();
   const [open, setOpen] = React.useState(false);
   let messageId = intl.formatMessage({ id: `tooltip.${cle}` });

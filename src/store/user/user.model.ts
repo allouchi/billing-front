@@ -40,12 +40,11 @@ export const userModel: UserModel = {
     try {
       const { userService } = injections;
       const user = await userService.createOrUpdate(payload);
-      console.log("user : ", user);
 
       if (isNew) {
-        actions.add(user);
+        //actions.add(user);
       } else {
-        actions.updateState(user);
+        //actions.updateState(user);
       }
     } catch (error) {
       throw error;
