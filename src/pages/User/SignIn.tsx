@@ -14,7 +14,6 @@ import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
 import { useStoreActions } from "../../store/hooks";
-import useSiret from "../../hooks/siret.hook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +63,6 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
     (actions) => actions.user.findUserByEMail
   );
   const classes = useStyles();
-  const siret = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
   const firebase = useContext(FirebaseContext);

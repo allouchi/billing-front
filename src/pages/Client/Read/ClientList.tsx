@@ -19,7 +19,6 @@ import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import Alert from "@material-ui/lab/Alert";
 import useSiret from "../../../hooks/siret.hook";
-import User from "../../../domains/User";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -90,7 +89,6 @@ const ClientList: FC<{}> = () => {
   );
   const isLoaded: boolean = useStoreState((state) => state.clients.isLoaded);
   const items: Client[] = useStoreState((state) => state.clients.items);
-  //const connectedUser: Partial<User> = useStoreState((state) => state.user.user);
 
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);

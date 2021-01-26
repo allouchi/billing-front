@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, FC } from "react";
+import React, { ReactElement, useState, FC, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -31,14 +31,14 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 150,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -55,17 +55,13 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
-  const items: UserRolesRef[] = useStoreState(
+  const userRoles: UserRolesRef[] = useStoreState(
     (state) => state.userRolesRef.items
   );
-  const createOrUpdate = useStoreActions(
-    (actions) => actions.user.createOrUpdate
-  );
+  const createUser = useStoreActions((actions) => actions.user.createUser);
   const { isAuthenticated, preventSubscribe } = props;
 
   const item: User = useStoreState((state) => state.user.item);
-
-  console.log("items : ", items);
 
   const [infosUser, setInfosUser] = useState({
     firstName: "",
@@ -74,27 +70,27 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     password: "",
     confirmPassword: "",
     roleId: "",
-    roleDesc: "",
+    roleName: "",
     companyId: "",
   });
 
-  const userRoles = [
-    { roleId: 0, roleDesc: "admin" },
-    { roleId: 1, roleDesc: "Lecture" },
-    { roleId: 2, roleDesc: "Modification" },
-  ];
+  useEffect(() => {
+    if (!isAuthenticated) {
+      history.push("/login");
+    }
+  }, [isAuthenticated, history]);
 
   const isValidForm = (): boolean => {
     return (
       isNotEmptyString(infosUser.lastName) &&
       isNotEmptyString(infosUser.firstName) &&
-      isNotEmptyString(infosUser.mail) &&
-      isNotEmptyString(infosUser.password) &&
-      isNotEmptyString(infosUser.confirmPassword) &&
-      infosUser.roleId !== "" &&
-      infosUser.companyId !== "" &&
-      infosUser.password === infosUser.confirmPassword &&
-      infosUser.password.length >= 6
+      isNotEmptyString(infosUser.mail)
+      //isNotEmptyString(infosUser.password) &&
+      //isNotEmptyString(infosUser.confirmPassword) &&
+      //infosUser.roleId !== "" &&
+      //infosUser.companyId !== "" &&
+      //infosUser.password === infosUser.confirmPassword &&
+      //infosUser.password.length >= 6
     );
   };
 
@@ -106,7 +102,6 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       [id]: value,
     });
   };
-
   const handleUserRole = (event: React.ChangeEvent<{ value: string }>) => {
     const value = event.target.value;
     setInfosUser({
@@ -114,7 +109,6 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       roleId: value,
     });
   };
-
   const handleCampanyChange = (event: React.ChangeEvent<{ value: string }>) => {
     const value = event.target.value;
     setInfosUser({
@@ -122,7 +116,6 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       companyId: value,
     });
   };
-
   const addUser = () => {
     const message = intl.formatMessage(
       { id: "messages.create.success" },
@@ -133,26 +126,25 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       firstName: infosUser.firstName,
       lastName: infosUser.lastName,
       email: infosUser.mail,
+      password: infosUser.password,
       userRole: {
         id: 0,
         roleId: infosUser.roleId,
-        roleName: infosUser.roleDesc,
+        roleName: infosUser.roleName,
       },
-      password: infosUser.password,
       company: {
         id: Number(infosUser.companyId),
       },
     };
 
-    preventSubscribe(true);
-
-    createOrUpdate(user)
-      .then(() => history.push("/factures"))
-      .then(() =>
+    createUser(user)
+      .then(() => {
+        history.push("/");
+        preventSubscribe(true);
         enqueueSnackbar(message, {
           variant: "success",
-        })
-      )
+        });
+      })
       .catch((err: Error) => {
         preventSubscribe(false);
         enqueueSnackbar(err.message, { variant: "error" });
@@ -176,7 +168,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     return userRoles.map((item) => {
       return (
         <MenuItem key={item.roleId} value={item.roleId}>
-          {item.roleDesc}
+          {item.roleName}
         </MenuItem>
       );
     });
@@ -258,7 +250,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl variant="outlined" className={classes.formControl}>
+              <FormControl variant="outlined" className={classes.form}>
                 <InputLabel id="roleLabelId">Role</InputLabel>
                 <Select
                   labelId="role"
@@ -270,7 +262,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
                   {userRolesDisplay()}
                 </Select>
               </FormControl>
-              <FormControl variant="outlined" className={classes.formControl}>
+              <FormControl variant="outlined" className={classes.form}>
                 <InputLabel id="companyLabelId">Société</InputLabel>
                 <Select
                   labelId="company"

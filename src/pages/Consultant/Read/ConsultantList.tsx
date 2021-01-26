@@ -91,15 +91,9 @@ const ConsultantList: FC<{}> = () => {
     (state) => state.consultants.isLoaded
   );
   const items: Consultant[] = useStoreState((state) => state.consultants.items);
-  /*
-  const connectedUser: Partial<User> = useStoreState(
-    (state) => state.user.user
-  );
-  */
 
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-  //let siret: string = connectedUser && connectedUser.company && connectedUser.company.siret ? connectedUser.company.siret : "85292702900011";
   let siret = useSiret();
 
   useEffect(() => {

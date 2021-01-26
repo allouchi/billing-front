@@ -90,8 +90,8 @@ export const parseCompanyJsonObject = (jsonObject: any): Company => {
       rcsName: item.rcsName,
       numeroTva: item.numeroTva,
       codeApe: item.codeApe,
-      numeroIban: item.codeIban,
-      numeroBic: item.codeBic,
+      numeroIban: item.numeroIban,
+      numeroBic: item.numeroBic,
       companyAdresse: {
         id: item.companyAdresse.id,
         numero: item.companyAdresse.numero,

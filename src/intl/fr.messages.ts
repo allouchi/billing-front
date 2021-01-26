@@ -13,6 +13,10 @@ export default {
     prestations: "Prestations",
     admin: "Admin.",
   },
+  pages: {
+    company: "Société",
+    adresse: "Adresse",
+  },
   // Internal/unknown error
   internalError: "Une erreur est survenue",
   internalErrorMessage:

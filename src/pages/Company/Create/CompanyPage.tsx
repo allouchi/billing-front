@@ -8,11 +8,13 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Button, Paper, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
+
 import {
   isNotEmptyString,
   parseCompanyJsonObject,
   parseModeJsonObject,
 } from "../../../shared/Utils";
+import TextMaskCustom from "./SiretMaskCustom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: "40ch",
   },
+  textFieldIban: {
+    width: "180ch",
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
@@ -52,6 +57,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
     (actions) => actions.companies.createOrUpdate
   );
   const company = parseCompanyJsonObject(history.location.state);
+
   const [companyInfo, setCompanyInfo] = useState(company);
   const [companyAdress, setCompanyAdress] = useState(company.companyAdresse);
 
@@ -115,7 +121,9 @@ const CompanyPage: FC<{}> = (): ReactElement => {
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Paper style={{ padding: 15 }}>
-            <Typography className={classes.heading}>Société</Typography>
+            <Typography className={classes.heading}>
+              {intl.formatMessage({ id: "pages.company" })}
+            </Typography>
             <Grid
               container
               direction="row"
@@ -129,7 +137,6 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Raison sociale"
                   variant="outlined"
                   color="secondary"
-                  autoFocus
                   value={companyInfo.socialReason}
                   helperText="Raison sociale obligatoire."
                   onChange={handleInfoCompany}
@@ -166,9 +173,13 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   label="Numéro Siret"
                   variant="outlined"
                   color="secondary"
+                  value={companyInfo.siret}
                   helperText="Numéro Siret obligatoire."
                   onChange={handleInfoCompany}
-                ></TextField>
+                  InputProps={{
+                    inputComponent: TextMaskCustom as any,
+                  }}
+                />
               </Grid>
               <Grid item xs={4}>
                 <TextField
@@ -198,7 +209,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
               <Grid item xs={4}>
                 <TextField
                   id="numeroIban"
-                  className={classes.textField}
+                  className={classes.textFieldIban}
                   label="Numéro Iban"
                   variant="outlined"
                   color="secondary"
@@ -207,7 +218,6 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   onChange={handleInfoCompany}
                 />
               </Grid>
-
               <Grid item xs={4}>
                 <TextField
                   id="numeroBic"
@@ -223,7 +233,9 @@ const CompanyPage: FC<{}> = (): ReactElement => {
             </Grid>
           </Paper>
           <Paper style={{ marginTop: 6, padding: 15 }}>
-            <Typography className={classes.heading}>Adresse</Typography>
+            <Typography className={classes.heading} variant="h6">
+              {intl.formatMessage({ id: "pages.adresse" })}
+            </Typography>
             <Grid
               container
               direction="row"
@@ -286,7 +298,6 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   color="secondary"
                   value={companyAdress.pays}
                   helperText="Nom pays obligatoire."
-                  defaultValue="France"
                   onChange={handleAdressCompany}
                 />
               </Grid>

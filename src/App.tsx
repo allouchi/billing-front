@@ -32,18 +32,17 @@ const App: React.FunctionComponent<{}> = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   let [user, setUser] = useState(null);
-  /*
+
   useEffect(() => {
     const subscribe = firebase.doAutentification();
     return subscribe.onAuthStateChanged((user) => {
       setUser(user);
     });
   }, [firebase]);
-*/
+
   const preventSubscribe = (authenticated: boolean) => {
     setIsAuthenticated(authenticated);
   };
-  //alert(isAuthenticated);
 
   return (
     <Providers>
@@ -59,7 +58,6 @@ const App: React.FunctionComponent<{}> = (props) => {
             <Suspense fallback={<>Loading</>}>
               <Switch>
                 <Route exact path="/" component={Home} />
-
                 <Route
                   exact
                   path="/signup"

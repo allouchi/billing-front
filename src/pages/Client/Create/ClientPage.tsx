@@ -49,11 +49,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const createOrUpdate = useStoreActions(
     (actions) => actions.clients.createOrUpdate
   );
-  /*
-  const connectedUser: Partial<User> = useStoreState(
-    (state) => state.user.user
-  );
-*/
+
   let client = parseClientJsonObject(history.location.state);
 
   const { enqueueSnackbar } = useSnackbar();

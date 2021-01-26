@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { useIntl } from "react-intl";
 import useSiret from "../../../hooks/siret.hook";
 import { useSnackbar } from "notistack";
+
 import {
   Button,
   Dialog,
@@ -130,6 +131,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             type="text"
             required
             fullWidth
+            disabled={true}
             onChange={handleChange}
           />
           <TextField

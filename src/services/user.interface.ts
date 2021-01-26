@@ -17,7 +17,7 @@ export interface IUserService {
    * Create new user
    *
    * @param user user to create or to update
-   * @returns Promise<User>
+   * @returns Promise<>
    */
-  createOrUpdate(user: User): Promise<User>;
+  createUser(user: User): Promise<string>;
 }
