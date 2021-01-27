@@ -76,7 +76,6 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
 
   const displayMenuAdmin = () => {
     let isAdmin = isUserAdmin(user);
-
     if (isAdmin) {
       return (
         <Button color="inherit" onClick={() => history.push("/signup")}>

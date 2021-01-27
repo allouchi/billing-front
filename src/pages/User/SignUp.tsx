@@ -84,13 +84,13 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     return (
       isNotEmptyString(infosUser.lastName) &&
       isNotEmptyString(infosUser.firstName) &&
-      isNotEmptyString(infosUser.mail)
-      //isNotEmptyString(infosUser.password) &&
-      //isNotEmptyString(infosUser.confirmPassword) &&
-      //infosUser.roleId !== "" &&
-      //infosUser.companyId !== "" &&
-      //infosUser.password === infosUser.confirmPassword &&
-      //infosUser.password.length >= 6
+      isNotEmptyString(infosUser.mail) &&
+      isNotEmptyString(infosUser.password) &&
+      isNotEmptyString(infosUser.confirmPassword) &&
+      infosUser.roleId !== "" &&
+      infosUser.companyId !== "" &&
+      infosUser.password === infosUser.confirmPassword &&
+      infosUser.password.length >= 6
     );
   };
 
@@ -138,15 +138,13 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     };
 
     createUser(user)
-      .then(() => {
-        history.push("/");
-        preventSubscribe(true);
+      .then(() => history.push("/"))
+      .then(() =>
         enqueueSnackbar(message, {
           variant: "success",
-        });
-      })
+        })
+      )
       .catch((err: Error) => {
-        preventSubscribe(false);
         enqueueSnackbar(err.message, { variant: "error" });
       });
   };
@@ -184,122 +182,120 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
         <Typography component="h1" variant="h5">
           Ajouter utilisateur
         </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                onChange={handleInfoUser}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lastName"
-                onChange={handleInfoUser}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="mail"
-                label="Email Address"
-                name="mail"
-                autoComplete="mail"
-                onChange={handleInfoUser}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={handleInfoUser}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirmPassword"
-                label="confirm password"
-                type="password"
-                id="confirmPassword"
-                autoComplete="current-password"
-                onChange={handleInfoUser}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl variant="outlined" className={classes.form}>
-                <InputLabel id="roleLabelId">Role</InputLabel>
-                <Select
-                  labelId="role"
-                  id="role"
-                  value={infosUser.roleId}
-                  onChange={handleUserRole}
-                  label="Role"
-                >
-                  {userRolesDisplay()}
-                </Select>
-              </FormControl>
-              <FormControl variant="outlined" className={classes.form}>
-                <InputLabel id="companyLabelId">Société</InputLabel>
-                <Select
-                  labelId="company"
-                  id="company"
-                  value={infosUser.companyId}
-                  onChange={handleCampanyChange}
-                  label={intl.formatMessage({ id: "menu.companies" })}
-                >
-                  {userCompanyDisplay()}
-                </Select>
-              </FormControl>
-            </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              autoComplete="fname"
+              name="firstName"
+              variant="outlined"
+              required
+              fullWidth
+              id="firstName"
+              label="First Name"
+              autoFocus
+              onChange={handleInfoUser}
+            />
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={!isValidForm()}
-            onClick={addUser}
-          >
-            Ajouter
-          </Button>
-          <Grid container>
-            <Grid item>
-              <NavLink
-                className="navbar-item"
-                activeClassName="is-active"
-                to="/login"
-                exact
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="lastName"
+              label="Last Name"
+              name="lastName"
+              autoComplete="lastName"
+              onChange={handleInfoUser}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="mail"
+              label="Email Address"
+              name="mail"
+              autoComplete="mail"
+              onChange={handleInfoUser}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={handleInfoUser}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="confirm password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="current-password"
+              onChange={handleInfoUser}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl variant="outlined" className={classes.form}>
+              <InputLabel id="roleLabelId">Role</InputLabel>
+              <Select
+                labelId="role"
+                id="role"
+                value={infosUser.roleId}
+                onChange={handleUserRole}
+                label="Role"
               >
-                Vous avez un compte? connectez-vous
-              </NavLink>
-            </Grid>
+                {userRolesDisplay()}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" className={classes.form}>
+              <InputLabel id="companyLabelId">Société</InputLabel>
+              <Select
+                labelId="company"
+                id="company"
+                value={infosUser.companyId}
+                onChange={handleCampanyChange}
+                label={intl.formatMessage({ id: "menu.companies" })}
+              >
+                {userCompanyDisplay()}
+              </Select>
+            </FormControl>
           </Grid>
-        </form>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          disabled={!isValidForm()}
+          onClick={addUser}
+        >
+          Ajouter
+        </Button>
+        <Grid container>
+          <Grid item>
+            <NavLink
+              className="navbar-item"
+              activeClassName="is-active"
+              to="/login"
+              exact
+            >
+              Vous avez un compte? connectez-vous
+            </NavLink>
+          </Grid>
+        </Grid>
       </div>
     </Container>
   );

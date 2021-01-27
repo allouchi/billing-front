@@ -9,6 +9,7 @@ export interface UserModel {
 
   // Actions
   loadSuccess: Action<UserModel, User>;
+  add: Action<UserModel, User>;
   // Thunk
   findUserByEMail: Thunk<UserModel, string, Injections>;
   createUser: Thunk<UserModel, User, Injections>;
@@ -23,12 +24,16 @@ export const userModel: UserModel = {
     state.item = payload;
     state.isLoaded = true;
   }),
+  add: action((state, payload: User) => {
+    state.item = payload;
+  }),
 
   // Thunks
   createUser: thunk(async (actions, payload: User, { injections }) => {
     try {
       const { userService } = injections;
-      await userService.createUser(payload);
+      const user = await userService.createUser(payload);
+      //actions.add(user);
     } catch (error) {
       throw error;
     }

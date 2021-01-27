@@ -48,42 +48,28 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
     (actions) => actions.consultants.createOrUpdate
   );
 
-  const isValidForm = (): boolean => {
-    return (
-      isNotEmptyString(state.consultant.firstName) &&
-      isEmptyString(state.firstNameMessage) &&
-      isNotEmptyString(state.consultant.lastName) &&
-      isEmptyString(state.fonctionMessage) &&
-      isNotEmptyString(state.consultant.fonction) &&
-      isEmptyString(state.lastNameMessage) &&
-      isNotEmptyString(state.consultant.mail) &&
-      isEmptyString(state.mailMessage)
-    );
-  };
-
   let consult = parseConsultJsonObject(history.location.state);
   const { enqueueSnackbar } = useSnackbar();
-  const [state, setState] = useState({
-    consultant: consult,
-    firstNameMessage: "",
-    lastNameMessage: "",
-    fonctionMessage: "",
-    mailMessage: "",
-  });
+  const [consultant, setConsultant] = useState(consult);
+
+  const isValidForm = (): boolean => {
+    return (
+      isNotEmptyString(consultant.firstName) &&
+      isNotEmptyString(consultant.lastName) &&
+      isNotEmptyString(consultant.fonction) &&
+      isNotEmptyString(consultant.mail)
+    );
+  };
 
   const handleInfoConsultant = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
-    setState({
-      ...state,
-      consultant: { ...state.consultant, [id]: value },
-      [`${id}Message`]: isEmptyString(value) ? "Required" : "",
-    });
+    setConsultant({ ...consultant, [id]: value });
   };
 
   const addConsultant = () => {
     let messageId = "";
-    const isNew: boolean = !state.consultant.id || state.consultant.id === 0;
+    const isNew: boolean = !consultant.id || consultant.id === 0;
     if (isNew) {
       messageId = "messages.create.success";
     } else {
@@ -94,7 +80,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
       { cle: "Le consultant" }
     );
 
-    createOrUpdate({ consultant: state.consultant, siret: siret })
+    createOrUpdate({ consultant: consultant, siret: siret })
       .then(() => history.push("/consultants"))
       .then(() =>
         enqueueSnackbar(message, {
@@ -116,7 +102,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
     <PageLayout
       title={intl.formatMessage(
         { id: `consultants.${mode}.title` },
-        { cle: `${state.consultant.firstName} ${state.consultant.lastName}` }
+        { cle: `${consultant.firstName} ${consultant.lastName}` }
       )}
       content={
         <Grid container className={classes.root}>
@@ -126,23 +112,23 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
-                      autoComplete="fname"
+                      id="firstName"
                       name="firstName"
                       variant="outlined"
                       required
                       fullWidth
-                      id="firstName"
                       label="First Name"
+                      autoComplete="fname"
                       autoFocus
                       onChange={handleInfoConsultant}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      id="lastName"
                       variant="outlined"
                       required
                       fullWidth
-                      id="lastName"
                       label="Last Name"
                       name="lastName"
                       autoComplete="lname"
@@ -151,10 +137,10 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      id="mail"
                       variant="outlined"
                       required
                       fullWidth
-                      id="email"
                       label="Email Address"
                       name="email"
                       autoComplete="email"
@@ -163,26 +149,14 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      id="fonction"
                       variant="outlined"
                       required
                       fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      onChange={handleInfoConsultant}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="role"
-                      label="Role"
+                      name="fonction"
+                      label="Fonction"
+                      autoComplete="fname"
                       type="text"
-                      id="role"
                       onChange={handleInfoConsultant}
                     />
                   </Grid>

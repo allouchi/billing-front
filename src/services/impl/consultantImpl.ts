@@ -11,7 +11,10 @@ import { IConsultantService } from "../consultant.interface";
 export class ConsultantServiceImpl implements IConsultantService {
   private static readonly CONSULTANT_PATH: string = "consultants";
 
-  async createOrUpdate(consultant: Consultant, siret: string): Promise<Consultant> {
+  async createOrUpdate(
+    consultant: Consultant,
+    siret: string
+  ): Promise<Consultant> {
     const isNew: boolean = !consultant.id || consultant.id === 0;
     try {
       let response;
@@ -26,8 +29,11 @@ export class ConsultantServiceImpl implements IConsultantService {
           consultant
         );
       }
+
       return response.data;
     } catch (error) {
+      console.log(error);
+
       throw Error(
         `Error during ${isNew ? "creating" : "editing"} new consultant`
       );
@@ -45,7 +51,7 @@ export class ConsultantServiceImpl implements IConsultantService {
     }
   }
 
-  async deleteById(id: number, siret : string): Promise<string> {
+  async deleteById(id: number, siret: string): Promise<string> {
     try {
       await Webservice.getInstance().delete(
         `${ConsultantServiceImpl.CONSULTANT_PATH}/${siret}/${id}`

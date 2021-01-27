@@ -5,12 +5,15 @@ import { IUserService } from "../user.interface";
 export class UserServiceImpl implements IUserService {
   private static readonly USER_PATH: string = "users";
 
-  async createUser(user: User): Promise<string> {
+  async createUser(user: User): Promise<User> {
     try {
-      await Webservice.getInstance().post(`${UserServiceImpl.USER_PATH}`, user);
-      return Promise.resolve("200");
+      let reponse = await Webservice.getInstance().post(
+        `${UserServiceImpl.USER_PATH}`,
+        user
+      );
+      return reponse.data;
     } catch (error) {
-      return Promise.reject(`Error during saving user`);
+      throw Error(`Error during creating new user`);
     }
   }
 
