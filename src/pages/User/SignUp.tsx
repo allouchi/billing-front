@@ -250,11 +250,11 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
             <FormControl variant="outlined" className={classes.form}>
               <InputLabel id="roleLabelId">Role</InputLabel>
               <Select
-                labelId="role"
-                id="role"
+                labelId="profile"
+                id="profile"
                 value={infosUser.roleId}
                 onChange={handleUserRole}
-                label="Role"
+                label="Profile"
               >
                 {userRolesDisplay()}
               </Select>

@@ -15,7 +15,7 @@ export class PrestationServiceImpl implements IPrestationService {
     prestation: Prestation,
     siret: string
   ): Promise<Prestation> {
-    const isNew : boolean = !prestation.id || prestation.id === 0;    
+    const isNew: boolean = !prestation.id || prestation.id === 0;
     try {
       let response;
       if (isNew) {
@@ -31,8 +31,11 @@ export class PrestationServiceImpl implements IPrestationService {
       }
       return response.data;
     } catch (error) {
+      let jsonMessage = JSON.parse(error.request.response);
       throw Error(
-        `Error during ${isNew ? "creating" : "editing"} new prestation`
+        `Erreur pendant ${
+          isNew ? "la création" : "la modification"
+        } prestation : ` + jsonMessage.message
       );
     }
   }

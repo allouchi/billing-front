@@ -13,7 +13,11 @@ export class UserServiceImpl implements IUserService {
       );
       return reponse.data;
     } catch (error) {
-      throw Error(`Error during creating new user`);
+      const { status, data } = error;
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(
+        `Erreur pendant la création de l'utilisateur` + jsonMessage.message
+      );
     }
   }
 
@@ -24,7 +28,8 @@ export class UserServiceImpl implements IUserService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting user");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(jsonMessage.message);
     }
   }
 }

@@ -12,7 +12,8 @@ export class UserRolesRefImpl implements IUserRolesRefService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting user");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(jsonMessage.message);
     }
   }
 }

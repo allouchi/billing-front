@@ -11,9 +11,7 @@ import { IFactureService } from "../facture.interface";
 export class FactureServiceImpl implements IFactureService {
   private static readonly FACTURES_PATH: string = "factures";
 
-  async update(
-    facture: Facture    
-  ): Promise<Facture> {    
+  async update(facture: Facture): Promise<Facture> {
     try {
       let response = await Webservice.getInstance().put(
         `${FactureServiceImpl.FACTURES_PATH}`,
@@ -21,9 +19,12 @@ export class FactureServiceImpl implements IFactureService {
       );
       return response.data;
     } catch (error) {
-      throw Error(`Error during editing facture`);
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(
+        `Erreur pendant la modification de la facture` + jsonMessage.message
+      );
     }
-  }  
+  }
   async create(
     facture: Facture,
     siret: string,
@@ -31,14 +32,16 @@ export class FactureServiceImpl implements IFactureService {
   ): Promise<Facture> {
     //const isNew: boolean = !facture.id || facture.id === 0;
     try {
-           
-        let response = await Webservice.getInstance().post(
-          `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
-          facture
-        );     
+      let response = await Webservice.getInstance().post(
+        `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,
+        facture
+      );
       return response.data;
     } catch (error) {
-      throw Error("Error during creating new facture");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(
+        `Erreur pendant la création de la facture` + jsonMessage.message
+      );
     }
   }
   async findAllBySiret(siret: string): Promise<Facture[]> {
@@ -51,9 +54,7 @@ export class FactureServiceImpl implements IFactureService {
       throw Error("Error during getting bills");
     }
   }
-  async deleteById(    
-    factureId: number
-  ): Promise<string> {
+  async deleteById(factureId: number): Promise<string> {
     try {
       await Webservice.getInstance().delete(
         `${FactureServiceImpl.FACTURES_PATH}/${factureId}`
@@ -64,5 +65,5 @@ export class FactureServiceImpl implements IFactureService {
         `Error during deleting facture with id ${factureId}`
       );
     }
-  } 
+  }
 }

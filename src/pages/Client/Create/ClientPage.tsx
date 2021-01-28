@@ -202,7 +202,6 @@ const ClientPage: FC<{}> = (): ReactElement => {
                   variant="outlined"
                   color="secondary"
                   helperText="Nom pays obligatoire."
-                  defaultValue="FRANCE"
                   onChange={handleAdresseClient}
                 />
               </Grid>

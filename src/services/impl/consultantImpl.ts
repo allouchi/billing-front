@@ -16,8 +16,8 @@ export class ConsultantServiceImpl implements IConsultantService {
     siret: string
   ): Promise<Consultant> {
     const isNew: boolean = !consultant.id || consultant.id === 0;
+    let response;
     try {
-      let response;
       if (isNew) {
         response = await Webservice.getInstance().post(
           `${ConsultantServiceImpl.CONSULTANT_PATH}/${siret}`,
@@ -29,13 +29,13 @@ export class ConsultantServiceImpl implements IConsultantService {
           consultant
         );
       }
-
       return response.data;
     } catch (error) {
-      console.log(error);
-
+      let jsonMessage = JSON.parse(error.request.response);
       throw Error(
-        `Error during ${isNew ? "creating" : "editing"} new consultant`
+        `Erreur pendant ${
+          isNew ? "la création" : "la modification"
+        } consultant : ` + jsonMessage.message
       );
     }
   }
