@@ -62,7 +62,6 @@ const consultants = (
     <Table className={classes.table} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell>Id</StyledTableCell>
           <StyledTableCell align="left">Prénom</StyledTableCell>
           <StyledTableCell align="left">Nom</StyledTableCell>
           <StyledTableCell align="left">Fonction</StyledTableCell>

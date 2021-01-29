@@ -59,7 +59,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     (state) => state.userRolesRef.items
   );
   const createUser = useStoreActions((actions) => actions.user.createUser);
-  const { isAuthenticated, preventSubscribe } = props;
+  const { isAuthenticated } = props;
 
   const item: User = useStoreState((state) => state.user.item);
 
@@ -70,6 +70,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     password: "",
     confirmPassword: "",
     roleId: "",
+    roleCode: "",
     roleName: "",
     companyId: "",
   });
@@ -131,6 +132,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
         id: 0,
         roleId: infosUser.roleId,
         roleName: infosUser.roleName,
+        roleCode: infosUser.roleCode,
       },
       company: {
         id: Number(infosUser.companyId),
@@ -248,7 +250,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
           </Grid>
           <Grid item xs={12}>
             <FormControl variant="outlined" className={classes.form}>
-              <InputLabel id="roleLabelId">Role</InputLabel>
+              <InputLabel id="roleLabelId">Profile</InputLabel>
               <Select
                 labelId="profile"
                 id="profile"

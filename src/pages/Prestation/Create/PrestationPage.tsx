@@ -127,6 +127,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
     const param: PrestationSiret = {
       prestation: state.prestation,
       siret: siret,
+      templateChoice: false,
     };
 
     const message = intl.formatMessage(

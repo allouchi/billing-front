@@ -15,9 +15,7 @@ export class UserServiceImpl implements IUserService {
     } catch (error) {
       const { status, data } = error;
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant la création de l'utilisateur` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
 

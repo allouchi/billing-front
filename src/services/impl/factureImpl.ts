@@ -20,9 +20,7 @@ export class FactureServiceImpl implements IFactureService {
       return response.data;
     } catch (error) {
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant la modification de la facture` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
   async create(
@@ -39,9 +37,7 @@ export class FactureServiceImpl implements IFactureService {
       return response.data;
     } catch (error) {
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant la création de la facture` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
   async findAllBySiret(siret: string): Promise<Facture[]> {
@@ -51,7 +47,8 @@ export class FactureServiceImpl implements IFactureService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting bills");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(jsonMessage.message);
     }
   }
   async deleteById(factureId: number): Promise<string> {

@@ -29,11 +29,7 @@ export class ClientServiceImpl implements IClientService {
       return response.data;
     } catch (error) {
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant ${
-          isNew ? "la création" : "la modification"
-        } client : ` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
   async findAllBySiret(siret: string): Promise<Client[]> {
@@ -43,7 +39,8 @@ export class ClientServiceImpl implements IClientService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting clients");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(jsonMessage.message);
     }
   }
 

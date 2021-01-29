@@ -16,11 +16,8 @@ import { useHistory } from "react-router-dom";
 import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import useSiret from "../../../hooks/siret.hook";
-import Prestation from "../../../domains/Prestation";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import PdfPath from "../../../store/pdf/pdf.model";
-import { findPrestationId } from "../../../shared/Utils";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Box from "@material-ui/core/Box";
@@ -62,7 +59,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const history = useHistory();
   const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
-  const items: Prestation[] = useStoreState((state) => state.prestations.items);
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
   const [open, setOpen] = React.useState(false);
@@ -101,18 +97,17 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       });
   };
 
+  const onClickTable = () => {
+    setOpen(!open);
+  };
+
   const downloadPdfClick = () => {
     const message = intl.formatMessage(
       { id: "messages.download.success" },
       { cle: "La facture" }
     );
 
-    const pdfPath: PdfPath = {
-      prestationId: findPrestationId(items, item),
-      siret: siret,
-      factureId: item.id,
-    };
-    downloadPdf(pdfPath)
+    downloadPdf(item.id)
       .then(() => history.push("/factures"))
       .then(() =>
         enqueueSnackbar(message, {
@@ -122,10 +117,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
-  };
-
-  const onClickTable = () => {
-    setOpen(!open);
   };
 
   return (

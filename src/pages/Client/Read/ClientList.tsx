@@ -62,7 +62,6 @@ const clients = (
     <Table className={classes.table} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell>Id</StyledTableCell>
           <StyledTableCell align="left">Raison sociale</StyledTableCell>
           <StyledTableCell align="left">Adresse Email</StyledTableCell>
           <StyledTableCell align="left">Adresse client</StyledTableCell>

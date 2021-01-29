@@ -5,7 +5,7 @@ import Prestation from "../../../domains/Prestation";
 import { StyledTableCell } from "./PrestationList";
 import ConsultantAvatar from "./../../../components/Avatar/ConsultantAvatar";
 import { useIntl } from "react-intl";
-import {IconButton, Tooltip } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import { useStoreActions } from "../../../store/hooks";
@@ -23,19 +23,24 @@ export const StyledTableRow = withStyles((theme: Theme) =>
   })
 )(TableRow);
 
-interface PrestationItemProps { 
+interface PrestationItemProps {
   item: Prestation;
-  editerFacture(item: Prestation, click : boolean): void;
+  editerFacture(item: Prestation, click: boolean): void;
 }
-const FactureItem: FC<PrestationItemProps> = ({item,...props}): ReactElement => {
+const FactureItem: FC<PrestationItemProps> = ({
+  item,
+  ...props
+}): ReactElement => {
   const intl = useIntl();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
-  const deleteById = useStoreActions((actions) => actions.prestations.deleteById); 
+  const deleteById = useStoreActions(
+    (actions) => actions.prestations.deleteById
+  );
 
-  const handleEditClick = () => {   
-    props.editerFacture(item, true);   
+  const handleEditClick = () => {
+    props.editerFacture(item, true);
   };
 
   const handleDeleteClick = () => {
@@ -58,9 +63,8 @@ const FactureItem: FC<PrestationItemProps> = ({item,...props}): ReactElement => 
 
   return (
     <StyledTableRow>
-      <StyledTableCell>{item.id}</StyledTableCell>
-      <StyledTableCell>{item.tarifHT}</StyledTableCell>
       <StyledTableCell>{item.numeroCommande}</StyledTableCell>
+      <StyledTableCell>{item.tarifHT}</StyledTableCell>
       <StyledTableCell>{item.delaiPaiement}</StyledTableCell>
       <StyledTableCell>
         <ConsultantAvatar consultant={item.consultant} />{" "}
@@ -82,7 +86,7 @@ const FactureItem: FC<PrestationItemProps> = ({item,...props}): ReactElement => 
           cle="prestation"
           value={item.numeroCommande}
           deleteAction={handleDeleteClick}
-        />      
+        />
       </StyledTableCell>
     </StyledTableRow>
   );

@@ -61,7 +61,8 @@ export const prestationsModel: PrestationsModel = {
         const { prestationService } = injections;
         const prestation = await prestationService.createOrUpdate(
           payload.prestation,
-          payload.siret
+          payload.siret,
+          payload.templateChoice
         );
         if (isNew) {
           actions.add(prestation);
@@ -87,5 +88,6 @@ export const prestationsModel: PrestationsModel = {
 interface PrestationSiret {
   prestation: Partial<Prestation>;
   siret: string;
+  templateChoice: boolean;
 }
 export default PrestationSiret;

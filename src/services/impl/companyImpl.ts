@@ -29,11 +29,7 @@ export class CompanyServiceImpl implements ICompanyService {
       return response.data;
     } catch (error) {
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant ${
-          isNew ? "la création" : "la modification"
-        } company : ` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
 

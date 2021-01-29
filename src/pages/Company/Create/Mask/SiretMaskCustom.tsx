@@ -6,7 +6,7 @@ interface TextMaskCustomProps {
   inputRef: (ref: HTMLInputElement | null) => void;
 }
 
-const TextMaskCustom = (props: TextMaskCustomProps): ReactElement => {
+const SiretMaskCustom = (props: TextMaskCustomProps): ReactElement => {
   const { inputRef, ...other } = props;
 
   return (
@@ -40,4 +40,4 @@ const TextMaskCustom = (props: TextMaskCustomProps): ReactElement => {
   );
 };
 
-export default TextMaskCustom;
+export default SiretMaskCustom;

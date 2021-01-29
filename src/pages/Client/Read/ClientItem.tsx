@@ -52,23 +52,22 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
       });
   };
 
-  const editerClientClick = () => {   
+  const editerClientClick = () => {
     let client = JSON.stringify(item);
     history.push({
       pathname: "/client",
       search: "",
-      state: { mode:"update", detail: client },
+      state: { mode: "update", detail: client },
     });
   };
   return (
     <>
-      <StyledTableCell> {item.id}</StyledTableCell>
       <StyledTableCell> {item.socialReason}</StyledTableCell>
       <StyledTableCell> {item.mail}</StyledTableCell>
       <StyledTableCell>
         {item.adresseClient.numero} {item.adresseClient.rue}{" "}
-        {item.adresseClient.codePostal}{" "}
-        {item.adresseClient.localite} {" "} {item.adresseClient.pays}
+        {item.adresseClient.codePostal} {item.adresseClient.localite}{" "}
+        {item.adresseClient.pays}
       </StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("client", "edit")}>

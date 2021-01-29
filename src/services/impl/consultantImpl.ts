@@ -47,7 +47,8 @@ export class ConsultantServiceImpl implements IConsultantService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting consultants");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(jsonMessage.message);
     }
   }
 

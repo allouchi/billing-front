@@ -14,7 +14,8 @@ import {
   parseCompanyJsonObject,
   parseModeJsonObject,
 } from "../../../shared/Utils";
-import TextMaskCustom from "./SiretMaskCustom";
+import SiretMaskCustom from "./Mask/SiretMaskCustom";
+import IbanMaskCustom from "./Mask/IbanMaskCustom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -177,7 +178,7 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   helperText="Numéro Siret obligatoire."
                   onChange={handleInfoCompany}
                   InputProps={{
-                    inputComponent: TextMaskCustom as any,
+                    inputComponent: SiretMaskCustom as any,
                   }}
                 />
               </Grid>
@@ -216,6 +217,10 @@ const CompanyPage: FC<{}> = (): ReactElement => {
                   value={companyInfo.numeroIban}
                   helperText="Numéro IBAN obligatoire."
                   onChange={handleInfoCompany}
+                  /*
+                  InputProps={{
+                    inputComponent: IbanMaskCustom as any,
+                  }} */
                 />
               </Grid>
               <Grid item xs={4}>

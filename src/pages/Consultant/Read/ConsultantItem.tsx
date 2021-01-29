@@ -45,9 +45,9 @@ const ConsultantItem: FC<ConsultantItemProps> = ({ item }): ReactElement => {
       { cle: "Le consultant" }
     );
 
-    const param : ConsultantSiret = {
+    const param: ConsultantSiret = {
       consultant: item,
-      siret: siret,      
+      siret: siret,
     };
 
     deleteById(param)
@@ -67,14 +67,13 @@ const ConsultantItem: FC<ConsultantItemProps> = ({ item }): ReactElement => {
     history.push({
       pathname: "/consultant",
       search: "",
-      state: { mode : "update", detail: consult },
+      state: { mode: "update", detail: consult },
     });
   };
 
   return (
     <>
-      <StyledTableCell> {item.id}</StyledTableCell>
-      <StyledTableCell> {item.firstName}</StyledTableCell>      
+      <StyledTableCell> {item.firstName}</StyledTableCell>
       <StyledTableCell> {item.lastName}</StyledTableCell>
       <StyledTableCell> {item.fonction}</StyledTableCell>
       <StyledTableCell> {item.mail}</StyledTableCell>

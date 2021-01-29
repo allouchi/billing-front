@@ -8,10 +8,12 @@ import { useSnackbar } from "notistack";
 
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
+  FormControlLabel,
   TextField,
 } from "@material-ui/core";
 import PrestationSiret from "../../../store/prestation/prestations.model";
@@ -28,6 +30,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     (actions) => actions.prestations.createOrUpdate
   );
   const [open, setOpen] = useState(clickOn);
+  const [check, setCheck] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
     prestation: {
@@ -36,7 +39,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       delaiPaiement: item.delaiPaiement,
       consultant: item.consultant,
       client: item.client,
-      designation: "Prestation",
+      designation: "La Prestation est réalisée pour le compte de",
       numeroCommande: `${item.numeroCommande}`,
       clientPrestation: `${item.client.socialReason}`,
       quantite: 0,
@@ -63,6 +66,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     const prestationSiret: PrestationSiret = {
       prestation: state.prestation,
       siret: siret,
+      templateChoice: check,
     };
     if (
       prestationSiret.prestation.numeroCommande === "" ||
@@ -90,6 +94,24 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
   };
+
+  const handleChangeCheckBox = () => {
+    setCheck(!check);
+  };
+
+  const displayDesignation = check ? (
+    <TextField
+      id="designation"
+      label="Désignation"
+      multiline
+      rowsMax={2}
+      value={state.prestation.designation}
+      onChange={handleChange}
+      variant="outlined"
+    />
+  ) : (
+    ""
+  );
 
   return (
     <div>
@@ -124,17 +146,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             onChange={handleChange}
           />
           <TextField
-            id="designation"
-            margin="dense"
-            label="Désignation"
-            value={state.prestation.designation}
-            type="text"
-            required
-            fullWidth
-            disabled={true}
-            onChange={handleChange}
-          />
-          <TextField
             margin="dense"
             id="clientPrestation"
             label="Client prestation"
@@ -144,6 +155,20 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             fullWidth
             onChange={handleChange}
           />
+        </DialogContent>
+        <DialogContent>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={check}
+                onChange={handleChangeCheckBox}
+                name="checked"
+                id="checked"
+              />
+            }
+            label="Désignation libre"
+          />
+          {displayDesignation}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleAnnuler} color="primary">

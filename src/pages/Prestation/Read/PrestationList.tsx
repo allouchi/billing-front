@@ -41,7 +41,6 @@ const useStyles = makeStyles({
   },
 });
 
-
 const PrestationList: FC<{}> = () => {
   const classes = useStyles();
   //const intl = useIntl();
@@ -52,35 +51,30 @@ const PrestationList: FC<{}> = () => {
     (state) => state.prestations.isLoaded
   );
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
-  /*
-  const connectedUser: Partial<User> = useStoreState(
-    (state) => state.user.user
-  );
-  */
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-  const [clickOn, setClickOn] = useState(true);
+  const [clickOn, setClickOn] = useState(false);
   const [currentItem, setCurrentItem] = useState<Prestation>();
   const siret: string = useSiret();
 
-  const handleEditFacture = (item: Prestation, click: boolean) => {    
-    setCurrentItem(item);      
+  const handleEditFacture = (item: Prestation, click: boolean) => {
+    setCurrentItem(item);
     setClickOn(click);
   };
-  
-  useEffect(() => {     
-    if (!isLoaded) {     
+
+  useEffect(() => {
+    if (!isLoaded) {
       findAllBySiret(siret).catch((e: Error) => {
         enqueueSnackbar(e.message, { variant: "error" });
         setOnError(true);
-      });      
+      });
     }
   }, [findAllBySiret, enqueueSnackbar, isLoaded, siret]);
 
   if (!isLoaded && !onError) {
     return <CircularProgress color="inherit" />;
   }
-  
+
   return (
     <div className={classes.table}>
       <TableContainer component={Paper}>
@@ -89,26 +83,32 @@ const PrestationList: FC<{}> = () => {
             <Table className={classes.table} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="left">Id</StyledTableCell>
+                  <StyledTableCell align="left">
+                    Numéro de commande
+                  </StyledTableCell>
                   <StyledTableCell align="left">Tarif HT</StyledTableCell>
-                  <StyledTableCell align="left">Numéro de commande</StyledTableCell>
-                  <StyledTableCell align="left">Délai de paiement</StyledTableCell>
+                  <StyledTableCell align="left">
+                    Délai de paiement
+                  </StyledTableCell>
                   <StyledTableCell align="left">Consultant</StyledTableCell>
                   <StyledTableCell align="left">Client</StyledTableCell>
-                  <StyledTableCell align="left">{}</StyledTableCell>                  
+                  <StyledTableCell align="left">{}</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {items && items.map((prestation: Prestation, index: number) => (
-                  <PrestationItem
-                    key={index}
-                    item={prestation}
-                    editerFacture={handleEditFacture}
-                  />
-                ))}
+                {items &&
+                  items.map((prestation: Prestation, index: number) => (
+                    <PrestationItem
+                      key={index}
+                      item={prestation}
+                      editerFacture={handleEditFacture}
+                    />
+                  ))}
               </TableBody>
             </Table>
-            {currentItem && <FactureEdit item={currentItem} clickOn={clickOn} />}
+            {currentItem && (
+              <FactureEdit item={currentItem} clickOn={clickOn} />
+            )}
           </>
         ) : (
           <Alert severity="warning">Aucune prestation enregistrée</Alert>

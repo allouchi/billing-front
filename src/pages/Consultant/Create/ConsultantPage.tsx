@@ -49,6 +49,9 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
   );
 
   let consult = parseConsultJsonObject(history.location.state);
+
+  console.log(consult);
+
   const { enqueueSnackbar } = useSnackbar();
   const [consultant, setConsultant] = useState(consult);
 
@@ -115,6 +118,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                       id="firstName"
                       name="firstName"
                       variant="outlined"
+                      value={consultant.firstName}
                       required
                       fullWidth
                       label="First Name"
@@ -127,6 +131,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                     <TextField
                       id="lastName"
                       variant="outlined"
+                      value={consultant.lastName}
                       required
                       fullWidth
                       label="Last Name"
@@ -141,6 +146,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                       variant="outlined"
                       required
                       fullWidth
+                      value={consultant.mail}
                       label="Email Address"
                       name="email"
                       autoComplete="email"
@@ -154,6 +160,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                       required
                       fullWidth
                       name="fonction"
+                      value={consultant.fonction}
                       label="Fonction"
                       autoComplete="fname"
                       type="text"

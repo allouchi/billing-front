@@ -33,7 +33,7 @@ export const userModel: UserModel = {
     try {
       const { userService } = injections;
       const user = await userService.createUser(payload);
-      //actions.add(user);
+      actions.add(user);
     } catch (error) {
       throw error;
     }

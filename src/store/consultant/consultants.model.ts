@@ -63,8 +63,6 @@ export const consultantsModel: ConsultantsModel = {
           payload.consultant,
           payload.siret
         );
-        console.log(consultant);
-
         if (isNew) {
           actions.add(consultant);
         } else {

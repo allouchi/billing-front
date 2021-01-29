@@ -55,13 +55,12 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
     history.push({
       pathname: "/company",
       search: "",
-      state: { mode:"update", detail: company },
+      state: { mode: "update", detail: company },
     });
   };
 
   return (
     <>
-      <StyledTableCell> {item.id}</StyledTableCell>
       <StyledTableCell> {item.socialReason}</StyledTableCell>
       <StyledTableCell> {item.siret} </StyledTableCell>
       <StyledTableCell> {item.rcsName} </StyledTableCell>
@@ -69,7 +68,12 @@ const CompanyItem: FC<CompanyItemProps> = ({ item }): ReactElement => {
       <StyledTableCell> {item.codeApe} </StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("company", "edit")}>
-          <IconButton onClick={editerCompanyClick} aria-label="edit" size="small" style={{ marginRight: 6 }}>
+          <IconButton
+            onClick={editerCompanyClick}
+            aria-label="edit"
+            size="small"
+            style={{ marginRight: 6 }}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>

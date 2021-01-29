@@ -10,7 +10,7 @@ export interface PdfModel {
   loadSuccess: Action<PdfModel, DataPDF[]>;
 
   // Thunk
-  downloadPdf: Thunk<PdfModel, PdfPath, Injections>;
+  downloadPdf: Thunk<PdfModel, number, Injections>;
 }
 
 export const pdfModel: PdfModel = {
@@ -24,26 +24,13 @@ export const pdfModel: PdfModel = {
   }),
 
   // Thunks
-  downloadPdf: thunk(async (actions, payload: PdfPath, { injections }) => {
+  downloadPdf: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { pdfService } = injections;
-      const data = await pdfService.download(
-        payload.siret,
-        payload.prestationId,
-        payload.factureId
-      );
-
+      const data = await pdfService.download(payload);
       actions.loadSuccess(data);
     } catch (error) {
       throw error;
     }
   }),
 };
-
-interface PdfPath {
-  siret: string;
-  prestationId: number;
-  factureId: number;
-}
-
-export default PdfPath;

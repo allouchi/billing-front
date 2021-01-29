@@ -13,30 +13,27 @@ export class PrestationServiceImpl implements IPrestationService {
 
   async createOrUpdate(
     prestation: Prestation,
-    siret: string
+    siret: string,
+    templateChoice
   ): Promise<Prestation> {
     const isNew: boolean = !prestation.id || prestation.id === 0;
     try {
       let response;
       if (isNew) {
         response = await Webservice.getInstance().post(
-          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}`,
+          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}/${templateChoice}`,
           prestation
         );
       } else {
         response = await Webservice.getInstance().put(
-          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}`,
+          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}/${templateChoice}`,
           prestation
         );
       }
       return response.data;
     } catch (error) {
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant ${
-          isNew ? "la création" : "la modification"
-        } prestation : ` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
   async findAllBySiret(siret: string): Promise<Prestation[]> {
@@ -46,7 +43,8 @@ export class PrestationServiceImpl implements IPrestationService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting prestations");
+      let jsonMessage = JSON.parse(error.request.response);
+      throw Error(jsonMessage.message);
     }
   }
 

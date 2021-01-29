@@ -1,13 +1,10 @@
-
-import DataPDF from '../domains/DataPDF';
-
+import DataPDF from "../domains/DataPDF";
 
 export interface IPdfService {
   /**
    * Download pdf file
    *
-   * @param id siret, id facture
+   * @param id facture
    */
-  download(siret: string, prestationId: number, factureId: number): Promise<DataPDF[]>;
- 
+  download(factureId: number): Promise<DataPDF[]>;
 }

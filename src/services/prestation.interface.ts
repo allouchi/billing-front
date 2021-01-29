@@ -13,7 +13,8 @@ export interface IPrestationService {
    */
   createOrUpdate(
     prestation: Partial<Prestation>,
-    siret: string
+    siret: string,
+    templateChoice: boolean
   ): Promise<Prestation>;
 
   /**
