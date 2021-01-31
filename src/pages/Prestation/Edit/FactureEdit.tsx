@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { useIntl } from "react-intl";
 import useSiret from "../../../hooks/siret.hook";
 import { useSnackbar } from "notistack";
+import { makeStyles } from "@material-ui/core/styles";
+import { InputLabel, Select } from "@material-ui/core";
 
 import {
   Button,
@@ -13,11 +15,39 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  FormControl,
   FormControlLabel,
   TextField,
+  MenuItem,
 } from "@material-ui/core";
 import PrestationSiret from "../../../store/prestation/prestations.model";
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(0),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 150,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 interface FactureEditProps {
   item: Prestation;
   clickOn: boolean;
@@ -25,6 +55,7 @@ interface FactureEditProps {
 const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const history = useHistory();
   const siret: string = useSiret();
+  const classes = useStyles();
   const intl = useIntl();
   const createOrUpdate = useStoreActions(
     (actions) => actions.prestations.createOrUpdate
@@ -33,6 +64,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const [check, setCheck] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
+    moisFactureId: 0,
     prestation: {
       id: item.id,
       tarifHT: item.tarifHT,
@@ -46,6 +78,28 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     },
   });
 
+  const moisAnnee = [
+    { id: 1, mois: "Janvier" },
+    { id: 2, mois: "Février" },
+    { id: 3, mois: "Mars" },
+    { id: 4, mois: "Avril" },
+    { id: 5, mois: "Mai" },
+    { id: 6, mois: "Juin" },
+    { id: 7, mois: "Juillet" },
+    { id: 8, mois: "Août" },
+    { id: 9, mois: "Septembre" },
+    { id: 10, mois: "Octobre" },
+    { id: 11, mois: "Novembre" },
+    { id: 12, mois: "Décembre" },
+  ];
+
+  const handleMoisPresta = (event: React.ChangeEvent<{ value: string }>) => {
+    const value = event.target.value;
+    setState({
+      ...state,
+      moisFactureId: Number(value),
+    });
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
@@ -67,8 +121,10 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       prestation: state.prestation,
       siret: siret,
       templateChoice: check,
+      moisFactureId: state.moisFactureId,
     };
     if (
+      prestationSiret.moisFactureId === undefined ||
       prestationSiret.prestation.numeroCommande === "" ||
       prestationSiret.prestation.designation === "" ||
       prestationSiret.prestation.quantite === 0 ||
@@ -99,6 +155,16 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
     setCheck(!check);
   };
 
+  const moisDisplay = () => {
+    return moisAnnee.map((item) => {
+      return (
+        <MenuItem key={item.id} value={item.id}>
+          {item.mois}
+        </MenuItem>
+      );
+    });
+  };
+
   const displayDesignation = check ? (
     <TextField
       id="designation"
@@ -122,8 +188,22 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       >
         <DialogContent>
           <DialogContentText>
-            Veuillez saisir le numéro de commande client
+            Veuillez saisir les informations facture pour le mois de :
           </DialogContentText>
+
+          <FormControl variant="outlined" className={classes.form}>
+            <InputLabel id="moisLabelId">Mois</InputLabel>
+            <Select
+              labelId="mois"
+              id="mois"
+              value={state.moisFactureId}
+              onChange={handleMoisPresta}
+              label="Mois"
+            >
+              {moisDisplay()}
+            </Select>
+          </FormControl>
+
           <TextField
             id="numeroCommande"
             autoFocus

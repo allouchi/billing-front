@@ -128,6 +128,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       prestation: state.prestation,
       siret: siret,
       templateChoice: false,
+      moisFactureId: 0,
     };
 
     const message = intl.formatMessage(

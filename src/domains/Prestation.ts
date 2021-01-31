@@ -3,16 +3,16 @@ import Consultant from "./Consultant";
 import Facture from "./Facture";
 
 export default interface Prestation {
-  id: number; 
+  id: number;
   tarifHT: number;
-  delaiPaiement: number;  
+  delaiPaiement: number;
   consultant: Consultant;
   client: Client;
   facture: Facture[];
-  designation : string;
-  numeroCommande: string; 
+  designation: string;
+  numeroCommande: string;
   clientPrestation: string;
-  quantite: number,  
+  quantite: number;
   startDate?: Date;
   endDate?: Date;
 }

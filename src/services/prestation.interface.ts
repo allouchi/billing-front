@@ -14,7 +14,8 @@ export interface IPrestationService {
   createOrUpdate(
     prestation: Partial<Prestation>,
     siret: string,
-    templateChoice: boolean
+    templateChoice: boolean,
+    moisFactureId: number
   ): Promise<Prestation>;
 
   /**

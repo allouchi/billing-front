@@ -14,19 +14,20 @@ export class PrestationServiceImpl implements IPrestationService {
   async createOrUpdate(
     prestation: Prestation,
     siret: string,
-    templateChoice
+    templateChoice,
+    moisFactureId
   ): Promise<Prestation> {
     const isNew: boolean = !prestation.id || prestation.id === 0;
     try {
       let response;
       if (isNew) {
         response = await Webservice.getInstance().post(
-          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}/${templateChoice}`,
+          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}/${templateChoice}/${moisFactureId}`,
           prestation
         );
       } else {
         response = await Webservice.getInstance().put(
-          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}/${templateChoice}`,
+          `${PrestationServiceImpl.PRESTATION_PATH}/${siret}/${templateChoice}/${moisFactureId}`,
           prestation
         );
       }
