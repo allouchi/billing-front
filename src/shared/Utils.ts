@@ -229,32 +229,6 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
   return facture;
 };
 
-export const findPrestationId = (
-  items: Prestation[],
-  item: Facture
-): number => {
-  let pestationId: number = 0;
-  let prestation = items.map((prestat) => {
-    return prestat;
-  });
-
-  if (prestation && prestation.length > 0) {
-    for (let i = 0; i < prestation.length; i++) {
-      if (typeof prestation[i] !== "undefined") {
-        let facture = prestation[i].facture;
-        if (typeof facture[i] !== "undefined") {
-          for (let j = 0; j < facture.length; j++) {
-            if (facture[j].id === item.id) {
-              pestationId = prestation[i].id;
-            }
-          }
-        }
-      }
-    }
-  }
-  return pestationId;
-};
-
 export const parseModeJsonObject = (jsonObject: any): string => {
   let retour = "create";
   if (
@@ -271,3 +245,5 @@ export const parseModeJsonObject = (jsonObject: any): string => {
   }
   return retour;
 };
+
+export const calculJoursOuvresMois = (date: Date): void => {};

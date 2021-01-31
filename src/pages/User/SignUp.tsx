@@ -182,7 +182,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Ajouter utilisateur
+          Ajouter un utilisateur
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -291,7 +291,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
             <NavLink
               className="navbar-item"
               activeClassName="is-active"
-              to="/login"
+              to="/init"
               exact
             >
               Vous avez un compte? connectez-vous

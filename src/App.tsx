@@ -10,6 +10,7 @@ import PrivateRoute from "./pages/User/PrivateRoute";
 
 const SignIn = React.lazy(() => import("./pages/User/SignIn"));
 const SignUp = React.lazy(() => import("./pages/User/SignUp"));
+const InitPassword = React.lazy(() => import("./pages/User/InitPassword"));
 const Home = React.lazy(() => import("./pages/Home"));
 const Factures = React.lazy(() => import("./pages/Facture/Read"));
 const Facture = React.lazy(() => import("./pages/Facture/Update"));
@@ -58,6 +59,7 @@ const App: React.FunctionComponent<{}> = (props) => {
             <Suspense fallback={<>Loading</>}>
               <Switch>
                 <Route exact path="/" component={Home} />
+                <Route exact path="/init" component={InitPassword} />
                 <Route
                   exact
                   path="/signup"

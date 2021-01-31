@@ -116,7 +116,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const handleValider = () => {
     const requiredMsg = intl.formatMessage({ id: "messages.required" });
     setOpen(true);
-
     const prestationSiret: PrestationSiret = {
       prestation: state.prestation,
       siret: siret,
@@ -124,7 +123,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       moisFactureId: state.moisFactureId,
     };
     if (
-      prestationSiret.moisFactureId === undefined ||
+      prestationSiret.moisFactureId === 0 ||
       prestationSiret.prestation.numeroCommande === "" ||
       prestationSiret.prestation.designation === "" ||
       prestationSiret.prestation.quantite === 0 ||
@@ -199,6 +198,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
               value={state.moisFactureId}
               onChange={handleMoisPresta}
               label="Mois"
+              autoFocus
             >
               {moisDisplay()}
             </Select>
@@ -206,7 +206,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
 
           <TextField
             id="numeroCommande"
-            autoFocus
             margin="dense"
             label="Numéro de commande"
             value={state.prestation.numeroCommande}
