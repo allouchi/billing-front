@@ -1,7 +1,3 @@
-
-//******************************************************************************************************************************//
-//************************Fonction de vérification si une date entrée est au de^là de la date minimum***************************//
-//******************************************************************************************************************************//
 /*
 
 function verif_date_mini(date_entree, date_mini){
@@ -22,7 +18,7 @@ function verif_date_mini(date_entree, date_mini){
 		return 1;
 		}
 	} 
-}*/
+}
 
 function JoursFeries (an){
     var JourAn = new Date(an, 0, 1);
@@ -44,20 +40,17 @@ function JoursFeries (an){
     var MoisPaques = 3 + Math.floor((L + 40)/44);
     var JourPaques = L + 28 - 31*Math.floor(MoisPaques/4);
     var Paques = new Date(an, MoisPaques-1, JourPaques);
-    //**var VendrediSaint = new Date(an, MoisPaques-1, JourPaques-2);**//
+   
     var LundiPaques = new Date(an, MoisPaques-1, JourPaques+1);
     var Ascension = new Date(an, MoisPaques-1, JourPaques+39);
     var Pentecote = new Date(an, MoisPaques-1, JourPaques+49);
     var LundiPentecote = new Date(an, MoisPaques-1, JourPaques+50);
   
-    //**SaintEtienne et Vendredi Saint sont des fêtes exclusivement**//
-    //**alscacienne. On les ignore dans notre cas.**//
+   
     return new Array(JourAn, Paques, LundiPaques, FeteTravail, Victoire1945, Ascension, Pentecote, LundiPentecote, FeteNationale, Assomption, Toussaint, Armistice, Noel);
   }
 
-  /******************************************************************************************************************************//
-//************************Calcul de la date minimum de portage (15 jours ouvrables après la date du jour)***********************//
-//******************************************************************************************************************************//
+
 function calc_date_mini(){
 
 	var date_now = new Date();
@@ -65,12 +58,12 @@ function calc_date_mini(){
 	var date_now_mois = date_now.getMonth();
 	var date_now_jour = date_now.getDate();
 
-	//**init. des compteurs**//
+	
 	var cpt_i = 0;
 	var cpt_j = 0;
 	var cpt_k = 0;
 
-	//**init. des tableaux récupérant les jours feries de l'annee en cours et de l'annee suivante.**//
+	
 	var tab_1=new Array;
 	var tab_2=new Array;
 	tab_1=JoursFeries(date_now.getFullYear());
@@ -95,13 +88,9 @@ function calc_date_mini(){
 	}
 	return date_eval;
 }
+*/
 
-
-const JoursOuvres = (): number=>{
-
-    return 0;
-}
+const JoursOuvres = (): number => {
+  return 0;
+};
 export default JoursOuvres;
-
-
-  

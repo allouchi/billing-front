@@ -32,11 +32,7 @@ export class ConsultantServiceImpl implements IConsultantService {
       return response.data;
     } catch (error) {
       let jsonMessage = JSON.parse(error.request.response);
-      throw Error(
-        `Erreur pendant ${
-          isNew ? "la création" : "la modification"
-        } consultant : ` + jsonMessage.message
-      );
+      throw Error(jsonMessage.message);
     }
   }
 
