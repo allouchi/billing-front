@@ -119,9 +119,14 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       });
   };
 
+  const etatFature =
+    item.dateEncaissement === "" || item.dateEncaissement === null
+      ? { backgroundColor: "yellow" }
+      : { backgroundColor: "green" };
+
   return (
     <>
-      <StyledTableRow>
+      <StyledTableRow style={etatFature}>
         <StyledTableCell>
           <IconButton
             aria-label="expand row"
@@ -131,7 +136,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </StyledTableCell>
-        <StyledTableCell>{item.numeroFacture}</StyledTableCell>
+        <StyledTableCell sortDirection="asc">
+          {item.numeroFacture}
+        </StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>
         <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
         <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
@@ -166,7 +173,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           </Tooltip>
         </StyledTableCell>
       </StyledTableRow>
-      <StyledTableRow>
+      <StyledTableRow style={etatFature}>
         <StyledTableCell
           style={{ paddingBottom: 0, paddingTop: 0 }}
           colSpan={6}

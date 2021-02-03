@@ -2,7 +2,6 @@ import Client from "../domains/Client";
 import Consultant from "../domains/Consultant";
 import Facture from "../domains/Facture";
 import Company from "../domains/Company";
-import Prestation from "../domains/Prestation";
 import User from "../domains/User";
 
 export const isUserAdmin = (user: User): boolean => {
@@ -12,8 +11,8 @@ export const isUserAdmin = (user: User): boolean => {
     user !== undefined &&
     user.userRole !== null &&
     user.userRole !== undefined &&
-    user.userRole.roleId !== undefined &&
-    user.userRole.roleId === "1"
+    user.userRole.roleCode !== undefined &&
+    user.userRole.roleCode === "admin"
   ) {
     isAdmin = true;
   }

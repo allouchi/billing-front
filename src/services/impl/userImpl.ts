@@ -26,8 +26,13 @@ export class UserServiceImpl implements IUserService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let jsonMessage = "";
+      if (error.request !== undefined && error.request.response === "") {
+        jsonMessage = "Problème réseau";
+      } else {
+        jsonMessage = JSON.parse(error.request.response);
+      }
+      throw Error(jsonMessage);
     }
   }
 }
