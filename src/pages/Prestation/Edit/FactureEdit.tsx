@@ -21,6 +21,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import PrestationSiret from "../../../store/prestation/prestations.model";
+import { calculJoursOuvresMois } from "../../../shared/Utils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -77,8 +78,8 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       quantite: 0,
     },
   });
-
   const moisAnnee = [
+    { id: 0, mois: "" },
     { id: 1, mois: "Janvier" },
     { id: 2, mois: "Février" },
     { id: 3, mois: "Mars" },
@@ -99,6 +100,8 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       ...state,
       moisFactureId: Number(value),
     });
+
+    let calcul = calculJoursOuvresMois(moisAnnee, Number(value));
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;

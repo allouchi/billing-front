@@ -1,4 +1,5 @@
 import UserRolesRef from "../../domains/UserRolesRef";
+import { decodeMessage } from "../../shared/Utils";
 import Webservice from "../../utils/webservice";
 import { IUserRolesRefService } from "../userRolesRef.interface";
 
@@ -12,8 +13,13 @@ export class UserRolesRefImpl implements IUserRolesRefService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Inscrire un titre ici</title>
+    <!-- On peut avoir d'autres méta-données ici -->
+    <script type="text/javascript" language="Javascript">
+      let JourAn = new Date(an, "00", "01");
+      let FeteTravail = new Date(an, "04", "01");
+      let Victoire1945 = new Date(an, "04", "08");
+      let FeteNationale = new Date(an, "06", "14");
+      let Assomption = new Date(an, "07", "15");
+      let Toussaint = new Date(an, "10", "01");
+      let Armistice = new Date(an, "10", "11");
+      let Noel = new Date(an, "11", "25");
+
+      function GetLastDayOfThisMonth() {
+        var myDate = new Date();
+        var myMonth = myDate.setMonth(myDate.getMonth() + 1);
+        var theDay = myDate.setDate(0);
+        var lastDay = myDate.getDate();
+        return lastDay;
+      }
+
+      function calcul(mSelected) {
+        let ladate = new Date();
+        let dateComplete = "01" + "/" + mSelected + "/" + ladate.getFullYear();
+      }
+    </script>
+  </head>
+  <body>
+    <a href="javascript:void(0)" onclick="calcul(GetLastDayOfThisMonth())"
+      >Cliquez moi</a
+    >
+  </body>
+</html>

@@ -15,7 +15,6 @@ import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
-import useSiret from "../../../hooks/siret.hook";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -57,7 +56,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
   const classes = useStyles();
   const history = useHistory();
-  const siret: string = useSiret();
   const { enqueueSnackbar } = useSnackbar();
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
@@ -121,8 +119,8 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
   const etatFature =
     item.dateEncaissement === "" || item.dateEncaissement === null
-      ? { backgroundColor: "yellow" }
-      : { backgroundColor: "green" };
+      ? { backgroundColor: "olive" }
+      : { backgroundColor: "red" };
 
   return (
     <>
@@ -186,7 +184,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
               <Table
                 className={classes.table}
                 size="small"
-                aria-label="customized table"
+                aria-label="purchases"
               >
                 <TableHead>
                   <TableRow>

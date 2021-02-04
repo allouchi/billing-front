@@ -1,4 +1,5 @@
 import User from "../../domains/User";
+import { decodeMessage } from "../../shared/Utils";
 import Webservice from "../../utils/webservice";
 import { IUserService } from "../user.interface";
 
@@ -14,8 +15,13 @@ export class UserServiceImpl implements IUserService {
       return reponse.data;
     } catch (error) {
       const { status, data } = error;
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
 
@@ -26,13 +32,13 @@ export class UserServiceImpl implements IUserService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = "";
+      let messageJson;
       if (error.request !== undefined && error.request.response === "") {
-        jsonMessage = "Problème réseau";
+        messageJson = "Problème réseau";
       } else {
-        jsonMessage = JSON.parse(error.request.response);
+        messageJson = decodeMessage(error);
       }
-      throw Error(jsonMessage);
+      throw Error(messageJson);
     }
   }
 }

@@ -1,4 +1,5 @@
 import Prestation from "../../domains/Prestation";
+import { decodeMessage } from "../../shared/Utils";
 import Webservice from "../../utils/webservice";
 import { IPrestationService } from "../prestation.interface";
 
@@ -33,8 +34,13 @@ export class PrestationServiceImpl implements IPrestationService {
       }
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
   async findAllBySiret(siret: string): Promise<Prestation[]> {
@@ -44,8 +50,13 @@ export class PrestationServiceImpl implements IPrestationService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
 

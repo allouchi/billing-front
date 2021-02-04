@@ -1,4 +1,5 @@
 import Facture from "../../domains/Facture";
+import { decodeMessage } from "../../shared/Utils";
 import Webservice from "../../utils/webservice";
 import { IFactureService } from "../facture.interface";
 
@@ -19,8 +20,13 @@ export class FactureServiceImpl implements IFactureService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
   async create(
@@ -36,8 +42,13 @@ export class FactureServiceImpl implements IFactureService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
   async findAllBySiret(siret: string): Promise<Facture[]> {
@@ -47,8 +58,13 @@ export class FactureServiceImpl implements IFactureService {
       );
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
   async deleteById(factureId: number): Promise<string> {

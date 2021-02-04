@@ -1,4 +1,5 @@
 import Company from "../../domains/Company";
+import { decodeMessage } from "../../shared/Utils";
 import Webservice from "../../utils/webservice";
 import { ICompanyService } from "../company.interface";
 
@@ -28,8 +29,13 @@ export class CompanyServiceImpl implements ICompanyService {
       }
       return response.data;
     } catch (error) {
-      let jsonMessage = JSON.parse(error.request.response);
-      throw Error(jsonMessage.message);
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
 
@@ -40,7 +46,13 @@ export class CompanyServiceImpl implements ICompanyService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting companys");
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
   async findAllBySiret(siret: string): Promise<Company[]> {
@@ -50,7 +62,13 @@ export class CompanyServiceImpl implements ICompanyService {
       );
       return response.data;
     } catch (error) {
-      throw Error("Error during getting bills");
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
     }
   }
 
