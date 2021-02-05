@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 20,
   },
   textField: {
-    width: "35ch",
+    width: "23ch",
   },
   button: {
     margin: theme.spacing(1),
@@ -95,6 +95,8 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       numeroCommande: "",
       clientPrestation: "",
       quantite: 0,
+      dateDebut: null,
+      dateFin: null,
     },
     clientsOnError: false,
     consultantsOnError: false,
@@ -116,6 +118,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       state.prestation.delaiPaiement !== undefined &&
       state.prestation.client !== undefined &&
       state.prestation.consultant !== undefined &&
+      state.prestation.dateDebut !== null &&
       isNotEmptyString(state.prestation.numeroCommande)
     );
   };
@@ -164,6 +167,11 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       ...state,
       prestation: { ...state.prestation, client: value },
     });
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const id: string = e.target.id;
+    const value: string = e.target.value;
   };
 
   const consultantsAutocomplete = () => {
@@ -241,11 +249,42 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       content={
         <form className={classes.root} noValidate autoComplete="off">
           <Grid container direction="row" justify="center" alignItems="center">
-            <Grid item xs={6}>
+            <Grid item xs={3}>
               {clientsAutoComplete()}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={3}>
               {consultantsAutocomplete()}
+            </Grid>
+
+            <Grid item xs={3}>
+              <TextField
+                id="dateDebut"
+                label="Date Debut"
+                variant="outlined"
+                color="secondary"
+                type="date"
+                className={classes.textField}
+                onChange={handleInfoPrestation}
+                onBlur={handleBlur}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                id="dateFin"
+                label="Date Fin"
+                variant="outlined"
+                color="secondary"
+                type="date"
+                className={classes.textField}
+                onChange={handleInfoPrestation}
+                onBlur={handleBlur}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
             </Grid>
             <Grid item xs={4}>
               <TextField

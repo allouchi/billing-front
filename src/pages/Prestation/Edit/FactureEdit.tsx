@@ -21,7 +21,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import PrestationSiret from "../../../store/prestation/prestations.model";
-import { calculJoursOuvresMois } from "../../../shared/Utils";
+import JoursOuvres from "../../../shared/JoursOuvres";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,6 +64,9 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const [open, setOpen] = useState(clickOn);
   const [check, setCheck] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  const [joursOuvres, setJoursOuvres] = useState(0);
+
   const [state, setState] = useState({
     moisFactureId: 0,
     prestation: {
@@ -75,7 +78,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       designation: "La Prestation est réalisée pour le compte de",
       numeroCommande: `${item.numeroCommande}`,
       clientPrestation: `${item.client.socialReason}`,
-      quantite: 0,
+      quantite: joursOuvres,
     },
   });
   const moisAnnee = [
@@ -100,8 +103,8 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       ...state,
       moisFactureId: Number(value),
     });
-
-    let calcul = calculJoursOuvresMois(moisAnnee, Number(value));
+    let nbJoursOuvres = JoursOuvres(Number(value));
+    setJoursOuvres(nbJoursOuvres);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
@@ -125,6 +128,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       templateChoice: check,
       moisFactureId: state.moisFactureId,
     };
+    alert(prestationSiret.prestation.quantite);
     if (
       prestationSiret.moisFactureId === 0 ||
       prestationSiret.prestation.numeroCommande === "" ||
@@ -221,7 +225,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             id="quantite"
             margin="dense"
             label="Quantité"
-            value={state.prestation.quantite}
+            value={state.prestation.quantite || joursOuvres}
             type="number"
             required
             fullWidth

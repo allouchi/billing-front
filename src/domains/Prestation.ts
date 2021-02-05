@@ -13,6 +13,6 @@ export default interface Prestation {
   numeroCommande: string;
   clientPrestation: string;
   quantite: number;
-  startDate?: Date;
-  endDate?: Date;
+  dateFin?: Date;
+  dateDebut?: Date;
 }

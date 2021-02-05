@@ -21,6 +21,7 @@ const emptyFacture: Facture = {
   nbJourRetard: 0,
   fraisRetard: 0,
   factureStatus: "",
+  statusDesc: "",
   quantite: 0,
   numeroCommande: "",
   designation: "",

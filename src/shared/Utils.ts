@@ -191,6 +191,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     nbJourRetard: 0,
     fraisRetard: 0,
     factureStatus: "",
+    statusDesc: "",
     quantite: 0,
     designation: "",
     clientPrestation: "",
@@ -219,6 +220,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       nbJourRetard: item.nbJourRetard,
       fraisRetard: item.fraisRetard,
       factureStatus: item.factureStatus,
+      statusDesc: item.statusDesc,
       quantite: item.quantite,
       designation: item.designation,
       clientPrestation: item.clientPrestation,
@@ -243,31 +245,6 @@ export const parseModeJsonObject = (jsonObject: any): string => {
     }
   }
   return retour;
-};
-
-export const calculJoursOuvresMois = (
-  moisAnnee: any = [],
-  param: number
-): number => {
-  let mSelected: any = "";
-
-  moisAnnee.forEach((element) => {
-    if (element.id === param) {
-      mSelected = element.id;
-    }
-  });
-
-  let ladate = new Date();
-  let dateComplete = "01" + "/" + mSelected + "/" + ladate.getFullYear();
-  console.log("dateComplete : ", dateComplete);
-  /*
-  let dateD: Date = new Date(dateDebut);
-  let dateF: Date = new Date(dateFin);
-  let time_diff = dateF.getTime() - dateD.getTime();
-  let nbJour = time_diff / (1000 * 3600 * 24);
-
-  */
-  return 1;
 };
 
 export const decodeMessage = (error: any): string => {

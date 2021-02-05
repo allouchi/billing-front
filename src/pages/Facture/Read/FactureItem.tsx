@@ -13,7 +13,7 @@ import { useIntl } from "react-intl";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
-import { IconButton, Tooltip } from "@material-ui/core";
+import { Avatar, IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
@@ -25,6 +25,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import Typography from "@material-ui/core/Typography";
+import { deepOrange } from "@material-ui/core/colors";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -55,6 +56,7 @@ interface FactureItemProps {
 const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
   const classes = useStyles();
+  const avatard = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
@@ -119,8 +121,8 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
   const etatFature =
     item.dateEncaissement === "" || item.dateEncaissement === null
-      ? { backgroundColor: "olive" }
-      : { backgroundColor: "red" };
+      ? { backgroundColor: "red" }
+      : { backgroundColor: "olive" };
 
   return (
     <>
@@ -171,7 +173,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           </Tooltip>
         </StyledTableCell>
       </StyledTableRow>
-      <StyledTableRow style={etatFature}>
+      <StyledTableRow>
         <StyledTableCell
           style={{ paddingBottom: 0, paddingTop: 0 }}
           colSpan={6}
@@ -198,6 +200,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                       Statut facture
                     </StyledTableCell>
                     <StyledTableCell align="center">
+                      Description
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
                       Frais retard
                     </StyledTableCell>
                     <StyledTableCell align="center">
@@ -221,6 +226,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {item.factureStatus}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.statusDesc}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {item.fraisRetard}

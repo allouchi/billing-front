@@ -5,7 +5,7 @@ import ConsultantList from "./ConsultantList";
 import { useHistory } from "react-router-dom";
 import { Button, Toolbar, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,12 +23,12 @@ const Consultants: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const intl = useIntl();
 
-  const handleCreate = () => {       
+  const handleCreate = () => {
     history.push({
-      pathname: '/consultant',
-      search: '',
-      state: { detail: null }
-    })
+      pathname: "/consultant",
+      search: "",
+      state: { detail: null },
+    });
   };
 
   return (
@@ -49,7 +49,7 @@ const Consultants: FC<{}> = (): ReactElement => {
               className={classes.button}
               onClick={handleCreate}
             >
-              <PersonAddIcon style={{marginRight: 5}} />
+              <PersonAddIcon style={{ marginRight: 5 }} />
               {intl.formatMessage({ id: "buttons.addButton" })}
             </Button>
           </Toolbar>

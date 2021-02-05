@@ -5,18 +5,18 @@ export default interface Facture {
   numeroFacture: string;
   dateFacturation: string;
   dateEcheance: string;
-  dateEncaissement: string; 
-  delaiPaiement: number; 
+  dateEncaissement: string;
+  delaiPaiement: number;
   montantTVA: number;
   prixTotalHT: number;
   prixTotalTTC: number;
   nbJourRetard: number;
-  fraisRetard: number;  
+  fraisRetard: number;
   factureStatus: string;
-  quantite: number,
+  statusDesc: string;
+  quantite: number;
   numeroCommande: string;
-  designation: string,  
-  clientPrestation: string,
-  filePath: string,
-  
+  designation: string;
+  clientPrestation: string;
+  filePath: string;
 }
