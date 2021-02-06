@@ -42,6 +42,9 @@ export default {
     edit: {
       success: "{cle} a été éditée avec succès",
     },
+    modify: {
+      success: "{cle} a été modifiée avec succès",
+    },
     update: {
       success: "{cle} a été mise à jour avec succès",
       echec: "{cle} n'a pas été mise à jour",
@@ -115,7 +118,7 @@ export default {
       title: "Création d'une nouvelle prestation",
     },
     update: {
-      title: "Mise à jour la prestation : {cle}",
+      title: "Mise à jour de la prestation : {cle}",
     },
   },
   buttons: {
@@ -130,6 +133,7 @@ export default {
     edit: "Editer {cle}",
     update: "Modifier {cle}",
     delete: "Supprimer {cle}",
+    modify: "Prolonger {cle}",
     prestation: "prestation",
     facture: "facture",
     client: "client",

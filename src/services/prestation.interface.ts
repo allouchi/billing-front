@@ -19,6 +19,14 @@ export interface IPrestationService {
   ): Promise<Prestation>;
 
   /**
+   * Modify prestation for the current project or update it if already exists
+   *
+   * @param prestation prestation to create or to update
+   * @returns Promise<Prestation>
+   */
+  modify(prestation: Partial<Prestation>, siret: string): Promise<Prestation>;
+
+  /**
    * Delete one facture by it's id
    *
    * @param id facture id to delete

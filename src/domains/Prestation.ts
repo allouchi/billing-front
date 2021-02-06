@@ -4,15 +4,15 @@ import Facture from "./Facture";
 
 export default interface Prestation {
   id: number;
-  tarifHT: number;
-  delaiPaiement: number;
-  consultant: Consultant;
-  client: Client;
-  facture: Facture[];
-  designation: string;
-  numeroCommande: string;
-  clientPrestation: string;
-  quantite: number;
-  dateFin?: Date;
-  dateDebut?: Date;
+  tarifHT?: number;
+  delaiPaiement?: number;
+  consultant?: Consultant;
+  client?: Client;
+  facture?: Facture[];
+  designation?: string;
+  numeroCommande?: string;
+  clientPrestation?: string;
+  quantite?: number;
+  dateFin?: string;
+  dateDebut?: string;
 }

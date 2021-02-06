@@ -11,9 +11,8 @@ import Facture from "../../../domains/Facture";
 import { StyledTableCell } from "./FactureList";
 import { useIntl } from "react-intl";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
-import { useStoreActions, useStoreState } from "../../../store/hooks";
+import { useStoreActions } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
-import { Avatar, IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
@@ -25,7 +24,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import Typography from "@material-ui/core/Typography";
-import { deepOrange } from "@material-ui/core/colors";
+import { IconButton, Tooltip } from "@material-ui/core";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -56,7 +55,6 @@ interface FactureItemProps {
 const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const intl = useIntl();
   const classes = useStyles();
-  const avatard = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
@@ -126,7 +124,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
   return (
     <>
-      <StyledTableRow style={etatFature}>
+      <StyledTableRow>
         <StyledTableCell>
           <IconButton
             aria-label="expand row"
@@ -224,7 +222,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                     <StyledTableCell align="center">
                       {item.dateFacturation}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell style={etatFature} align="center">
                       {item.factureStatus}
                     </StyledTableCell>
                     <StyledTableCell align="center">

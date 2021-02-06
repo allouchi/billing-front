@@ -12,6 +12,7 @@ import { useStoreActions } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -43,9 +44,17 @@ const FactureItem: FC<PrestationItemProps> = ({
     props.editerFacture(item, true);
   };
 
+  const handleModifyClick = () => {
+    history.push({
+      pathname: "/prestaModify",
+      search: "",
+      state: { detail: item },
+    });
+  };
+
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
-      { id: "messages.delete.success" },
+      { id: "messages.modify.success" },
       { cle: "La prestation" }
     );
 
@@ -61,9 +70,28 @@ const FactureItem: FC<PrestationItemProps> = ({
       });
   };
 
+  const isPrestationClose = (): boolean => {
+    let isClose = false;
+    if (item && item.dateFin !== null) {
+      let parseDate = item.dateFin.split("/");
+      let dateFin = new Date(
+        Number(parseDate[2]),
+        Number(parseDate[1]),
+        Number(parseDate[0])
+      );
+      let dateJour = new Date();
+      if (dateFin.getTime() < dateJour.getTime()) {
+        isClose = true;
+      }
+    }
+    return isClose;
+  };
+
   return (
     <StyledTableRow>
       <StyledTableCell>{item.numeroCommande}</StyledTableCell>
+      <StyledTableCell>{item.dateDebut}</StyledTableCell>
+      <StyledTableCell>{item.dateFin}</StyledTableCell>
       <StyledTableCell>{item.tarifHT}</StyledTableCell>
       <StyledTableCell>{item.delaiPaiement}</StyledTableCell>
       <StyledTableCell>
@@ -77,6 +105,7 @@ const FactureItem: FC<PrestationItemProps> = ({
             aria-label="edit"
             size="small"
             style={{ marginRight: 6 }}
+            //disabled={!isPrestationClose()}
           >
             <EditIcon />
           </IconButton>
@@ -87,6 +116,16 @@ const FactureItem: FC<PrestationItemProps> = ({
           value={item.numeroCommande}
           deleteAction={handleDeleteClick}
         />
+        <Tooltip title={BuildMessageTooltip("prestation", "modify")}>
+          <IconButton
+            onClick={() => handleModifyClick()}
+            aria-label="prolonger"
+            size="small"
+            style={{ marginRight: 6 }}
+          >
+            <AddBoxIcon />
+          </IconButton>
+        </Tooltip>
       </StyledTableCell>
     </StyledTableRow>
   );

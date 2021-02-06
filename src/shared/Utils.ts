@@ -3,6 +3,7 @@ import Consultant from "../domains/Consultant";
 import Facture from "../domains/Facture";
 import Company from "../domains/Company";
 import User from "../domains/User";
+import Prestation from "../domains/Prestation";
 
 export const isUserAdmin = (user: User): boolean => {
   let isAdmin = false;
@@ -228,6 +229,67 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     };
   }
   return facture;
+};
+
+export const parsePrestationJsonObject = (jsonObject: any): Prestation => {
+  let prestation = {
+    id: 0,
+    tarifHT: 0,
+    delaiPaiement: 0,
+    consultant: null,
+    client: null,
+    facture: [],
+    designation: "",
+    numeroCommande: "",
+    clientPrestation: "",
+    quantite: 0,
+    dateFin: null,
+    dateDebut: null,
+  };
+
+  if (
+    jsonObject !== null &&
+    jsonObject !== undefined &&
+    jsonObject.detail !== null &&
+    jsonObject.detail !== undefined
+  ) {
+    let item = jsonObject.detail;
+
+    prestation = {
+      id: item.id,
+      tarifHT: item.tarifHT,
+      delaiPaiement: item.delaiPaiement,
+      facture: item.facture,
+      designation: item.designation,
+      numeroCommande: item.numeroCommande,
+      clientPrestation: item.clientPrestation,
+      quantite: item.quantite,
+      dateFin: item.dateFin,
+      dateDebut: item.dateDebut,
+      consultant: {
+        id: item.consultant.id,
+        lastName: item.consultant.lastName,
+        firstName: item.consultant.firstName,
+        mail: item.consultant.mail,
+        fonction: item.consultant.fonction,
+      },
+      client: {
+        id: item.client.id,
+        socialReason: item.client.socialReason,
+        mail: item.client.mail,
+        adresseClient: {
+          id: item.client.adresseClient.id,
+          numero: item.client.adresseClient.numero,
+          rue: item.client.adresseClient.rue,
+          codePostal: item.client.adresseClient.codePostal,
+          localite: item.client.adresseClient.localite,
+          pays: item.client.adresseClient.pays,
+        },
+      },
+    };
+  }
+
+  return prestation;
 };
 
 export const parseModeJsonObject = (jsonObject: any): string => {

@@ -8,6 +8,9 @@ import AppFooter from "./components/Footer/AppFooter";
 import { FirebaseContext } from "./auth";
 import PrivateRoute from "./pages/User/PrivateRoute";
 
+const PrestationModify = React.lazy(
+  () => import("./pages/Prestation/Edit/PrestationModify")
+);
 const SignIn = React.lazy(() => import("./pages/User/SignIn"));
 const SignUp = React.lazy(() => import("./pages/User/SignUp"));
 const InitPassword = React.lazy(() => import("./pages/User/InitPassword"));
@@ -118,6 +121,13 @@ const App: React.FunctionComponent<{}> = (props) => {
                   component={Client}
                   authenticated={isAuthenticated}
                 />
+                <PrivateRoute
+                  exact
+                  path="/prestaModify"
+                  component={PrestationModify}
+                  authenticated={isAuthenticated}
+                />
+
                 <PrivateRoute
                   exact
                   path="/prestations"

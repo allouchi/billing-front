@@ -95,8 +95,8 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       numeroCommande: "",
       clientPrestation: "",
       quantite: 0,
-      dateDebut: null,
-      dateFin: null,
+      dateDebut: "",
+      dateFin: "",
     },
     clientsOnError: false,
     consultantsOnError: false,
@@ -118,7 +118,8 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       state.prestation.delaiPaiement !== undefined &&
       state.prestation.client !== undefined &&
       state.prestation.consultant !== undefined &&
-      state.prestation.dateDebut !== null &&
+      isNotEmptyString(state.prestation.dateDebut) &&
+      isNotEmptyString(state.prestation.dateFin) &&
       isNotEmptyString(state.prestation.numeroCommande)
     );
   };

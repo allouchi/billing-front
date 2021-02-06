@@ -99,13 +99,16 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
 
   const handleMoisPresta = (event: React.ChangeEvent<{ value: string }>) => {
     const value = event.target.value;
+    let nbJoursOuvres = JoursOuvres(Number(value));
+    setJoursOuvres(nbJoursOuvres);
+
     setState({
       ...state,
       moisFactureId: Number(value),
+      prestation: { ...state.prestation, quantite: nbJoursOuvres },
     });
-    let nbJoursOuvres = JoursOuvres(Number(value));
-    setJoursOuvres(nbJoursOuvres);
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id: string = e.target.id;
     const value: string = e.target.value;
@@ -128,7 +131,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       templateChoice: check,
       moisFactureId: state.moisFactureId,
     };
-    alert(prestationSiret.prestation.quantite);
+
     if (
       prestationSiret.moisFactureId === 0 ||
       prestationSiret.prestation.numeroCommande === "" ||
@@ -194,7 +197,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       >
         <DialogContent>
           <DialogContentText>
-            Veuillez saisir les informations facture pour le mois de :
+            Veuillez saisir les informations de facture du mois de :
           </DialogContentText>
 
           <FormControl variant="outlined" className={classes.form}>
@@ -210,7 +213,6 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
               {moisDisplay()}
             </Select>
           </FormControl>
-
           <TextField
             id="numeroCommande"
             margin="dense"

@@ -11,10 +11,12 @@ export interface PrestationsModel {
   remove: Action<PrestationsModel, number>;
   add: Action<PrestationsModel, Prestation>;
   updateState: Action<PrestationsModel, Prestation>;
+  modifyState: Action<PrestationsModel, Prestation>;
   findAllBySiret: Thunk<PrestationsModel, string, Injections>;
 
   // Thunk
   createOrUpdate: Thunk<PrestationsModel, PrestationSiret, Injections>;
+  modifyPrestation: Thunk<PrestationsModel, PrestationSiret, Injections>;
   deleteById: Thunk<PrestationsModel, number, Injections>;
 }
 
@@ -36,6 +38,11 @@ export const prestationsModel: PrestationsModel = {
     state.items = [payload, ...state.items];
   }),
   updateState: action((state, payload: Prestation) => {
+    state.items = state.items.map((item: Prestation) =>
+      item.id === payload.id ? payload : item
+    );
+  }),
+  modifyState: action((state, payload: Prestation) => {
     state.items = state.items.map((item: Prestation) =>
       item.id === payload.id ? payload : item
     );
@@ -75,6 +82,23 @@ export const prestationsModel: PrestationsModel = {
       }
     }
   ),
+
+  // Thunks
+  modifyPrestation: thunk(
+    async (actions, payload: PrestationSiret, { injections }) => {
+      try {
+        const { prestationService } = injections;
+        const prestation = await prestationService.modify(
+          payload.prestation,
+          payload.siret
+        );
+        actions.modifyState(prestation);
+      } catch (error) {
+        throw error;
+      }
+    }
+  ),
+
   deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { prestationService } = injections;
@@ -89,7 +113,7 @@ export const prestationsModel: PrestationsModel = {
 interface PrestationSiret {
   prestation: Partial<Prestation>;
   siret: string;
-  templateChoice: boolean;
-  moisFactureId: number;
+  templateChoice?: boolean;
+  moisFactureId?: number;
 }
 export default PrestationSiret;

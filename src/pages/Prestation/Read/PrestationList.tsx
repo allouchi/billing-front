@@ -86,6 +86,10 @@ const PrestationList: FC<{}> = () => {
                   <StyledTableCell align="left">
                     Numéro de commande
                   </StyledTableCell>
+
+                  <StyledTableCell align="left">Date début</StyledTableCell>
+
+                  <StyledTableCell align="left">Date fin</StyledTableCell>
                   <StyledTableCell align="left">Tarif HT</StyledTableCell>
                   <StyledTableCell align="left">
                     Délai de paiement

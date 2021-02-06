@@ -43,6 +43,25 @@ export class PrestationServiceImpl implements IPrestationService {
       throw Error(messageJson);
     }
   }
+
+  async modify(prestation: Prestation, siret: string): Promise<Prestation> {
+    try {
+      let response;
+      response = await Webservice.getInstance().put(
+        `${PrestationServiceImpl.PRESTATION_PATH}/${siret}`,
+        prestation
+      );
+      return response.data;
+    } catch (error) {
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
+    }
+  }
   async findAllBySiret(siret: string): Promise<Prestation[]> {
     try {
       const response = await Webservice.getInstance().get(
