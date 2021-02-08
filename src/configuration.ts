@@ -16,8 +16,8 @@ import { PrestationServiceImpl } from "./services/impl/prestationImpl";
 import { IUserService } from "./services/user.interface";
 import { UserServiceImpl } from "./services/impl/userImpl";
 
-import { IUserRolesRefService } from "./services/userRolesRef.interface";
-import { UserRolesRefImpl } from "./services/impl/userRolesRefImpl";
+import { IRolesRefService } from "./services/rolesRef.interface";
+import { RolesRefImpl } from "./services/impl/rolesRefImpl";
 
 import { IPdfService } from "./services/pdf.interface";
 import { PdfServiceImpl } from "./services/impl/pdfImpl";
@@ -30,7 +30,7 @@ class ManualDependenciesConfiguration {
   private readonly _prestationService: IPrestationService;
   private readonly _userService: IUserService;
   private readonly _pdfService: IPdfService;
-  private readonly _userRolesRefService: IUserRolesRefService;
+  private readonly _rolesRefService: IRolesRefService;
 
   constructor() {
     this._factureService = new FactureServiceImpl();
@@ -39,7 +39,7 @@ class ManualDependenciesConfiguration {
     this._consultantService = new ConsultantServiceImpl();
     this._prestationService = new PrestationServiceImpl();
     this._userService = new UserServiceImpl();
-    this._userRolesRefService = new UserRolesRefImpl();
+    this._rolesRefService = new RolesRefImpl();
     this._pdfService = new PdfServiceImpl();
   }
   get factureService(): IFactureService {
@@ -57,8 +57,8 @@ class ManualDependenciesConfiguration {
   get prestationService(): IPrestationService {
     return this._prestationService;
   }
-  get userRolesRefService(): IUserRolesRefService {
-    return this._userRolesRefService;
+  get rolesRefService(): IRolesRefService {
+    return this._rolesRefService;
   }
 
   get userService(): IUserService {

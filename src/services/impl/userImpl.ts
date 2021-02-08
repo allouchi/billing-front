@@ -14,7 +14,6 @@ export class UserServiceImpl implements IUserService {
       );
       return reponse.data;
     } catch (error) {
-      const { status, data } = error;
       let messageJson;
       if (error.request !== undefined && error.request.response === "") {
         messageJson = "Problème réseau";
@@ -32,6 +31,7 @@ export class UserServiceImpl implements IUserService {
       );
       return response.data;
     } catch (error) {
+      console.log("erreur : ", error.request.status);
       let messageJson;
       if (error.request !== undefined && error.request.response === "") {
         messageJson = "Problème réseau";

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     height: "35vh",
   },
   image: {
-    // backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundImage: "url(https://source.unsplash.com/random)",
     backgroundRepeat: "repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -57,7 +57,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
   const history = useHistory();
   const { preventSubscribe } = props;
   const findRolesRef = useStoreActions(
-    (actions) => actions.userRolesRef.findRolesRef
+    (actions) => actions.rolesRef.findRolesRef
   );
   const findUserByEMail = useStoreActions(
     (actions) => actions.user.findUserByEMail

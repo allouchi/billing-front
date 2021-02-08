@@ -59,7 +59,7 @@ const InitPassword: FC<initPasswordProps> = (
   const history = useHistory();
   const { preventSubscribe } = props;
   const findRolesRef = useStoreActions(
-    (actions) => actions.userRolesRef.findRolesRef
+    (actions) => actions.rolesRef.findRolesRef
   );
   const findUserByEMail = useStoreActions(
     (actions) => actions.user.findUserByEMail

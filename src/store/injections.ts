@@ -5,7 +5,7 @@ import { IClientService } from "../services/client.interface";
 import { IConsultantService } from "../services/consultant.interface";
 import { IPrestationService } from "../services/prestation.interface";
 import { IUserService } from "../services/user.interface";
-import { IUserRolesRefService } from "../services/userRolesRef.interface";
+import { IRolesRefService } from "../services/rolesRef.interface";
 import { IPdfService } from "../services/pdf.interface";
 
 export interface Injections {
@@ -15,6 +15,6 @@ export interface Injections {
   consultantService: IConsultantService;
   prestationService: IPrestationService;
   userService: IUserService;
-  userRolesRefService: IUserRolesRefService;
+  rolesRefService: IRolesRefService;
   pdfService: IPdfService;
 }

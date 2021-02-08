@@ -16,7 +16,7 @@ import { useStoreActions, useStoreState } from "../../store/hooks";
 import User from "../../domains/User";
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import UserRolesRef from "../../domains/UserRolesRef";
+import RolesRef from "../../domains/RolesRef";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,24 +55,25 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
-  const userRoles: UserRolesRef[] = useStoreState(
-    (state) => state.userRolesRef.items
-  );
+  const roles: RolesRef[] = useStoreState((state) => state.rolesRef.items);
   const createUser = useStoreActions((actions) => actions.user.createUser);
   const { isAuthenticated } = props;
 
   const item: User = useStoreState((state) => state.user.item);
 
   const [infosUser, setInfosUser] = useState({
+    userName: "",
     firstName: "",
     lastName: "",
     mail: "",
     password: "",
     confirmPassword: "",
-    roleId: "",
-    roleCode: "",
-    roleName: "",
     companyId: "",
+    role: {
+      id: 0,
+      role: "",
+      description: "",
+    },
   });
 
   useEffect(() => {
@@ -88,7 +89,6 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       isNotEmptyString(infosUser.mail) &&
       isNotEmptyString(infosUser.password) &&
       isNotEmptyString(infosUser.confirmPassword) &&
-      infosUser.roleId !== "" &&
       infosUser.companyId !== "" &&
       infosUser.password === infosUser.confirmPassword &&
       infosUser.password.length >= 6
@@ -105,10 +105,11 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
   };
   const handleUserRole = (event: React.ChangeEvent<{ value: string }>) => {
     const value = event.target.value;
+    /*
     setInfosUser({
       ...infosUser,
-      roleId: value,
-    });
+      role: { ...infosUser.role, [id]: value },
+    });*/
   };
   const handleCampanyChange = (event: React.ChangeEvent<{ value: string }>) => {
     const value = event.target.value;
@@ -124,15 +125,15 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     );
     const user: User = {
       id: 0,
+      userName: infosUser.userName,
       firstName: infosUser.firstName,
       lastName: infosUser.lastName,
       email: infosUser.mail,
       password: infosUser.password,
-      userRole: {
+      role: {
         id: 0,
-        roleId: infosUser.roleId,
-        roleName: infosUser.roleName,
-        roleCode: infosUser.roleCode,
+        role: infosUser.role.role,
+        description: infosUser.role.description,
       },
       company: {
         id: Number(infosUser.companyId),
@@ -164,11 +165,11 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     }
   };
 
-  const userRolesDisplay = () => {
-    return userRoles.map((item) => {
+  const rolesDisplay = () => {
+    return roles.map((item) => {
       return (
-        <MenuItem key={item.roleId} value={item.roleId}>
-          {item.roleName}
+        <MenuItem key={item.id} value={item.id}>
+          {item.description}
         </MenuItem>
       );
     });
@@ -254,11 +255,11 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
               <Select
                 labelId="profile"
                 id="profile"
-                value={infosUser.roleId}
+                value={infosUser.role.id}
                 onChange={handleUserRole}
                 label="Profile"
               >
-                {userRolesDisplay()}
+                {rolesDisplay()}
               </Select>
             </FormControl>
             <FormControl variant="outlined" className={classes.form}>

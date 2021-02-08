@@ -1,15 +1,15 @@
-import UserRolesRef from "../../domains/UserRolesRef";
+import UserRolesRef from "../../domains/RolesRef";
 import { decodeMessage } from "../../shared/Utils";
 import Webservice from "../../utils/webservice";
-import { IUserRolesRefService } from "../userRolesRef.interface";
+import { IRolesRefService } from "../rolesRef.interface";
 
-export class UserRolesRefImpl implements IUserRolesRefService {
+export class RolesRefImpl implements IRolesRefService {
   private static readonly ROLES_PATH: string = "roles";
 
   async findRolesRef(): Promise<UserRolesRef[]> {
     try {
       const response = await Webservice.getInstance().get(
-        `${UserRolesRefImpl.ROLES_PATH}`
+        `${RolesRefImpl.ROLES_PATH}`
       );
       return response.data;
     } catch (error) {

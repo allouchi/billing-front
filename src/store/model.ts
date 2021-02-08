@@ -11,10 +11,7 @@ import {
   PrestationsModel,
 } from "./prestation/prestations.model";
 import { userModel, UserModel } from "./user/user.model";
-import {
-  userRolesRefModel,
-  UserRolesRefModel,
-} from "./user/userRolesRef.model";
+import { rolesRefModel, RolesRefModel } from "./user/RolesRef.model";
 import { pdfModel, PdfModel } from "./pdf/pdf.model";
 
 export interface AppStoreModel {
@@ -25,7 +22,7 @@ export interface AppStoreModel {
   prestations: PrestationsModel;
   factures: FacturesModel;
   user: UserModel;
-  userRolesRef: UserRolesRefModel;
+  rolesRef: RolesRefModel;
   pdf: PdfModel;
 }
 
@@ -37,7 +34,7 @@ const model: AppStoreModel = {
   consultants: consultantsModel,
   prestations: prestationsModel,
   user: userModel,
-  userRolesRef: userRolesRefModel,
+  rolesRef: rolesRefModel,
   pdf: pdfModel,
 };
 

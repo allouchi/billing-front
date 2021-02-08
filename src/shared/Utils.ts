@@ -10,10 +10,10 @@ export const isUserAdmin = (user: User): boolean => {
   if (
     user !== null &&
     user !== undefined &&
-    user.userRole !== null &&
-    user.userRole !== undefined &&
-    user.userRole.roleCode !== undefined &&
-    user.userRole.roleCode === "admin"
+    user.role !== null &&
+    user.role !== undefined &&
+    user.role.role !== undefined &&
+    user.role.role === "ADMIN"
   ) {
     isAdmin = true;
   }
