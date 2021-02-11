@@ -6,6 +6,29 @@ import { IUserService } from "../user.interface";
 export class UserServiceImpl implements IUserService {
   private static readonly USER_PATH: string = "users";
 
+  private static readonly SIGNIN_PATH: string = "signin";
+
+  async connect(user: User): Promise<User> {
+    try {
+      const response = await Webservice.getInstance().get(
+        `${UserServiceImpl.SIGNIN_PATH}/${user.userName}/${user.password}`
+      );
+      return response.data;
+    } catch (error) {
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
+    }
+  }
+
+  disconnect(user: User): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
   async createUser(user: User): Promise<User> {
     try {
       let reponse = await Webservice.getInstance().post(
@@ -24,14 +47,13 @@ export class UserServiceImpl implements IUserService {
     }
   }
 
-  async findUserByEMail(email: string): Promise<User> {
+  async findByEmailAndPassword(email: string, password: string): Promise<User> {
     try {
       const response = await Webservice.getInstance().get(
-        `${UserServiceImpl.USER_PATH}/${email}`
+        `${UserServiceImpl.USER_PATH}/${email}/${password}`
       );
       return response.data;
     } catch (error) {
-      console.log("erreur : ", error.request.status);
       let messageJson;
       if (error.request !== undefined && error.request.response === "") {
         messageJson = "Problème réseau";

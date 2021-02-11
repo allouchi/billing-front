@@ -14,6 +14,8 @@ import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
 import { useStoreActions } from "../../store/hooks";
+import UserEmailPassword from "../../store/user/user.model";
+import User from "../../domains/User";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,9 +61,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
   const findRolesRef = useStoreActions(
     (actions) => actions.rolesRef.findRolesRef
   );
-  const findUserByEMail = useStoreActions(
-    (actions) => actions.user.findUserByEMail
-  );
+  const connect = useStoreActions((actions) => actions.user.connect);
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
@@ -108,8 +108,12 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
       });
   };
 
-  const findUserSever = (email: string): void => {
-    findUserByEMail(email)
+  const findUserSever = (mail: string, password: string): void => {
+    const user: User = {
+      userName: mail,
+      password: password,
+    };
+    connect(user)
       .then(() => {
         history.push("/");
         findUserRolesRef();
@@ -134,7 +138,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
     firebase
       .doSignInWithEmailAndPassword(email, password)
       .then((user) => {
-        findUserSever(email);
+        findUserSever(email, password);
       })
       .catch((error) => {
         enqueueSnackbar(echecMsg, { variant: "error" });

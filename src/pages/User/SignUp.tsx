@@ -65,7 +65,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     userName: "",
     firstName: "",
     lastName: "",
-    mail: "",
+    email: "",
     password: "",
     confirmPassword: "",
     companyId: "",
@@ -86,7 +86,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     return (
       isNotEmptyString(infosUser.lastName) &&
       isNotEmptyString(infosUser.firstName) &&
-      isNotEmptyString(infosUser.mail) &&
+      isNotEmptyString(infosUser.email) &&
       isNotEmptyString(infosUser.password) &&
       isNotEmptyString(infosUser.confirmPassword) &&
       infosUser.companyId !== "" &&
@@ -124,11 +124,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       { cle: "Utilisateur" }
     );
     const user: User = {
-      id: 0,
       userName: infosUser.userName,
-      firstName: infosUser.firstName,
-      lastName: infosUser.lastName,
-      email: infosUser.mail,
       password: infosUser.password,
       role: {
         id: 0,
@@ -216,10 +212,10 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
               variant="outlined"
               required
               fullWidth
-              id="mail"
+              id="email"
               label="Email Address"
-              name="mail"
-              autoComplete="mail"
+              name="email"
+              autoComplete="email"
               onChange={handleInfoUser}
             />
           </Grid>

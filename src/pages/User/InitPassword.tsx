@@ -14,6 +14,7 @@ import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
 import { useStoreActions } from "../../store/hooks";
+import UserEmailPassword from "../../store/user/user.model";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,8 +62,8 @@ const InitPassword: FC<initPasswordProps> = (
   const findRolesRef = useStoreActions(
     (actions) => actions.rolesRef.findRolesRef
   );
-  const findUserByEMail = useStoreActions(
-    (actions) => actions.user.findUserByEMail
+  const findByEmailAndPassword = useStoreActions(
+    (actions) => actions.user.findByEmailAndPassword
   );
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -107,8 +108,13 @@ const InitPassword: FC<initPasswordProps> = (
       });
   };
 
-  const findUserSever = (email: string): void => {
-    findUserByEMail(email)
+  const findUserSever = (email: string, password: string): void => {
+    const param: UserEmailPassword = {
+      email: email,
+      password: password,
+    };
+
+    findByEmailAndPassword(param)
       .then(() => {
         history.push("/");
         findUserRolesRef();
@@ -132,7 +138,7 @@ const InitPassword: FC<initPasswordProps> = (
     firebase
       .doSignInWithEmailAndPassword(email, password)
       .then((user) => {
-        findUserSever(email);
+        findUserSever(email, password);
       })
       .catch((error) => {
         enqueueSnackbar(echecMsg, { variant: "error" });

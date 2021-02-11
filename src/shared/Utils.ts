@@ -114,7 +114,7 @@ export const parseConsultJsonObject = (jsonObject: any): Consultant => {
     id: 0,
     lastName: "",
     firstName: "",
-    mail: "",
+    email: "",
     fonction: "",
   };
 
@@ -130,7 +130,7 @@ export const parseConsultJsonObject = (jsonObject: any): Consultant => {
       id: item.id,
       lastName: item.lastName,
       firstName: item.firstName,
-      mail: item.mail,
+      email: item.email,
       fonction: item.fonction,
     };
   }
@@ -141,7 +141,7 @@ export const parseClientJsonObject = (jsonObject: any): Client => {
   let client = {
     id: 0,
     socialReason: "",
-    mail: "",
+    email: "",
     adresseClient: {
       id: 0,
       numero: "",
@@ -163,7 +163,7 @@ export const parseClientJsonObject = (jsonObject: any): Client => {
     client = {
       id: item.id,
       socialReason: item.socialReason,
-      mail: item.mail,
+      email: item.email,
       adresseClient: {
         id: item.adresseClient.id,
         numero: item.adresseClient.numero,
@@ -270,13 +270,13 @@ export const parsePrestationJsonObject = (jsonObject: any): Prestation => {
         id: item.consultant.id,
         lastName: item.consultant.lastName,
         firstName: item.consultant.firstName,
-        mail: item.consultant.mail,
+        email: item.consultant.email,
         fonction: item.consultant.fonction,
       },
       client: {
         id: item.client.id,
         socialReason: item.client.socialReason,
-        mail: item.client.mail,
+        email: item.client.email,
         adresseClient: {
           id: item.client.adresseClient.id,
           numero: item.client.adresseClient.numero,

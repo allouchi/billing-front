@@ -91,7 +91,7 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
     return (
       user &&
       user.company &&
-      ` : ${user.company.socialReason} (${user.firstName} ${user.lastName})`
+      ` : ${user.company.socialReason} (${user.userName})`
     );
   };
 

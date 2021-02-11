@@ -92,7 +92,7 @@ const ClientPage: FC<{}> = (): ReactElement => {
   const isValidForm = (): boolean => {
     return (
       isNotEmptyString(clientInfo.socialReason) &&
-      isNotEmptyString(clientInfo.mail) &&
+      isNotEmptyString(clientInfo.email) &&
       isNotEmptyString(clientAdresse.numero) &&
       isNotEmptyString(clientAdresse.rue) &&
       isNotEmptyString(clientAdresse.localite) &&
@@ -136,9 +136,9 @@ const ClientPage: FC<{}> = (): ReactElement => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="mail"
+                  id="email"
                   label="EMail"
-                  value={clientInfo.mail}
+                  value={clientInfo.email}
                   variant="outlined"
                   color="secondary"
                   helperText="EMail obligatoire."

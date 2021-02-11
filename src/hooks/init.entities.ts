@@ -14,7 +14,7 @@ export interface ConsultantInit {
   id: 0;
   lastName: "";
   firstName: "";
-  mail: "";
+  email: "";
 }
 export interface PrestationInit {
   id: 0;

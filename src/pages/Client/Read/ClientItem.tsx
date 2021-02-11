@@ -63,7 +63,7 @@ const ClientItem: FC<ClientItemProps> = ({ item }): ReactElement => {
   return (
     <>
       <StyledTableCell> {item.socialReason}</StyledTableCell>
-      <StyledTableCell> {item.mail}</StyledTableCell>
+      <StyledTableCell> {item.email}</StyledTableCell>
       <StyledTableCell>
         {item.adresseClient.numero} {item.adresseClient.rue}{" "}
         {item.adresseClient.codePostal} {item.adresseClient.localite}{" "}

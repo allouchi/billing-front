@@ -11,7 +11,8 @@ export interface UserModel {
   loadSuccess: Action<UserModel, User>;
   add: Action<UserModel, User>;
   // Thunk
-  findUserByEMail: Thunk<UserModel, string, Injections>;
+  findByEmailAndPassword: Thunk<UserModel, UserEmailPassword, Injections>;
+  connect: Thunk<UserModel, User, Injections>;
   createUser: Thunk<UserModel, User, Injections>;
 }
 
@@ -39,13 +40,34 @@ export const userModel: UserModel = {
     }
   }),
   // Thunks
-  findUserByEMail: thunk(async (actions, payload: string, { injections }) => {
+  findByEmailAndPassword: thunk(
+    async (actions, payload: UserEmailPassword, { injections }) => {
+      try {
+        const { userService } = injections;
+        const user = await userService.findByEmailAndPassword(
+          payload.email,
+          payload.password
+        );
+        actions.loadSuccess(user);
+      } catch (error) {
+        throw error;
+      }
+    }
+  ),
+
+  connect: thunk(async (actions, payload: User, { injections }) => {
     try {
       const { userService } = injections;
-      const user = await userService.findUserByEMail(payload);
+      const user = await userService.connect(payload);
       actions.loadSuccess(user);
     } catch (error) {
       throw error;
     }
   }),
 };
+
+interface UserEmailPassword {
+  email: string;
+  password: string;
+}
+export default UserEmailPassword;

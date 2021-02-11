@@ -60,7 +60,7 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
       isNotEmptyString(consultant.firstName) &&
       isNotEmptyString(consultant.lastName) &&
       isNotEmptyString(consultant.fonction) &&
-      isNotEmptyString(consultant.mail)
+      isNotEmptyString(consultant.email)
     );
   };
 
@@ -142,11 +142,11 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      id="mail"
+                      id="email"
                       variant="outlined"
                       required
                       fullWidth
-                      value={consultant.mail}
+                      value={consultant.email}
                       label="Email Address"
                       name="email"
                       autoComplete="email"

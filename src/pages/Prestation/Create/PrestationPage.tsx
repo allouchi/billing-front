@@ -76,11 +76,11 @@ const PrestationPage: FC<{}> = (): ReactElement => {
   );
 
   const [state, setState] = useState<PrestationState>({
-    consultant: { id: 0, firstName: "", lastName: "", mail: "", fonction: "" },
+    consultant: { id: 0, firstName: "", lastName: "", email: "", fonction: "" },
     client: {
       id: 0,
       socialReason: "",
-      mail: "",
+      email: "",
       adresseClient: {
         id: 0,
         numero: "",
