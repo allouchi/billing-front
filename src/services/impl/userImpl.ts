@@ -11,7 +11,7 @@ export class UserServiceImpl implements IUserService {
   async connect(user: User): Promise<User> {
     try {
       const response = await Webservice.getInstance().get(
-        `${UserServiceImpl.SIGNIN_PATH}/${user.userName}/${user.password}`
+        `${UserServiceImpl.USER_PATH}/${user.userName}/${user.password}`
       );
       return response.data;
     } catch (error) {
