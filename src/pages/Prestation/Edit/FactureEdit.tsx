@@ -73,6 +73,8 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       id: item.id,
       tarifHT: item.tarifHT,
       delaiPaiement: item.delaiPaiement,
+      dateDebut: item.dateDebut,
+      dateFin: item.dateFin,
       consultant: item.consultant,
       client: item.client,
       designation: "La Prestation est réalisée pour le compte de",
@@ -227,7 +229,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
             id="quantite"
             margin="dense"
             label="Quantité"
-            value={state.prestation.quantite || joursOuvres}
+            value={state.prestation.quantite}
             type="number"
             required
             fullWidth

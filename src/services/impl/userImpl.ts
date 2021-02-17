@@ -16,6 +16,7 @@ export class UserServiceImpl implements IUserService {
       return response.data;
     } catch (error) {
       let messageJson;
+      console.log(error);
       if (error.request !== undefined && error.request.response === "") {
         messageJson = "Problème réseau";
       } else {

@@ -14,7 +14,7 @@ import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
 import { useStoreActions } from "../../store/hooks";
-import UserEmailPassword from "../../store/user/user.model";
+import bcrypt from "bcrypt";
 import User from "../../domains/User";
 
 const useStyles = makeStyles((theme) => ({
@@ -125,12 +125,13 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
       .catch((err: Error) => {
         enqueueSnackbar(err.message, { variant: "error" });
         preventSubscribe(false);
+        /*
         setLoginData({
           email: "",
           password: "",
           passwordMessage: "",
           emailMessage: "",
-        });
+        });*/
       });
   };
 
@@ -155,6 +156,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = loginData;
+
     findUserFirebase(email, password);
   };
 

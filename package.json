@@ -39,6 +39,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@react-pdf/renderer": "^1.6.12",
+    "@types/bcrypt": "^3.0.0",
     "axios": "^0.21.1",
     "easy-peasy": "^3.3.0",
     "firebase": "^8.2.3",

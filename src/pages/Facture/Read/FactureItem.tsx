@@ -138,8 +138,8 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           {item.numeroFacture}
         </StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>
-        <StyledTableCell>{item.prixTotalHT}</StyledTableCell>
-        <StyledTableCell>{item.prixTotalTTC}</StyledTableCell>
+        <StyledTableCell>{item.prixTotalHT}€</StyledTableCell>
+        <StyledTableCell>{item.prixTotalTTC}€</StyledTableCell>
         <StyledTableCell>{item.dateEcheance}</StyledTableCell>
         <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
         <StyledTableCell>
@@ -238,7 +238,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                       {item.delaiPaiement}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.montantTVA}
+                      {item.montantTVA}€
                     </StyledTableCell>
                   </TableRow>
                 </TableBody>
