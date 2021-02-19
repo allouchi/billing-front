@@ -1,5 +1,5 @@
-export default interface UseRole {
+export default interface Role {
   id: number;
-  role: string;
+  roleName: string;
   description: string;
 }

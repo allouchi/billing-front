@@ -127,7 +127,6 @@ const App: React.FunctionComponent<{}> = (props) => {
                   component={PrestationModify}
                   authenticated={isAuthenticated}
                 />
-
                 <PrivateRoute
                   exact
                   path="/prestations"

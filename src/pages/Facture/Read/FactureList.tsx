@@ -51,8 +51,7 @@ const factures = (
           <StyledTableCell align="left">Prix Total HT</StyledTableCell>
           <StyledTableCell align="left">Prix Total TTC</StyledTableCell>
           <StyledTableCell align="left">Date d'Echéance</StyledTableCell>
-          <StyledTableCell align="left">Date d'Encaissement</StyledTableCell>
-          <StyledTableCell>{}</StyledTableCell>
+          <StyledTableCell align="center">Actions</StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>

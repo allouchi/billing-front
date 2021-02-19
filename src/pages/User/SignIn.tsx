@@ -14,7 +14,6 @@ import { useIntl } from "react-intl";
 import { NavLink, useHistory } from "react-router-dom";
 import { isEmptyString, isNotEmptyString } from "../../shared/Utils";
 import { useStoreActions } from "../../store/hooks";
-import bcrypt from "bcrypt";
 import User from "../../domains/User";
 
 const useStyles = makeStyles((theme) => ({

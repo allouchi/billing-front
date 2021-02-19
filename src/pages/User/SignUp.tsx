@@ -17,6 +17,7 @@ import User from "../../domains/User";
 import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import RolesRef from "../../domains/RolesRef";
+import Role from "../../domains/Role";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -71,7 +72,7 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
     companyId: "",
     role: {
       id: 0,
-      role: "",
+      roleName: "",
       description: "",
     },
   });
@@ -123,14 +124,19 @@ const SignUp: FC<SignUpProps> = (props: SignUpProps): ReactElement => {
       { id: "messages.create.success" },
       { cle: "Utilisateur" }
     );
+
+    const newRole = [
+      {
+        id: infosUser.role.id,
+        roleName: infosUser.role.roleName,
+        description: infosUser.role.description,
+      },
+    ];
+
     const user: User = {
       userName: infosUser.userName,
       password: infosUser.password,
-      role: {
-        id: 0,
-        role: infosUser.role.role,
-        description: infosUser.role.description,
-      },
+      roles: newRole,
       company: {
         id: Number(infosUser.companyId),
       },

@@ -76,7 +76,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
       state: { detail: facture },
     });
   };
-
   const handleDeleteClick = () => {
     const message = intl.formatMessage(
       { id: "messages.delete.success" },
@@ -141,7 +140,6 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
         <StyledTableCell>{item.prixTotalHT}€</StyledTableCell>
         <StyledTableCell>{item.prixTotalTTC}€</StyledTableCell>
         <StyledTableCell>{item.dateEcheance}</StyledTableCell>
-        <StyledTableCell>{item.dateEncaissement}</StyledTableCell>
         <StyledTableCell>
           <Tooltip title={BuildMessageTooltip("facture", "update")}>
             <IconButton
@@ -195,6 +193,9 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                       Date de facturation
                     </StyledTableCell>
                     <StyledTableCell align="center">
+                      Date d'encaissement
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
                       Statut facture
                     </StyledTableCell>
                     <StyledTableCell align="center">
@@ -222,11 +223,14 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                     <StyledTableCell align="center">
                       {item.dateFacturation}
                     </StyledTableCell>
-                    <StyledTableCell style={etatFature} align="center">
-                      {item.factureStatus}
+                    <StyledTableCell align="center">
+                      {item.dateEncaissement}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.statusDesc}
+                      <p style={etatFature}> {item.factureStatus}</p>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <p style={etatFature}> {item.statusDesc}</p>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {item.fraisRetard}

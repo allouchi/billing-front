@@ -7,15 +7,20 @@ import Prestation from "../domains/Prestation";
 
 export const isUserAdmin = (user: User): boolean => {
   let isAdmin = false;
+
   if (
     user !== null &&
     user !== undefined &&
-    user.role !== null &&
-    user.role !== undefined &&
-    user.role.role !== undefined &&
-    user.role.role === "ADMIN"
+    user.roles !== null &&
+    user.roles !== undefined
   ) {
-    isAdmin = true;
+    let roles = user.roles;
+    roles.forEach((item) => {
+      let pos = item.roleName.toUpperCase().search("ADMIN");
+      if (pos !== -1) {
+        isAdmin = true;
+      }
+    });
   }
   return isAdmin;
 };

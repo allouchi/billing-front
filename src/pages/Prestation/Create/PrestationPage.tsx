@@ -119,7 +119,7 @@ const PrestationPage: FC<{}> = (): ReactElement => {
       state.prestation.client !== undefined &&
       state.prestation.consultant !== undefined &&
       isNotEmptyString(state.prestation.dateDebut) &&
-      isNotEmptyString(state.prestation.dateFin) &&
+      //isNotEmptyString(state.prestation.dateFin) &&
       isNotEmptyString(state.prestation.numeroCommande)
     );
   };
@@ -171,8 +171,8 @@ const PrestationPage: FC<{}> = (): ReactElement => {
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const id: string = e.target.id;
-    const value: string = e.target.value;
+    //const id: string = e.target.id;
+    //const value: string = e.target.value;
   };
 
   const consultantsAutocomplete = () => {

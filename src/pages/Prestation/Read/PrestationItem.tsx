@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC, ReactElement, useState } from "react";
 import TableRow from "@material-ui/core/TableRow";
 import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Prestation from "../../../domains/Prestation";
@@ -35,7 +35,7 @@ const FactureItem: FC<PrestationItemProps> = ({
   const intl = useIntl();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-
+  const [state, setState] = useState(item.dateFin);
   const deleteById = useStoreActions(
     (actions) => actions.prestations.deleteById
   );
@@ -74,11 +74,10 @@ const FactureItem: FC<PrestationItemProps> = ({
     let isClose = false;
     if (item && item.dateFin !== null) {
       let parseDate = item.dateFin.split("/");
-      let dateFin = new Date(
-        Number(parseDate[2]),
-        Number(parseDate[1]),
-        Number(parseDate[0])
-      );
+      let jour = Number(parseDate[0]);
+      let mois = Number(parseDate[1]) - 1;
+      let annee = Number(parseDate[2]);
+      let dateFin = new Date(annee, mois, jour);
       let dateJour = new Date();
       if (dateFin.getTime() < dateJour.getTime()) {
         isClose = true;
@@ -100,16 +99,19 @@ const FactureItem: FC<PrestationItemProps> = ({
       <StyledTableCell>{item.client.socialReason}</StyledTableCell>
       <StyledTableCell>
         <Tooltip title={BuildMessageTooltip("prestation", "edit")}>
-          <IconButton
-            onClick={() => handleEditClick()}
-            aria-label="edit"
-            size="small"
-            style={{ marginRight: 6 }}
-            //disabled={!isPrestationClose()}
-          >
-            <EditIcon />
-          </IconButton>
+          <span>
+            <IconButton
+              onClick={() => handleEditClick()}
+              aria-label="edit"
+              size="small"
+              style={{ marginRight: 6 }}
+              disabled={isPrestationClose()}
+            >
+              <EditIcon />
+            </IconButton>
+          </span>
         </Tooltip>
+
         <DeleteItem
           id={item.id}
           cle="prestation"
