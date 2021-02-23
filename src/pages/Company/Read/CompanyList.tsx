@@ -44,7 +44,7 @@ const StyledTableRow = withStyles((theme: Theme) =>
 )(TableRow);
 
 interface CompanyListProps {
-  items: Company[];
+  items: Partial<Company>[];
 }
 
 const CompanyList: FC<CompanyListProps> = ({ items }) => {

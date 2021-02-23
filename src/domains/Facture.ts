@@ -13,6 +13,7 @@ export default interface Facture {
   nbJourRetard: number;
   fraisRetard: number;
   factureStatus: string;
+  tarifHT?: number;
   statusDesc: string;
   quantite: number;
   numeroCommande: string;

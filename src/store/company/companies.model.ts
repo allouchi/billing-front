@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { action, Action, Thunk, thunk } from 'easy-peasy';
-import Company from '../../domains/Company';
-import { Injections } from '../injections';
+import { action, Action, Thunk, thunk } from "easy-peasy";
+import Company from "../../domains/Company";
+import { Injections } from "../injections";
 
 export interface CompaniesModel {
   isLoaded: boolean;
@@ -15,7 +15,8 @@ export interface CompaniesModel {
 
   // Thunk
   findAll: Thunk<CompaniesModel, void, Injections>;
-  findAllBySiret: Thunk<CompaniesModel, string, Injections>; 
+  findAllBySiret: Thunk<CompaniesModel, string, Injections>;
+  findByUserName: Thunk<CompaniesModel, string, Injections>;
   createOrUpdate: Thunk<CompaniesModel, Company, Injections>;
   deleteById: Thunk<CompaniesModel, number, Injections>;
 }
@@ -24,23 +25,27 @@ export const companiesModel: CompaniesModel = {
   isLoaded: false,
   items: [],
 
-  // Actions  
+  // Actions
   loadSuccess: action((state, payload: Company[]) => {
-    state.items= payload;
+    state.items = payload;
     state.isLoaded = true;
-  }), 
+  }),
   remove: action((state, payload: number) => {
-    state.items = state.items.filter((company: Company) => company.id !== payload);
+    state.items = state.items.filter(
+      (company: Company) => company.id !== payload
+    );
   }),
   add: action((state, payload: Company) => {
-    state.items = [payload, ...state.items];    
+    state.items = [payload, ...state.items];
   }),
   updateState: action((state, payload: Company) => {
-    state.items = state.items.map((item: Company) => (item.id === payload.id ? payload : item));
-  }), 
+    state.items = state.items.map((item: Company) =>
+      item.id === payload.id ? payload : item
+    );
+  }),
 
-   // Thunks
-   findAll: thunk(async (actions, _void, { injections }) => {
+  // Thunks
+  findAll: thunk(async (actions, _void, { injections }) => {
     try {
       const { companyService } = injections;
       const companys = await companyService.findAll();
@@ -53,7 +58,18 @@ export const companiesModel: CompaniesModel = {
   findAllBySiret: thunk(async (actions, payload: string, { injections }) => {
     try {
       const { companyService } = injections;
-      const company = await companyService.findAllBySiret(payload);      
+      const company = await companyService.findAllBySiret(payload);
+      actions.loadSuccess(company);
+    } catch (error) {
+      throw error;
+    }
+  }),
+
+  // Thunks
+  findByUserName: thunk(async (actions, payload: string, { injections }) => {
+    try {
+      const { companyService } = injections;
+      const company = await companyService.findByUserName(payload);
       actions.loadSuccess(company);
     } catch (error) {
       throw error;
@@ -69,13 +85,13 @@ export const companiesModel: CompaniesModel = {
       if (isNew) {
         actions.add(company);
       } else {
-        actions.updateState(company);        
+        actions.updateState(company);
       }
     } catch (error) {
       throw error;
     }
   }),
- 
+
   deleteById: thunk(async (actions, payload: number, { injections }) => {
     try {
       const { companyService } = injections;

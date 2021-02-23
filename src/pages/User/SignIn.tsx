@@ -60,7 +60,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
   const findRolesRef = useStoreActions(
     (actions) => actions.rolesRef.findRolesRef
   );
-  const connect = useStoreActions((actions) => actions.user.connect);
+  const connected = useStoreActions((actions) => actions.user.toConnect);
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
@@ -112,7 +112,7 @@ const SignIn: FC<SignInProps> = (props: SignInProps): ReactElement => {
       userName: mail,
       password: password,
     };
-    connect(user)
+    connected(user)
       .then(() => {
         history.push("/");
         findUserRolesRef();

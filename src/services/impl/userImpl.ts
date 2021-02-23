@@ -6,9 +6,7 @@ import { IUserService } from "../user.interface";
 export class UserServiceImpl implements IUserService {
   private static readonly USER_PATH: string = "users";
 
-  private static readonly SIGNIN_PATH: string = "signin";
-
-  async connect(user: User): Promise<User> {
+  async toConnect(user: User): Promise<User> {
     try {
       const response = await Webservice.getInstance().get(
         `${UserServiceImpl.USER_PATH}/${user.userName}/${user.password}`
@@ -16,7 +14,6 @@ export class UserServiceImpl implements IUserService {
       return response.data;
     } catch (error) {
       let messageJson;
-      console.log(error);
       if (error.request !== undefined && error.request.response === "") {
         messageJson = "Problème réseau";
       } else {

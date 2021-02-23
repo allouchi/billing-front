@@ -10,7 +10,9 @@ import Company from "../../../domains/Company";
 import { useHistory } from "react-router-dom";
 import { Button, Toolbar, Typography } from "@material-ui/core";
 import PageLayout from "../../../components/PageLayout/PageLayout";
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { isUserAdmin } from "../../../shared/Utils";
+import User from "../../../domains/User";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,9 +33,16 @@ const Companies: FC<{}> = (): ReactElement => {
   const classes = useStyles();
   const history = useHistory();
   const intl = useIntl();
+
+  const userConnected: User = useStoreState((state) => state.user.item);
   const findAll = useStoreActions((actions) => actions.companies.findAll);
+  const findByUserName = useStoreActions(
+    (actions) => actions.companies.findByUserName
+  );
   const isLoaded: boolean = useStoreState((state) => state.companies.isLoaded);
-  const items: Company[] = useStoreState((state) => state.companies.items);
+  const company: Partial<Company> = useStoreState(
+    (state) => state.user.item.company
+  );
   const { enqueueSnackbar } = useSnackbar();
   const [openBackdrop, setOpenBackdrop] = useState(false);
 
@@ -41,9 +50,17 @@ const Companies: FC<{}> = (): ReactElement => {
     history.push("/company");
   };
 
+  let isAdmin = isUserAdmin(userConnected);
+
   useEffect(() => {
     setOpenBackdrop(true);
-    if (!isLoaded) {
+    if (!isLoaded && isAdmin) {
+      findAll()
+        .catch((e: Error) => enqueueSnackbar(e.message, { variant: "error" }))
+        .finally(() => {
+          setOpenBackdrop(false);
+        });
+    } else if (!isLoaded && !isAdmin) {
       findAll()
         .catch((e: Error) => enqueueSnackbar(e.message, { variant: "error" }))
         .finally(() => {
@@ -77,11 +94,11 @@ const Companies: FC<{}> = (): ReactElement => {
               className={classes.button}
               onClick={handleCreate}
             >
-              <AddCircleIcon style={{marginRight: 5}} />
+              <AddCircleIcon style={{ marginRight: 5 }} />
               {intl.formatMessage({ id: "buttons.addButton" })}
             </Button>
           </Toolbar>
-          <CompanyList items={items} />
+          <CompanyList items={Array.of(company)} />
         </>
       }
     />

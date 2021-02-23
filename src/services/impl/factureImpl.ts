@@ -34,7 +34,6 @@ export class FactureServiceImpl implements IFactureService {
     siret: string,
     prestationId: number
   ): Promise<Facture> {
-    //const isNew: boolean = !facture.id || facture.id === 0;
     try {
       let response = await Webservice.getInstance().post(
         `${FactureServiceImpl.FACTURES_PATH}/${siret}/${prestationId}`,

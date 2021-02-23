@@ -6,5 +6,5 @@ export interface IPdfService {
    *
    * @param id facture
    */
-  download(factureId: number): Promise<DataPDF[]>;
+  download(factureId: number): Promise<[]>;
 }

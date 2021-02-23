@@ -12,7 +12,7 @@ export interface UserModel {
   add: Action<UserModel, User>;
   // Thunk
   findByEmailAndPassword: Thunk<UserModel, UserEmailPassword, Injections>;
-  connect: Thunk<UserModel, User, Injections>;
+  toConnect: Thunk<UserModel, User, Injections>;
   createUser: Thunk<UserModel, User, Injections>;
 }
 
@@ -55,10 +55,10 @@ export const userModel: UserModel = {
     }
   ),
 
-  connect: thunk(async (actions, payload: User, { injections }) => {
+  toConnect: thunk(async (actions, payload: User, { injections }) => {
     try {
       const { userService } = injections;
-      const user = await userService.connect(payload);
+      const user = await userService.toConnect(payload);
       actions.loadSuccess(user);
     } catch (error) {
       throw error;

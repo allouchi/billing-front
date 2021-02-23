@@ -4,10 +4,10 @@ import { Injections } from "../injections";
 
 export interface PdfModel {
   isLoaded: boolean;
-  items: DataPDF[];
+  items: [];
 
   // Actions
-  loadSuccess: Action<PdfModel, DataPDF[]>;
+  loadSuccess: Action<PdfModel, []>;
 
   // Thunk
   downloadPdf: Thunk<PdfModel, number, Injections>;
@@ -15,10 +15,10 @@ export interface PdfModel {
 
 export const pdfModel: PdfModel = {
   isLoaded: false,
-  items: [],
+  items: null,
 
   // Actions
-  loadSuccess: action((state, payload: DataPDF[]) => {
+  loadSuccess: action((state, payload: []) => {
     state.items = payload;
     state.isLoaded = true;
   }),

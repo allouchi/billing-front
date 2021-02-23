@@ -28,7 +28,7 @@ export interface IUserService {
    * @param user user to find
    * @returns Promise<User>
    */
-  connect(user: User): Promise<User>;
+  toConnect(user: User): Promise<User>;
 
   /**
    * Disconnect user

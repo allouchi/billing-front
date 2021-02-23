@@ -43,7 +43,6 @@ const useStyles = makeStyles({
 
 const PrestationList: FC<{}> = () => {
   const classes = useStyles();
-  //const intl = useIntl();
   const findAllBySiret = useStoreActions(
     (actions) => actions.prestations.findAllBySiret
   );
@@ -53,13 +52,11 @@ const PrestationList: FC<{}> = () => {
   const items: Prestation[] = useStoreState((state) => state.prestations.items);
   const { enqueueSnackbar } = useSnackbar();
   const [onError, setOnError] = useState(false);
-  const [clickOn, setClickOn] = useState(false);
   const [currentItem, setCurrentItem] = useState<Prestation>();
   const siret: string = useSiret();
 
-  const handleEditFacture = (item: Prestation, click: boolean) => {
+  const handleEditFacture = (item: Prestation) => {
     setCurrentItem(item);
-    setClickOn(click);
   };
 
   useEffect(() => {
@@ -111,7 +108,10 @@ const PrestationList: FC<{}> = () => {
               </TableBody>
             </Table>
             {currentItem && (
-              <FactureEdit item={currentItem} clickOn={clickOn} />
+              <FactureEdit
+                item={currentItem}
+                handleCancel={() => setCurrentItem(undefined)}
+              />
             )}
           </>
         ) : (

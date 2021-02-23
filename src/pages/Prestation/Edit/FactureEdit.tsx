@@ -51,9 +51,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 interface FactureEditProps {
   item: Prestation;
-  clickOn: boolean;
+  handleCancel(): void;
 }
-const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
+const FactureEdit: FC<FactureEditProps> = ({
+  item,
+  ...props
+}): ReactElement => {
   const history = useHistory();
   const siret: string = useSiret();
   const classes = useStyles();
@@ -61,7 +64,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
   const createOrUpdate = useStoreActions(
     (actions) => actions.prestations.createOrUpdate
   );
-  const [open, setOpen] = useState(clickOn);
+  const [open, setOpen] = useState(true);
   const [check, setCheck] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -122,6 +125,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
 
   const handleAnnuler = () => {
     setOpen(false);
+    props.handleCancel();
   };
 
   const handleValider = () => {
@@ -181,7 +185,7 @@ const FactureEdit: FC<FactureEditProps> = ({ item, clickOn }): ReactElement => {
       id="designation"
       label="Désignation"
       multiline
-      rowsMax={2}
+      rowsMax={3}
       value={state.prestation.designation}
       onChange={handleChange}
       variant="outlined"

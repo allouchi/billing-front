@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 import TableRow from "@material-ui/core/TableRow";
 import { useSnackbar } from "notistack";
 import {
@@ -11,7 +11,7 @@ import Facture from "../../../domains/Facture";
 import { StyledTableCell } from "./FactureList";
 import { useIntl } from "react-intl";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
-import { useStoreActions } from "../../../store/hooks";
+import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import BuildMessageTooltip from "../../../shared/BuildMessageTooltip";
@@ -25,6 +25,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import Typography from "@material-ui/core/Typography";
 import { IconButton, Tooltip } from "@material-ui/core";
+import TableCell from "@material-ui/core/TableCell";
 
 export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
@@ -43,9 +44,27 @@ export const StyledTableRow = withStyles((theme: Theme) =>
   })
 )(TableRow);
 
+const StyledDetailTableCell = withStyles((theme: Theme) =>
+  createStyles({
+    head: {
+      backgroundColor: "#d0f0f5",
+      color: "#25829e",
+    },
+    body: {
+      fontSize: 14,
+    },
+  })
+)(TableCell);
+
 const useStyles = makeStyles({
   table: {
-    minWidth: 1000,
+    width: "110%",
+  },
+  description_aquited: {
+    color: "#1FA055",
+  },
+  description_non_aquited: {
+    color: "#b63939",
   },
 });
 
@@ -57,9 +76,12 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
   const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const pdf: [] = useStoreState((state) => state.pdf.items);
+  const isLoaded: boolean = useStoreState((state) => state.pdf.isLoaded);
   const deleteById = useStoreActions((actions) => actions.factures.deleteById);
   const downloadPdf = useStoreActions((actions) => actions.pdf.downloadPdf);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [onClick, setOnClick] = useState(false);
 
   const updateFactureClick = () => {
     let dateEncaissement = item.dateEncaissement;
@@ -98,7 +120,30 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
     setOpen(!open);
   };
 
+  const base64ToArrayBuffer = (data) => {
+    var binaryString = window.atob(data);
+    var binaryLen = binaryString.length;
+    var bytes = new Uint8Array(binaryLen);
+    for (var i = 0; i < binaryLen; i++) {
+      var ascii = binaryString.charCodeAt(i);
+      bytes[i] = ascii;
+    }
+    return new Blob([bytes], { type: "application/pdf" });
+  };
+
+  const downloadFile = () => {
+    let blob = base64ToArrayBuffer(pdf);
+    let data = window.URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.href = data;
+    link.download = "Facture.pdf";
+    link.click();
+    window.URL.revokeObjectURL(data);
+    link.remove();
+  };
+
   const downloadPdfClick = () => {
+    setOnClick(true);
     const message = intl.formatMessage(
       { id: "messages.download.success" },
       { cle: "La facture" }
@@ -106,20 +151,26 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
 
     downloadPdf(item.id)
       .then(() => history.push("/factures"))
-      .then(() =>
+      .then(() => {
         enqueueSnackbar(message, {
           variant: "success",
-        })
-      )
+        });
+      })
       .catch((err: Error) => {
+        setOnClick(false);
         enqueueSnackbar(err.message, { variant: "error" });
       });
   };
 
-  const etatFature =
-    item.dateEncaissement === "" || item.dateEncaissement === null
-      ? { backgroundColor: "red" }
-      : { backgroundColor: "olive" };
+  const etatFature = item.dateEncaissement
+    ? classes.description_aquited
+    : classes.description_non_aquited;
+
+  useEffect(() => {
+    if (onClick && isLoaded) {
+      downloadFile();
+    }
+  }, [onClick, isLoaded]);
 
   return (
     <>
@@ -136,6 +187,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
         <StyledTableCell sortDirection="asc">
           {item.numeroFacture}
         </StyledTableCell>
+        <StyledTableCell>{item.tarifHT}€</StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>
         <StyledTableCell>{item.prixTotalHT}€</StyledTableCell>
         <StyledTableCell>{item.prixTotalTTC}€</StyledTableCell>
@@ -186,33 +238,33 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
               >
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell align="center">
+                    <StyledDetailTableCell align="center">
                       Numéro commande
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Date de facturation
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Date d'encaissement
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Statut facture
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Description
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Frais retard
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Jours retard
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Délai paiement
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
+                    </StyledDetailTableCell>
+                    <StyledDetailTableCell align="center">
                       Montant TVA
-                    </StyledTableCell>
+                    </StyledDetailTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -227,10 +279,10 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
                       {item.dateEncaissement}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <p style={etatFature}> {item.factureStatus}</p>
+                      <b className={etatFature}>{item.factureStatus}</b>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <p style={etatFature}> {item.statusDesc}</p>
+                      <b className={etatFature}>{item.statusDesc}</b>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {item.fraisRetard}

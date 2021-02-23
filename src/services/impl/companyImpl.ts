@@ -72,6 +72,23 @@ export class CompanyServiceImpl implements ICompanyService {
     }
   }
 
+  async findByUserName(userName: string): Promise<Company[]> {
+    try {
+      const response = await Webservice.getInstance().get(
+        `${CompanyServiceImpl.COMPNAY_PATH}/${userName}`
+      );
+      return response.data;
+    } catch (error) {
+      let messageJson;
+      if (error.request !== undefined && error.request.response === "") {
+        messageJson = "Problème réseau";
+      } else {
+        messageJson = decodeMessage(error);
+      }
+      throw Error(messageJson);
+    }
+  }
+
   async deleteById(id: number): Promise<string> {
     try {
       await Webservice.getInstance().delete(

@@ -50,8 +50,6 @@ const ConsultantPage: FC<{}> = (props): ReactElement => {
 
   let consult = parseConsultJsonObject(history.location.state);
 
-  console.log(consult);
-
   const { enqueueSnackbar } = useSnackbar();
   const [consultant, setConsultant] = useState(consult);
 

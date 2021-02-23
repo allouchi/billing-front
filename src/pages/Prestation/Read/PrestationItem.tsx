@@ -26,7 +26,7 @@ export const StyledTableRow = withStyles((theme: Theme) =>
 
 interface PrestationItemProps {
   item: Prestation;
-  editerFacture(item: Prestation, click: boolean): void;
+  editerFacture(item: Prestation): void;
 }
 const FactureItem: FC<PrestationItemProps> = ({
   item,
@@ -35,13 +35,12 @@ const FactureItem: FC<PrestationItemProps> = ({
   const intl = useIntl();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const [state, setState] = useState(item.dateFin);
   const deleteById = useStoreActions(
     (actions) => actions.prestations.deleteById
   );
 
   const handleEditClick = () => {
-    props.editerFacture(item, true);
+    props.editerFacture(item);
   };
 
   const handleModifyClick = () => {
