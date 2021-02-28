@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       margin: theme.spacing(1),
     },
+    table: {
+      minWidth: 1000,
+    },
   })
 );
 
@@ -51,7 +54,7 @@ const Companies: FC<{}> = (): ReactElement => {
   };
 
   let isAdmin = isUserAdmin(userConnected);
-
+  let userName = userConnected.userName;
   useEffect(() => {
     setOpenBackdrop(true);
     if (!isLoaded && isAdmin) {
@@ -61,13 +64,13 @@ const Companies: FC<{}> = (): ReactElement => {
           setOpenBackdrop(false);
         });
     } else if (!isLoaded && !isAdmin) {
-      findAll()
+      findByUserName(userName)
         .catch((e: Error) => enqueueSnackbar(e.message, { variant: "error" }))
         .finally(() => {
           setOpenBackdrop(false);
         });
     }
-  }, [findAll, enqueueSnackbar, isLoaded]);
+  }, [findAll, findByUserName, enqueueSnackbar, isLoaded, isAdmin, userName]);
 
   if (!isLoaded) {
     return (

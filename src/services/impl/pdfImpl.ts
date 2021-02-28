@@ -11,7 +11,7 @@ export class PdfServiceImpl implements IPdfService {
       const response = await Webservice.getInstance().get(
         `${PdfServiceImpl.EDITIONS_PATH}/${factureId}`
       );
-
+      console.log(response);
       return response.data;
     } catch (error) {
       let messageJson;

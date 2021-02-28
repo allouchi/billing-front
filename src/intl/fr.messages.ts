@@ -33,8 +33,10 @@ export default {
   messages: {
     authentif: {
       success: "Bienvenue, vous êtes désormais connecté",
-      echec:
-        "L'identiant ou/et le mot de passe sont incorrects, vous devez vous reconnecter",
+      echec: "Les identiants sont incorrects, vous devez vous reconnecter",
+    },
+    logout: {
+      success: "Vous venez de vous déconnecter",
     },
     create: {
       success: "{cle} a été créee avec succès",

@@ -48,8 +48,8 @@ function JoursFeries(an) {
 }
 function dernierJourMoisSelected(moisSelected) {
   var myDate = new Date();
-  var myMonth = myDate.setMonth(moisSelected);
-  var theDay = myDate.setDate(0);
+  myDate.setMonth(moisSelected);
+  myDate.setDate(0);
   var lastDay = myDate.getDate();
   return lastDay;
 }

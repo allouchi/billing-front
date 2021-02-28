@@ -1,12 +1,12 @@
-import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import Axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-/*export enum HttpError {
-    BadRequest = 400,
-    Unauthorized = 401,
-    Forbidden = 403,
-    NotFound = 404,
-    Conflict = 400
-}*/
+export enum HttpError {
+  BadRequest = 400,
+  Unauthorized = 401,
+  Forbidden = 403,
+  NotFound = 404,
+  Conflict = 400,
+}
 
 /**
  * Rest API Client based on Axios library
@@ -30,7 +30,10 @@ export default class Webservice {
    * @param api endpoint path
    * @param config request config
    */
-  public get<T = any, R = AxiosResponse<T>>(api: string, config?: AxiosRequestConfig): Promise<R> {
+  public get<T = any, R = AxiosResponse<T>>(
+    api: string,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
     try {
       return Axios.get(`${Webservice.endpoint}/${api}`, config);
     } catch (error) {
@@ -44,7 +47,11 @@ export default class Webservice {
    * @param api
    * @param config
    */
-  public post<T = any, R = AxiosResponse<T>>(api: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
+  public post<T = any, R = AxiosResponse<T>>(
+    api: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
     try {
       return Axios.post(`${Webservice.endpoint}/${api}`, data, config);
     } catch (error) {
@@ -58,7 +65,11 @@ export default class Webservice {
    * @param api
    * @param config
    */
-  public put<T = any, R = AxiosResponse<T>>(api: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
+  public put<T = any, R = AxiosResponse<T>>(
+    api: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
     try {
       return Axios.put(`${Webservice.endpoint}/${api}`, data, config);
     } catch (error) {
@@ -66,15 +77,17 @@ export default class Webservice {
     }
   }
 
-  
   /**
    * Delete existing resource at the endpoint
    *
    * @param api
    * @param config
    */
-  public delete<T = any, R = AxiosResponse<T>>(api: string, config?: AxiosRequestConfig): Promise<R> {
-    try {         
+  public delete<T = any, R = AxiosResponse<T>>(
+    api: string,
+    config?: AxiosRequestConfig
+  ): Promise<R> {
+    try {
       return Axios.delete(`${Webservice.endpoint}/${api}`, config);
     } catch (error) {
       return Promise.reject(error);

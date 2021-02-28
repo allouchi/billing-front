@@ -75,7 +75,7 @@ export class CompanyServiceImpl implements ICompanyService {
   async findByUserName(userName: string): Promise<Company[]> {
     try {
       const response = await Webservice.getInstance().get(
-        `${CompanyServiceImpl.COMPNAY_PATH}/${userName}`
+        `${CompanyServiceImpl.COMPNAY_PATH}/${userName}/${userName}`
       );
       return response.data;
     } catch (error) {

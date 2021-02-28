@@ -12,6 +12,8 @@ import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../auth";
 import User from "../../domains/User";
 import { isUserAdmin } from "../../shared/Utils";
+import { useSnackbar } from "notistack";
+import LogoutDialog from "../LogoutDialog/LogoutDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,26 +59,50 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
   const { preventSubscribe, isAuthenticated } = props;
   const history = useHistory();
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const intl = useIntl();
-  const [checked, setChecked] = useState(isAuthenticated);
+  const [checkedState, setCheckedState] = useState(isAuthenticated);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const firebase = useContext(FirebaseContext);
   const user: User = useStoreState((state) => state.user.item);
+  const message = intl.formatMessage({ id: "messages.logout.success" });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked;
-    setChecked(isChecked);
-    if (!isChecked) {
-      firebase.doSignOut();
-      preventSubscribe(false);
-      history.push("/");
-    } else {
+  const handleLogin = (): void => {
+    history.push("/login");
+  };
+
+  const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isLogin: boolean = event.target.checked;
+    if (isLogin) {
+      event.preventDefault();
       history.push("/login");
+      return;
     }
+    setCheckedState(isLogin);
+    if (!isLogin) {
+      setShowLogoutConfirm(true);
+    }
+    if (isLogin) {
+      handleLogin();
+    }
+  };
+  const handleLogout = (): void => {
+    firebase.doSignOut();
+    setShowLogoutConfirm(false);
+    preventSubscribe(false);
+    enqueueSnackbar(message, {
+      variant: "success",
+    });
+    history.push("/login");
+  };
+
+  const handleLogoutCancel = (): void => {
+    setShowLogoutConfirm(false);
   };
 
   const displayMenuAdmin = () => {
     let isAdmin = isUserAdmin(user);
-    if (isAdmin) {
+    if (isAuthenticated && isAdmin) {
       return (
         <Button color="inherit" onClick={() => history.push("/signup")}>
           {intl.formatMessage({ id: "menu.admin" })}
@@ -89,6 +115,7 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
 
   const displayUser = () => {
     return (
+      isAuthenticated &&
       user &&
       user.company &&
       ` : ${user.company.socialReason} (${user.firstName} ${user.lastName})`
@@ -110,40 +137,51 @@ const AppHeader: FC<AppHeaderProps> = (props: AppHeaderProps): ReactElement => {
           <Typography className={classes.title} variant="h6" noWrap>
             {intl.formatMessage({ id: "menu.role" })} {displayUser()}
           </Typography>
-
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <Button color="inherit" onClick={() => history.push("/companies")}>
-              {intl.formatMessage({ id: "menu.companies" })}
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => history.push("/prestations")}
-            >
-              {intl.formatMessage({ id: "menu.prestations" })}
-            </Button>
-            <Button color="inherit" onClick={() => history.push("/factures")}>
-              {intl.formatMessage({ id: "menu.factures" })}
-            </Button>
-            <Button color="inherit" onClick={() => history.push("/clients")}>
-              {intl.formatMessage({ id: "menu.clients" })}
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => history.push("/consultants")}
-            >
-              {intl.formatMessage({ id: "menu.consultants" })}
-            </Button>
-
+          {isAuthenticated && (
+            <div className={classes.sectionDesktop}>
+              <Button
+                color="inherit"
+                onClick={() => history.push("/companies")}
+              >
+                {intl.formatMessage({ id: "menu.companies" })}
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => history.push("/prestations")}
+              >
+                {intl.formatMessage({ id: "menu.prestations" })}
+              </Button>
+              <Button color="inherit" onClick={() => history.push("/factures")}>
+                {intl.formatMessage({ id: "menu.factures" })}
+              </Button>
+              <Button color="inherit" onClick={() => history.push("/clients")}>
+                {intl.formatMessage({ id: "menu.clients" })}
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => history.push("/consultants")}
+              >
+                {intl.formatMessage({ id: "menu.consultants" })}
+              </Button>
+            </div>
+          )}
+          <div>
             {displayMenuAdmin()}
-
+            {!isAuthenticated && <span>Se connecter</span>}
             <Switch
               id="checked"
-              checked={checked || isAuthenticated}
-              onChange={handleChange}
+              checked={checkedState || isAuthenticated}
+              onChange={handleSwitch}
               name="checked"
               inputProps={{ "aria-label": "secondary checkbox" }}
             />
+            {showLogoutConfirm && (
+              <LogoutDialog
+                logoutAction={handleLogout}
+                handleLogoutCancel={handleLogoutCancel}
+              />
+            )}
           </div>
         </Toolbar>
       </AppBar>

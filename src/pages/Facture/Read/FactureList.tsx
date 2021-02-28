@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect } from "react";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 import {
   withStyles,
   Theme,
@@ -18,6 +18,8 @@ import Alert from "@material-ui/lab/Alert";
 import { useStoreActions, useStoreState } from "../../../store/hooks";
 import { useSnackbar } from "notistack";
 import useSiret from "../../../hooks/siret.hook";
+import { Backdrop } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 export const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -31,11 +33,23 @@ export const StyledTableCell = withStyles((theme: Theme) =>
   })
 )(TableCell);
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 1000,
-  },
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: "#fff",
+    },
+    title: {
+      flex: "1 1 100%",
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
+    table: {
+      minWidth: 1000,
+    },
+  })
+);
 
 const factures = (
   items: Facture[],
@@ -66,8 +80,10 @@ const factures = (
 };
 
 const FactureList: FC<{}> = () => {
+  const isLoaded: boolean = useStoreState((state) => state.factures.isLoaded);
   const classes = useStyles();
   let siret: string = useSiret();
+  const [openBackdrop, setOpenBackdrop] = useState(false);
   const findAllBySiret = useStoreActions(
     (actions) => actions.factures.findAllBySiret
   );
@@ -76,10 +92,23 @@ const FactureList: FC<{}> = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    findAllBySiret(siret).catch((e: Error) => {
-      enqueueSnackbar(e.message, { variant: "error" });
-    });
+    setOpenBackdrop(true);
+    findAllBySiret(siret)
+      .catch((e: Error) => {
+        enqueueSnackbar(e.message, { variant: "error" });
+      })
+      .finally(() => {
+        setOpenBackdrop(false);
+      });
   }, [findAllBySiret, enqueueSnackbar, siret]);
+
+  if (!isLoaded) {
+    return (
+      <Backdrop className={classes.backdrop} open={openBackdrop}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  }
 
   return (
     <div className={classes.table}>
