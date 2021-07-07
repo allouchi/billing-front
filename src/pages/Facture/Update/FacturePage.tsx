@@ -27,6 +27,7 @@ const emptyFacture: Facture = {
   designation: "",
   clientPrestation: "",
   filePath: "",
+  moisFacture:"",
 };
 
 const useStyles = makeStyles((theme) => ({

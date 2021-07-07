@@ -197,6 +197,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
     designation: "",
     clientPrestation: "",
     filePath: "",
+    moisFacture:"",
   };
 
   if (
@@ -226,6 +227,7 @@ export const parseFactureJsonObject = (jsonObject: any): Facture => {
       designation: item.designation,
       clientPrestation: item.clientPrestation,
       filePath: item.filePath,
+      moisFacture: item.moisFacture,
     };
   }
   return facture;

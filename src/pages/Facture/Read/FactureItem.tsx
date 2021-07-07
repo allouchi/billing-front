@@ -185,7 +185,7 @@ const FactureItem: FC<FactureItemProps> = ({ item }): ReactElement => {
           </IconButton>
         </StyledTableCell>
         <StyledTableCell sortDirection="asc">
-          {item.numeroFacture}
+          {item.numeroFacture} ({item.moisFacture})
         </StyledTableCell>
         <StyledTableCell>{item.tarifHT}€</StyledTableCell>
         <StyledTableCell>{item.quantite}</StyledTableCell>

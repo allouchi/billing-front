@@ -20,4 +20,5 @@ export default interface Facture {
   designation: string;
   clientPrestation: string;
   filePath: string;
+  moisFacture : string;
 }
